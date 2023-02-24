@@ -607,25 +607,25 @@ edge from parent/.style = {draw,-latex},
     
     \vspace{-.1in}
     \begin{definition}[Mean Squared Error]
-     $$\ev=\x-\rr\to\Ex{}{\|\ev\|^2}=\Ex{}{\|\x-\rr\|^2}=\Ex{}{\|\x-\W^H\y\|^2}$$
+     $$\e=\x-\rr\to\Ex{}{\|\e\|^2}=\Ex{}{\|\x-\rr\|^2}=\Ex{}{\|\x-\W^H\y\|^2}$$
     \end{definition}
     \begin{itemize}
      \item Distributive properties
      \begin{equation*}
         \begin{split}
-        \Ex{}{\|\ev\|^2}&=\Ex{}{(\x-\W^H\Hb\x-\W^H\z)^H(\x-\W^H\Hb\x-\W^H\z)^H)}\\
+        \Ex{}{\|\e\|^2}&=\Ex{}{(\x-\W^H\Hb\x-\W^H\z)^H(\x-\W^H\Hb\x-\W^H\z)^H)}\\
                         &=\Ex{}{(\x^H(\I-\W^H\Hb)^H(\I-\W^H\Hb)\x}+\Ex{}{(\z^H\W\W^H\z}\\
                         &\qquad+\cancel{\Ex{}{\x^H}}(\I-\W^H\Hb)^H\cancel{\Ex{}{\z}}+\cancel{\Ex{}{\z^H}}(\I-\W^H\Hb)\cancel{\Ex{}{\x}}\\
         \end{split}
      \end{equation*}
      \item Rotation of the trace $\ab^H\B\cc=\tr\{\ab^H\B\cc\}=\tr\{\cc\ab^H\B\}$
-     $$\Ex{}{\|\ev\|^2}=\Ex{}{\tr\{\x\x^H(\I-\W^H\Hb)^H(\I-\W^H\Hb\}}+\Ex{}{\tr\{\z\z^H\W\W^H\}}$$
+     $$\Ex{}{\|\e\|^2}=\Ex{}{\tr\{\x\x^H(\I-\W^H\Hb)^H(\I-\W^H\Hb\}}+\Ex{}{\tr\{\z\z^H\W\W^H\}}$$
      \item Average and trace are linear operators
-     $$\Ex{}{\|\ev\|^2}=\tr\{\K_{\x}(\I-\W^H\Hb)^H(\I-\W^H\Hb\}+\tr\{\K_{\z}\W\W^H\}$$
+     $$\Ex{}{\|\e\|^2}=\tr\{\K_{\x}(\I-\W^H\Hb)^H(\I-\W^H\Hb\}+\tr\{\K_{\z}\W\W^H\}$$
      \item I.i.d. noise and data 
-     $$\Ex{}{\|\ev\|^2}=\frac{P}{n_t}\left(\tr\{\I_{n_t}\}-\tr\{\Hb^H\W\}-\tr\{\W^H\Hb\}+\tr\{\W^H\Hb\Hb^H\W\}\right)+\sigma_z^2\tr\{\W\W^H\}\}$$
+     $$\Ex{}{\|\e\|^2}=\frac{P}{n_t}\left(\tr\{\I_{n_t}\}-\tr\{\Hb^H\W\}-\tr\{\W^H\Hb\}+\tr\{\W^H\Hb\Hb^H\W\}\right)+\sigma_z^2\tr\{\W\W^H\}\}$$
      \item Group the terms of a 2nd order ``polynomial'' (and $\A^H+\A=2\Re\{\A\}$)
-     $$\Ex{}{\|\ev\|^2}==P+\frac{P}{n_t}\underset{\mathscr{F}(\W)}{\underbrace{\left[-2\tr\{\Re\{\Hb^H\W\}\}+\tr\left\{\W^H\left(\Hb\Hb^H+\frac{n_t\sigma_z}{P}\I_{n_r}\right)\W\right\}\right]}}$$
+     $$\Ex{}{\|\e\|^2}==P+\frac{P}{n_t}\underset{\mathscr{F}(\W)}{\underbrace{\left[-2\tr\{\Re\{\Hb^H\W\}\}+\tr\left\{\W^H\left(\Hb\Hb^H+\frac{n_t\sigma_z}{P}\I_{n_r}\right)\W\right\}\right]}}$$
      \item Gradient equal to zero
        \begin{equation*}
         \begin{split}
@@ -661,7 +661,7 @@ edge from parent/.style = {draw,-latex},
     \vspace{-.1in}
     \begin{itemize}
      \item \textbf{Minimum MSE Equalizer} maximizes the SINR     
-     $$\rr=\x+\ev\to \textnormal{SINR}=\frac{\Ex{}{\|\x\|^2}}{\Ex{}{\|\ev\|^2}}\geq \frac{P}{\textnormal{MMSE}}$$
+     $$\rr=\x+\e\to \textnormal{SINR}=\frac{\Ex{}{\|\x\|^2}}{\Ex{}{\|\e\|^2}}\geq \frac{P}{\textnormal{MMSE}}$$
      $$\textnormal{SINR}_{\textnormal{MMSE}}=\frac{P}{\tr\{\left(\Hb\Hb^H+\frac{n_t\sigma_z^2}{P}\I\right)^{-1}\}\sigma_z^2}=\frac{P}{\sigma_z^2\left(\sum_{i=1}^{n_t}\frac{1}{\lambda_1+\frac{n_t\sigma_z^2}{P}}\right)}>\textnormal{SNR}_{ZF}$$
     \end{itemize}   
 }
@@ -703,7 +703,7 @@ edge from parent/.style = {draw,-latex},
  \begin{itemize}
   \item Cholesky matrix inverse algorithm
     \begin{enumerate}
-       \item Solve $\Lb^H\Deltab\vv_{aux}=\rr_{MF}$ with $\rr_{MF}=\Hb^H\y$
+       \item Solve $\Lb^H\Delb\vv_{aux}=\rr_{MF}$ with $\rr_{MF}=\Hb^H\y$
        \item Solve $\Lb\rr=\vv_{aux}$
     \end{enumerate}
   
@@ -719,7 +719,7 @@ edge from parent/.style = {draw,-latex},
         \draw [->,very thick] (ch) -- (sum);
         \node [block, right of = sum,node distance=1.5cm] (mf) {$\Hb^H$} ;
         \draw[->] (sum) -- (mf);
-        \node [block, right of = mf,node distance=2cm] (lf) {$\Deltab^{-1}\Lb^{-H}$} ;
+        \node [block, right of = mf,node distance=2cm] (lf) {$\Delb^{-1}\Lb^{-H}$} ;
         \draw[->] (mf) -- node {$\rr_{MF}$} (lf);
         \node [block, right of = lf,node distance=2cm] (if) {$\Lb^{-1}$} ;
         \draw[->] (lf) -- node {$\vv_{aux}$} (if);
@@ -731,13 +731,13 @@ edge from parent/.style = {draw,-latex},
     \end{figure}
 \vspace{-.1in}
 \begin{definition}[Cholesky Decomposition]
-Hermitian matrix $\M=\Lb^H\Deltab\Lb$ where
+Hermitian matrix $\M=\Lb^H\Delb\Lb$ where
 $$\Lb=\left(\begin{array}{cccc}
             1&0&\dots&0\\
             \ell_{2,1}&1&\dots&0\\
             \vdots&\vdots&\ddots&\vdots\\
             \ell_{n_t,1}&\ell_{n_t,2}&\dots&1\\
-\end{array}\right),\;\Deltab_{n_t}=\left(\begin{array}{cccc}
+\end{array}\right),\;\Delb_{n_t}=\left(\begin{array}{cccc}
  \delta_1&0&\dots&0\\
  0&\delta_2&\dots&0\\
  \vdots&\vdots&\ddots&\vdots\\
@@ -836,7 +836,7 @@ $$\Lb=\left(\begin{array}{cccc}
         \draw [->] (ch) -- (sum);
         \node [block, right of = sum, node distance=1.5cm] (mf) {$\Hb^H$} ;
         \draw [->] (sum) -- (mf);
-        \node [block, right of = mf, node distance=2cm] (ff) {$\Deltab^{-1}\Lb^{-H}$} ;
+        \node [block, right of = mf, node distance=2cm] (ff) {$\Delb^{-1}\Lb^{-H}$} ;
         \draw [->] (mf) -- node {$\rr_{MF}$}(ff);
         \node [sum, right of=ff, node distance=2cm] (sum2) {$+$};
         \draw [->] (ff) -- node {$\rr$} (sum2);
@@ -852,9 +852,9 @@ $$\Lb=\left(\begin{array}{cccc}
     \pagebreak
      \begin{itemize}
      \item QR decomposition of $\Hb=\Q\R$ (Lower triangular $\R$)\\ \ \\
-     \item Choleski decomposition $\Hb^H\Hb=\Lb^H\Deltab\Lb$ ($\R=\Deltab^{\frac{1}{2}}\Lb$)\\ \ \\
+     \item Choleski decomposition $\Hb^H\Hb=\Lb^H\Delb\Lb$ ($\R=\Delb^{\frac{1}{2}}\Lb$)\\ \ \\
      \item Triangular equivalent channel
-        $$\rr=\Deltab^{-\frac{1}{2}}\Q^H\y=\Deltab^{-\frac{1}{2}}\R\x+\Deltab^{-\frac{1}{2}}\Q\z=\Lb\x+\Deltab^{-\frac{1}{2}}\z'$$
+        $$\rr=\Delb^{-\frac{1}{2}}\Q^H\y=\Delb^{-\frac{1}{2}}\R\x+\Delb^{-\frac{1}{2}}\Q\z=\Lb\x+\Delb^{-\frac{1}{2}}\z'$$
     \end{itemize}
         
 \begin{figure}
@@ -869,7 +869,7 @@ $$\Lb=\left(\begin{array}{cccc}
         \draw [->] (ch) -- (sum);
         \node [block, right of = sum, node distance=1.5cm] (mf) {$\Q^H$} ;
         \draw [->] (sum) -- (mf);
-        \node [block, right of = mf, node distance=2cm] (ff) {$\Deltab^{-\frac{1}{2}}$} ;
+        \node [block, right of = mf, node distance=2cm] (ff) {$\Delb^{-\frac{1}{2}}$} ;
         \draw [->] (mf) -- (ff);
         \node [sum, right of=ff, node distance=2cm] (sum2) {$+$};
         \draw [->] (ff) -- node {$\rr$} (sum2);
@@ -899,9 +899,9 @@ $$\Lb=\left(\begin{array}{cccc}
      \end{beamercolorbox}
      \begin{itemize}
       \item If all decisions are correct, 
-         $$\vv=\rr-(\Lb-\I)\hat{\x}=\x+\Deltab^{-\frac{1}{2}}\z'$$
+         $$\vv=\rr-(\Lb-\I)\hat{\x}=\x+\Delb^{-\frac{1}{2}}\z'$$
         \item DF even better than ZF in high SNR
-            $$SINR_{DF}\simeq \frac{P}{\tr\{\Deltab^{-1}\}}\geq\frac{P}{\tr\{(\Hb^H\Hb)^{-1}\}}=\frac{P}{\tr\{(\Lb^H\Deltab\Lb)^{-1}\}}=SNR_{ZF}$$
+            $$SINR_{DF}\simeq \frac{P}{\tr\{\Delb^{-1}\}}\geq\frac{P}{\tr\{(\Hb^H\Hb)^{-1}\}}=\frac{P}{\tr\{(\Lb^H\Delb\Lb)^{-1}\}}=SNR_{ZF}$$
      \end{itemize}
 
 \pagebreak
@@ -910,7 +910,7 @@ $$\Lb=\left(\begin{array}{cccc}
  \item Different SINR in each branch suffers \textbf{Error propagation}
  $$\gamma_i\approx\frac{P\delta_i}{n_t\sigma_z^2+\sum_{j=1}^{i-1}P(\hat{x_j}\neq x_j)\|L_{i,j}d_{min}\|^2}$$
  \begin{definition}[Permutation Matrix]
-  $\Pb=\sum_{i=1}^{n_t}\ev_i\ev_{\pi(i)}^H$ changes the order of rows and columns of another matrix according to the permutation $\pi(1),\pi(2),\dots \pi(n_t)$. For example
+  $\Pb=\sum_{i=1}^{n_t}\e_i\e_{\pi(i)}^H$ changes the order of rows and columns of another matrix according to the permutation $\pi(1),\pi(2),\dots \pi(n_t)$. For example
    $$\begin{array}{ccc}i&\to&\pi(i)\\\hline
       1&\to&2\\
       2&\to&1\\
@@ -940,7 +940,7 @@ $$\Lb=\left(\begin{array}{cccc}
         \draw [->] (sum) -- (pf);
         \node [block, right of = pf, node distance=1.5cm] (mf) {$\Pb^H$} ;
         \draw [->] (pf) -- (mf);
-        \node [block, right of = mf, node distance=1.7cm] (ff) {$\Deltab^{-\frac{1}{2}}\Lb^{-H}$} ;
+        \node [block, right of = mf, node distance=1.7cm] (ff) {$\Delb^{-\frac{1}{2}}\Lb^{-H}$} ;
         \draw [->] (mf) -- (ff);
         \node [sum, right of=ff, node distance=1.5cm] (sum2) {$+$};
         \draw [->] (ff) -- node {$\rr$} (sum2);
@@ -1006,7 +1006,7 @@ $$\Lb=\left(\begin{array}{cccc}
    ZF&$(\Hb^H\Hb)^{-1}\Hb^H$&$\zero$\\
    MMSE&$(\Hb^H\Hb+\frac{n_t\sigma_z^2}{P}\I)^{-1}\Hb^H$&$\zero$\\
    PIC&$\Hb^H$&$\I-\M$\\
-   SIC&$\Deltab^{-\frac{1}{2}}\Q^H$&$\I-\Lb$\\
+   SIC&$\Delb^{-\frac{1}{2}}\Q^H$&$\I-\Lb$\\
   \end{tabular}
  \end{table}
  \end{column}
