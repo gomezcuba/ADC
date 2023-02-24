@@ -1,0 +1,879 @@
+\documentclass[xcolor=dvipsnames,aspectratio=169]{beamer}
+
+% INCLUSIÓN DOS PAQUETES IMPRESCINDIBLES DE IDIOMA E CODIFICACIÓN DE CARACTERE.
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+
+%ACRONYMS para engadir un glosario de acronimos automatizado
+% \usepackage[acronyms,nonumberlist,nopostdot,nomain,nogroupskip]{glossaries}
+% \input{./acronyms.tex}
+
+% PAQUETES PARA FIGURAS E GRAFICOS
+\usepackage{graphicx}
+%   \usepackage[pdftex]{graphicx}
+  \usepackage{epstopdf}
+   \graphicspath{{./img/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+   \DeclareGraphicsExtensions{.eps,.pdf,.png,.jpg}   
+\usepackage{subfigure}
+\usepackage{caption}
+\usepackage[inkscapelatex=false]{svg}
+
+%Tikz plots
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usetikzlibrary{plotmarks,patterns,decorations.pathreplacing,backgrounds,calc,arrows,arrows.meta,spy,matrix,backgrounds,shapes,math}
+
+\tikzset{
+    block/.style = {draw, rectangle, 
+        minimum height=1cm, 
+        minimum width=1.2cm, align=center},
+    input/.style = {coordinate,node distance=1cm},
+    output/.style = {coordinate,node distance=2cm},
+    arrow/.style={draw, -latex,node distance=1.5cm},
+    pinstyle/.style = {pin edge={latex-, black,node distance=1.5cm}},
+    sum/.style = {draw, circle, node distance=1cm}
+}
+
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \UE (#1) {};}
+\newcommand{\DrawBox}[4][]{%
+    \tikz[overlay,remember picture]{%
+        \coordinate (TopLeft)     at ($(#2)+(-0.4em,1.6em)$);
+        \coordinate (BottomRight) at ($(#3)+(0.4em,-1.0em)$);
+        %
+        \path (TopLeft); \pgfgetlastxy{\XCoord}{\IgnoreCoord};
+        \path (BottomRight); \pgfgetlastxy{\IgnoreCoord}{\YCoord};
+        \coordinate (LabelPoint) at ($(\XCoord,\YCoord)!0.5!(BottomRight)$);
+        %
+        \draw [red,#1] (TopLeft) rectangle (BottomRight);
+        \UE [below, #1, fill=none, fill opacity=1] at (LabelPoint) {#4};
+    }
+}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\pgfplotsset{plot coordinates/math parser=false}
+\usepgfplotslibrary{patchplots,groupplots}
+
+\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+\def\antenna{%
+    -- +(0mm,4.0mm) -- +(2.625mm,7.5mm) -- +(-2.625mm,7.5mm) -- +(0mm,4.0mm) -- +(0mm,0mm)
+}
+
+
+% OUTROS PAQUETES DE USO COMUN. HOXE EN DIA OS COMPILADORES SON TAN RAPIDOS QUE EU METO TODOS SEMPRE
+% \usepackage{float}
+% \usepackage{ucs} 
+% \usepackage{subcaption}
+\usepackage{psfrag}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage{amsfonts} 
+\usepackage{amssymb} 
+\usepackage{amsthm}
+\usepackage{pifont}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{stfloats}
+\usepackage{algorithm} 
+\usepackage{algorithmic} 
+\usepackage{url} 
+\usepackage{enumerate}
+\usepackage{multirow}
+\usepackage{wasysym}
+\usepackage{cancel}
+\usepackage{lmodern}
+
+\usepackage{mathrsfs}  
+\input{EETbeamerconfig.tex}
+\input{mydefinitions.tex}
+
+%---------------
+% LIMIAR
+%---------------
+%configuracion de opcions de beamer persoais, pero alleas ao estilo
+
+% COMANDO QUE INTRODUCE UNHA DIAPOSITIVA CUN ÍNDICE NO QUE APARECEN VELADAS TÓDALAS SECCIÓNS MENOS A ACTUAL. ÚTIL PARA INTRODUCIR OS TÍPICOS ÍNDICES INTERMEDIOS.
+\newcommand{\Inter}{\frame{\tableofcontents[currentsection]}}
+\newcommand{\inter}{\frame{\tableofcontents[currentsection,currentsubsection]}}
+
+% Pes de imaxe
+\renewcommand{\figurename}{Fig.}
+\addto\captionsenglish{\renewcommand{\figurename}{Fig.}}
+\setbeamertemplate{caption}[numbered]
+
+%ESTE PAQUETE PERMITE POÑER A BIBLIOGRAFIA AO PE DE PAXINA CON CONFIGURACIONS ESTETICAS PERSOAIS
+% \usepackage[style=ieee,doi=false,isbn=false,url=true,backend=bibtex]{biblatex}
+% \bibliography{./bibliografia.bib}
+% \newrobustcmd*{\footfullcitenomark}{%
+%   \AtNextCite{%
+%     \let\thefootnote\relax 
+%     \let\mkbibfootnote\mkbibfootnotetext
+%     }%
+%   \footfullcite}
+
+%paquete para engadir notas de guion ao pdf
+\usepackage{pgfpages}
+% \setbeameroption{show only notes} 
+% \setbeameroption{show notes}
+% \setbeameroption{show notes on second screen=right}
+% DATOS DO DOCUMENTO
+\title[CDA]{Advanced Digital Communications}
+\subtitle{Session 2: MIMO Channel Capacity}
+\author[FGC]{\underline{Felipe G\'omez-Cuba}}
+\institute[GPSC]{
+\begin{columns}[T]
+\begin{column}{5cm}\centering
+Office A-204\\
+Monday-Thursday 15:00-16:30\\
+\texttt{gomezcuba@gts.uvigo.es}\\
+\end{column}
+\end{columns}
+}
+
+\date{}
+
+\begin{document}
+
+% Diapositiva co título
+\frame[plain]{\titlepage}
+% 
+% \frame{\tableofcontents}
+% \note[itemize]{
+% \item First we will look at what the receiver needs from the CSI
+% \item Second we will look at several ML estimators for vector under known linear expressions
+% \item Finally we will look at delay-support CS estimators for $P_{\tau}$
+% }
+
+\frame{\frametitle{Entropy}
+    \begin{definition}[Information Theory]
+      Branch of engineering and mathematics studying the quantification of information founded by Claude Shannon's 1948 article ``A Mathematical Theory of
+Communication''
+    \end{definition}
+
+
+    \begin{definition}
+    The \textbf{entropy} of a random variable $X$ with a probability mass function $p(x)$ defined over a \textit{discrete} support set $x\in\mathcal{X}$ is given by
+    \begin{equation}
+     \Ent{X}=-\Ex{X}{\log(p(x))}=-\sum_{x\in\mathcal{X}}p(x)\log(p(x))
+    \end{equation}
+    \end{definition}
+    \begin{itemize}
+     \item $\Ent{X}\geq 0$
+     \item $\Ent{X}\leq \log(|\mathcal{X}|)$
+    \end{itemize}
+}
+\frame[allowframebreaks]{\frametitle{Entropy Examples}
+    \begin{itemize}
+     \item Let $X=\begin{cases}a&\textnormal{w.p. }p\\b&\textnormal{w.p. }1-p\end{cases}$ then $$\Ent{X}=-p\log(p)-(1-p)\log(1-p)\leq 1 (bits)$$
+     \begin{figure}[!h]
+      \includegraphics[width=.5\columnwidth]{coverHp}
+      \caption{credit: Thomas \& Cover}
+      \end{figure}
+     \item Let $X=\begin{cases}a&\textnormal{w.p. }\frac{1}{2}\\b&\textnormal{w.p. }\frac{1}{4}\\c&\textnormal{w.p. }\frac{1}{8}\\d&\textnormal{w.p. }\frac{1}{8}\\ \end{cases}$ then
+                   $$\Ent{X}=\frac{7}{4} (bits)$$
+      \textbf{Optimal Source Coding (Huffman)}: Let a code be $a\to 0$, $b\to 10$, $c\to 110$, $d\to 111$, then the avg. message length is
+      $$1\frac{1}{2}+2\frac{1}{4}+3\frac{1}{8}+3\frac{1}{8}=\frac{7}{4} (bits)$$
+                   
+    \end{itemize}
+}
+\frame{\frametitle{Diferential Entropy}
+    \begin{definition}
+    The \textbf{diferential entropy} of a r.v. $X$ with a probability density function $f(x)$ defined over a \textit{continuous} support set $x\in\mathcal{X}$ is
+    \begin{equation}
+     h(X)=-\Ex{X}{\log(p(x))}=-\int_{x\in\mathcal{X}}p(x)\log(p(x))
+    \end{equation}
+    \end{definition}
+    \begin{itemize}
+     \item \textcolor{ARust}{$\cancel{h(X)\geq 0}$}
+     \item Careful with $+C$ in the integral!
+    \end{itemize}
+    \begin{theorem}
+     Among all random variables with support in $\mathcal{X}=\mathbb{R}$, zero mean and variance $\sigma^2$, the entropy is maximized if $X$ is Gaussian
+     \begin{equation}
+      \begin{split}
+       \max_{f(x)}&\; h(x)\\ \;\textnormal{s.t. }&\Ex{X}{x}=0\textnormal{ and } \Ex{X}{x^2}=\sigma^2
+      \end{split} \Leftrightarrow \mathcal{N}(0,\sigma^2)
+     \end{equation}
+    \end{theorem}
+}
+
+\frame[allowframebreaks]{\frametitle{Entropy of Multiple Variables}
+    \begin{definition}
+    The \textbf{joint entropy} of a pair of r.v. $(X,Y)$ is
+     $$\Ent{X,Y}=-\sum_{(x,y)\in\mathcal{X}\times\mathcal{Y}}p(x,y)\log(p(x,y))$$
+    \end{definition}
+    \begin{itemize}
+     \item Complex numbers $z \triangleq (\Re\{z\},\Im\{z\})$
+     \item Vectors $\x\in \mathbb{C}^N \triangleq (x_1,x_2,\dots x_N)$
+    \end{itemize}
+    \begin{theorem}
+     Among and random variables $X$ with support in $\mathbb{C}^N$, zero mean and covariance matrix $\Sb$, the entropy is maximized if $X$ is $\mathcal{CN}(0,\Sb)$
+     \end{theorem}
+     \begin{remark}[p.d.f. of $\mathcal{CN}(\vec{\mu},\Sb)$]
+        $f(\x)=\pi^{-N}\det(\Sb)^{-1}e^{-(\x-\vec\mu)^H\Sb^{-1}(\x-\vec\mu)}$
+     \end{remark}
+
+
+     \pagebreak
+    \begin{definition}
+    The \textbf{conditional entropy} of r.v. $X$ conditioned on $Y$ is    
+     $$\CEnt{X}{Y}=\Ex{p(y)}{\Ent{X|Y=y}}=-\sum_{(x,y)\in\mathcal{X}\times\mathcal{Y}}\textcolor{ARust}{p(x,y)}\log(p(x|Y=y))$$
+    \end{definition}
+    \begin{theorem}[Chain Rule]
+        $$\Ent{X,Y}=\Ent{X}+\CEnt{Y}{X}$$
+    \end{theorem}
+    \begin{theorem}[Conditioning Reduces Entropy]
+        $$\Ent{X}\geq\CEnt{X}{Y}$$
+    \end{theorem}
+}
+\frame[allowframebreaks]{\frametitle{Measuring Information}
+    \begin{definition}
+        The \textbf{mutual information} between two r.v. $X$ and $Y$ is
+        $$\Inf{X}{Y}=\Ent{X}-\CEnt{X}{Y}=\int_x\int_yf(x,y)\log\left(\frac{f(x,y)}{f(x)f(y)}\right)$$
+    \end{definition}
+    ``How much uncertainty of $X$ decreases if we know $Y$''
+    
+    \begin{theorem}[Shannon’s channel coding theorem]
+        For dependent r.v. $Y$ as a function of r.v. $X$, the \textbf{capacity}, defined as the maximum rate of ``reliable'' communication through the channel $f(Y|X)$, is
+        $$C=\sup_{f(x)} \Inf{X}{Y}\textnormal{  s.t.  (constraints)}$$
+    \end{theorem}
+    
+     \begin{figure}
+      \centering
+        \begin{tikzpicture}[auto, node distance=4cm,>=latex']
+            \node [pinstyle] (t0) {$0$};
+            \node [pinstyle,below of=t0, node distance=2cm] (t1) {$1$};
+            \node [pinstyle,right of=t0] (r0) {$0$};
+            \node [pinstyle,right of=t1] (r1) {$1$};
+            \draw[->] (t0) -- node[]{$1-P_e$} (r0);
+            \draw[->] (t1) -- node[anchor=north]{$1-P_e$} (r1);
+            \draw[->] (t0) -- node[anchor=north]{$P_e$} (r1);
+            \draw[->] (t1) -- node[anchor=south]{$P_e$} (r0);
+        \end{tikzpicture}
+        \caption{Binary Simmetric Channel (BSC)}
+     \end{figure}
+     
+     $$f(Y|X)\sim Y=\begin{cases}
+                                               X&\textnormal{w.p. } 1-P_e\\
+                                               \textnormal{not}(X)&\textnormal{w.p. } P_e
+                                              \end{cases}\textnormal{ s.t. }X\in\{0,1\}$$
+     $$C_{BSC}=1-H(P_e)$$
+     \pagebreak
+     
+     
+\begin{figure}
+ \centering
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    \node [pinstyle,anchor=east] (txin) {$x[n]$};
+    \node [sum, right of=txin, node distance=2cm, pin={[pinstyle, pin distance=.3cm]above:$z[n]$}] (sum) {$+$};
+    \draw [->,] (txin) -- (sum);
+    \node [pinstyle, right of=sum] (rxout) {$y[n]$};
+    \draw [->] (sum) -- (rxout);
+\end{tikzpicture}
+\caption{Additive White Gaussian Noise (AWGN) real channel}
+\end{figure}
+     $$y[n]=x[n]+z[n],\;\textnormal{ s.t. }z\sim\mathcal{N}(0,\sigma^2),\;x\in\mathbb{R},\;\Ex{}{|x|^2}=P$$
+     $$C_{AWGN}=\frac{1}{2}\log\left(1+\frac{P}{\sigma^2}\right)\textnormal{ bits per channel use}$$
+}
+
+\frame[allowframebreaks]{\frametitle{Complex AWGN SISO DEC}
+
+\begin{figure}
+ \centering
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    \node [pinstyle] (tx) {$x[n]$};
+    \node [output,right of=tx] (txant) {};
+    \draw [-,ARust] (tx) -- (txant) \antenna;
+    \node [sum,color=ARust, right of=txant, pin={[pinstyle, pin distance=.3cm,color=ARust]above:$h$}] (mult) {$\times$};
+    \node [input,right of=mult] (rxant) {};
+    \draw [->,dotted,very thick,ARust] (txant) -- (mult);
+    \draw [->,dotted,very thick,ARust] (mult) -- (rxant);
+    \node [sum, right of=rxant, pin={[pinstyle, pin distance=.3cm]above:$z[n]$}] (sum) {$+$};
+    \draw [->,ARust] (rxant) \antenna -- (sum) ;
+    \node [pinstyle, right of=sum] (rec) {$y[n]$};
+    \draw [->] (sum) -- (rec);
+\end{tikzpicture}
+ \caption{AWGN SISO Discrete Equivalent Channel}
+\end{figure}
+ $$y[n]=h·x[n]+z[n],\;z[n]\sim\mathcal{CN}(0,\sigma^2),\;x[n]\in\mathbb{C}\;\Ex{}{|x[n]|^2}=P$$
+ $$C=B\log\left(1+\frac{|h|^2P}{\sigma^2}\right) \textnormal{ (bps)}$$
+\begin{itemize}
+ \item Bandwidth in Hertz $B$ (complex baseband or real passband $T_s\leq 2B$)
+ \item \textbf{Received} SNR $\frac{|h|^2P}{\sigma^2}$
+\end{itemize}
+
+\pagebreak
+\begin{definition}[Spectral Efficiency]
+ Ratio between the communication rate and the employed bandwidth $\eta\triangleq \frac{R}{B}$
+\end{definition}
+
+  $$\eta_{\max}=\frac{C}{B}=\log\left(1+\frac{|h|^2P}{\sigma^2}\right)$$
+  \begin{itemize}
+    \item S.E. only grows logarithmically with SNR\\ \ \\
+    \item $C$ grows linearly with $B$, but spectrum licenses are \textbf{very} expensive\\ \ \\
+    \item What technology can increase S.E. efficiently?
+  \end{itemize}
+}
+
+\frame[allowframebreaks]{\frametitle{Complex AWGN MIMO DEC}
+
+\begin{figure}
+ \centering
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    \node [pinstyle] (tx) {$\x[n]$};
+    \node [block,right of=tx] (mult) {$\Hb$};
+    \draw [->,dotted,very thick] (tx) -- (mult);
+    \node [sum, right of=mult, node distance=2cm, pin={[pinstyle, pin distance=.3cm]above:$\z[n]$}] (sum) {$+$};
+    \draw [->,dotted,very thick] (mult) -- (sum);
+    \node [pinstyle, right of=sum] (rec) {$\y[n]$};
+    \draw [->] (sum) -- (rec);
+\end{tikzpicture}
+ \caption{ \textbf{AWGN MIMO Discrete Equivalent Channel} (omit notation $[n]$)}
+\end{figure}
+
+    $$\y=\Hb\x+\z$$
+        
+\begin{columns}
+\begin{column}{6cm}
+    \begin{figure}
+    \includesvg[width=\columnwidth]{channel}
+    \end{figure}
+\end{column}
+\begin{column}{6cm}
+    $\Hb=\left(\begin{array}{cccc}
+ h_{1,1}&\dots&h_{1,n_t}\\
+ \vdots&\ddots&\vdots\\
+ h_{n_r,1}&\dots&h_{n_r,n_t}\\
+\end{array}\right)
+$
+\end{column}
+\end{columns}
+ \begin{itemize}
+ \item Number of transmit and receive antennas $n_t$, $n_r$
+ $$\x\in \mathbb{C}^{n_t},\;\Hb\in \mathbb{C}^{n_r\times n_t},\;\y,\z\in \mathbb{C}^{n_r},\;$$
+ \item Total transmitted power constraint (embedded in un-normalized $f(\x)$)
+ $$\Ex{}{\sum_{i=1}^{n_t}|x_i[n]|^2}=\Ex{}{\|\x\|^2}=\Ex{}{\x^H\x}\leq P$$
+ \item Transmitted signal covariance $\Ex{}{\x\x^H}=\Sb_{\z}$
+ $$\underset{\textnormal{tr circular rotation identity}}{\underbrace{\tr{\A\B\Cb}=\tr\{\Cb\A\B\}}}\Rightarrow \Ex{}{\x^H\x}=\Ex{}{\tr\{\x\x^H\}}=\tr\{\Sb_{\x}\}\leq P$$
+ \pagebreak
+ \item Additive White Gaussian Noise $\Ex{}{\z\z^H}=\Sb_{\z}=\sigma^2\I$
+ \begin{itemize}
+    \item Suppose Thermal Noise of PSD $N_o\to\sigma^2=BN_o$\\ \ \\
+ \end{itemize} 
+ \item What if $x_i=\sqrt{\frac{P}{n_t}}s_i$ where $s_i$ are i.i.d. constellations?
+ \begin{itemize}
+    \item Input covariance $\Sb_\x=\frac{P}{n_t}\I_{n_t}$
+    \item Received Signal Power $\tr\{\Hb\Sb_\x\Hb^H\}=\frac{P}{n_t}\tr\{\Hb\Hb^H\}=\frac{P}{n_t}\sum_{i,j=1}^{n_t,n_r} |h_{i,j}|^2=\frac{P\|\Hb\|^2}{n_t}$
+    \item Noise Power $\tr\{\Sb_\z\}=n_r\sigma^2$
+    \item Receiver SNR $\frac{P\|\Hb\|^2}{n_tn_r \sigma^2}$\\ \ \\
+ \end{itemize} 
+ \item Normalized Channel Matrix $\|\Hb\|^2=n_tn_r\to$ SNR (of i.i.d. inputs) $=\frac{P}{\sigma^2}$ \\ \ \\
+ \item \textbf{In this DEC, $P$ [Joules] energy received (w. pathloss), $\frac{P}{T_s}=PB$ [Watts]}
+\end{itemize}
+}
+
+\frame[allowframebreaks]{\frametitle{AWGN MIMO Mutual Information}
+\begin{itemize}
+ \item Capacity is the maximum M.I. over all input distributions
+ $$C\triangleq \max_{f(\x)} \Inf{\x}{\y}$$
+ \item Gaussian $\y$ maximizes M.I. over all cases with $\Sb_\y=\Hb\Sb_\x\Hb^H+\Sb_\z$
+    $$\Inf{\x}{\y}=\underset{\textnormal{max if }\y\textnormal{ is Gaussian}}{\underbrace{\Ent{\y}}}-\underset{\y|\x \sim  \mathcal{CN}(\Hb\x,\sigma^2\I)\textnormal{ always } \forall f(\x)}{\underbrace{\CEnt{\y}{\x}}}$$
+ \item If $\x$ is Gaussian, so is $\y=\Hb\x+\z$
+ \item Gaussian $\vv$ p.d.f. $f(\vv)=\pi^{-N}\det(\Sb_\vv)^{-1}e^{-(\vv-\vec\mu)^H\Sb_\vv^{-1}(\vv-\vec\mu)}$
+ $$C= \max_{\Sb_\x} \Inf{\x}{\y} \big|_{\x\sim \mathcal{CN}(0,\Sb_\x)} = \max_{\Sb_\x}\log\det \left(\I_{n_r}+\Sb_\z^{-1}\Hb\Sb_\x\Hb^H\right)$$
+\end{itemize}
+
+What about optimization constraints?
+ $$C= \max_{\Sb_\x}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Hb\Sb_\x\Hb^H\right)\textnormal{ s.t. \textcolor{ARust}{????????}}$$
+ \begin{itemize}
+  \item Total average transmitted power $\tr\{\Sb_\x\}\leq P$?
+  \item RF power amplifier in each antenna $x_i\leq P/n_t\forall i$?
+  \item Does the receiver know $\Hb$?
+  \item Does the transmitter know $\Hb$? 
+ \end{itemize}
+ 
+ \begin{definition}[$C$ with only Channel State Information at the Receiver]
+    $$C_{\textnormal{CSIR}}= \max_{\Sb_\x}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Hb\Sb_\x\Hb^H\right)\textnormal{ s.t. }\tr\{\Sb_\x\}\leq P, \Sb_x\textnormal{ const. }\forall \Hb$$
+ \end{definition}
+ \begin{definition}[$C$ with Channel State Information at the Transmitter]
+    $$C_{\textnormal{CSIT}}= \max_{\Sb_\x}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Hb\Sb_\x\Hb^H\right)\textnormal{ s.t. }\tr\{\Sb_\x\}\leq P, \Sb_x=\mathscr{F}(\Hb)$$
+ \end{definition}
+
+}
+
+\frame[allowframebreaks]{\frametitle{AWGN MIMO CSIR Capacity}
+    \begin{itemize}
+     \item No reason to transmit more power in one antenna than other
+     \item No reason to transmit more power in \textit{algebraic} direction than other
+    \begin{theorem}[M.I. Unitary Transform]
+     For any unitary matrix $\U$, the channels $\y=\Hb\x+\z$ and $\y=\Hb'\x'+\z$ with $\Hb'=\Hb\U^H$, $\x'=\U\x$ have equal output and capacity $\Inf{\y}{\x}=\Inf{\y}{\U\x}$.
+    \end{theorem}
+    \item so we choose the input covariance $\Sb_\x= \frac{P}{n_t}\I_{n_t}$
+    $$C_{\textnormal{CSIR}}= \log\det \left(\I_{n_r}+\frac{P}{n_t\sigma^2}\Hb\Hb^H\right)$$
+    \end{itemize}
+}
+
+\frame[allowframebreaks]{\frametitle{Channel Eigenvalue Decomposition}
+    \begin{itemize}
+     \item $\Hb\Hb^H$ is square $n_r\times n_r$, admits \textit{eigenvalues} analysis
+     \item $\Hb\Hb^H$ is Hermitian
+     \begin{itemize}
+        \item Non-negative eigenvalues $\lambda_1\geq \lambda_2\geq\dots\geq\lambda_{n_r}\geq 0$
+        \item Decompositoin $\Hb\Hb^H=\U\LL\U^H$
+        $$\U^H\U=\U^H\U=\I,\;\LL_{n_r}=\left(\begin{array}{cccc}
+ \lambda_1&0&\dots&0\\
+ 0&\lambda_2&\dots&0\\
+ \vdots&\vdots&\ddots&\vdots\\
+ 0&0&\dots&\lambda_{n_r}\\
+\end{array}\right)$$
+     \end{itemize}
+    \end{itemize}
+    \begin{equation*}
+     \begin{split}
+      C&=\log\det \left(\I_{n_r}+\frac{P}{n_t\sigma^2}\Hb\Hb^H\right)=\log\cancel{\det(\U)}^{1}\det\left(\I_{n_r}+\frac{P}{n_t\sigma^2}\LL\right)\cancel{\det(\U^H)}^{1}\\
+       &=\log\prod_{j=1}^{n_r} (1+\frac{P}{n_t\sigma^2}\lambda_j)=\sum_{j=1}^{n_r}\log (1+\frac{P}{n_t\sigma^2}\lambda_j)
+     \end{split}
+    \end{equation*}
+
+\pagebreak
+     \begin{definition}[Rank]
+        Number of non-zero eigenvalues $\rank(\Hb) \triangleq \texttt{count}(|\lambda_i|\neq0)\leq \min(n_r,n_t)$
+     \end{definition}
+     \begin{definition}[Eigenchannels]
+      The MIMO capacity is the sum of $\rank(\Hb)$ SISO channel with gains $\lambda_i$
+     \end{definition}
+     \begin{figure}
+        \centering
+        \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+            \node [pinstyle] (tx) {$x_i$ s.t. $\Ex{}{|x_i|^2}=\frac{P}{n_t}$};
+            \node [output,right of=tx] (txant) {};
+            \draw [-,ARust] (tx) -- (txant) \antenna;
+            \node [sum,color=ARust, right of=txant, pin={[pinstyle, pin distance=.3cm,color=ARust]above:$\sqrt{\lambda_i}$}] (mult) {$\times$};
+            \node [input,right of=mult] (rxant) {};
+            \draw [->,dotted,very thick,ARust] (txant) -- (mult);
+            \draw [->,dotted,very thick,ARust] (mult) -- (rxant);
+            \node [sum, right of=rxant, pin={[pinstyle, pin distance=.3cm]above:$z_i$}] (sum) {$+$};
+            \draw [->,ARust] (rxant) \antenna -- (sum) ;
+            \node [pinstyle, right of=sum] (rec) {$y_i$};
+            \draw [->] (sum) -- (rec);
+        \end{tikzpicture}
+        \caption{AWGN SISO Discrete Equivalent Channel}
+        \end{figure}
+    $$C=\sum_{j=1}^{\rank(\Hb)}C_i^{SISO}=\sum_{j=1}^{\rank(\Hb)}\log(1+\frac{P\lambda_i}{n_t\sigma^2})$$
+\pagebreak
+    \begin{itemize}
+     \item $\|\Hb\|^2=\sum_{i,j=1}^{n_t,n_r} |h_{i,j}|^2=\sum_{j=1}^{n_r}\lambda_j$
+     \item Best case scenario: $n_t=n_r=N$, $\lambda_i=\lambda$, $\|\Hb\|^2=\sum_{j=1}^{n_r}\lambda_j=N\lambda=N^2$
+     $$C=\textcolor{ARust}{N}\log(1+\frac{P}{\sigma^2})$$
+    \begin{itemize}
+     \item Capacity grows \textbf{linearly} with $N$\\ \ \\
+     \end{itemize}
+     \item Least favorable scenario: $\rank(\Hb)=1$, $\lambda_1=n_tn_r=\|\Hb\|^2$
+     $$C=\log(1+\frac{P\cancel{n_t}\textcolor{ARust}{n_R}}{\cancel{n_t}\sigma^2})$$
+    \begin{itemize}
+     \item Receive-only \textbf{MRC array gain}\\ \ \\
+     \end{itemize}
+     \item \textbf{SIMO only scales logarithmically}
+     \item \textbf{MISO does not increase $C_{\textnormal{CSIR}}$ at all!}
+     \end{itemize}
+}
+
+\frame[allowframebreaks]{\frametitle{AWGN MIMO CSIT Capacity}
+\begin{itemize}
+ \item Singular Value Decomposition of $\Hb=\U\Sm\V^H$
+        $$\small \U^H\U=\I_{n_r},\;\V^H\V=\I_{n_t},\;\Sm=\left(\begin{array}{cccc}
+ \sqrt{\lambda_1}&0&\dots&0\\
+ 0&\sqrt{\lambda_2}&\dots&0\\
+ \vdots&\vdots&\ddots&\vdots\\
+ 0&0&\dots&\sqrt{\lambda_{\rank(\Hb)}}\\
+\end{array}\right),\;\LL_{\rank(\Hb)}=\Sm^H\Sm=\Sm^2$$
+ \item Introduce the change of variable $\x=\V\x'$
+ 
+\begin{figure}
+ \centering
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    \node [pinstyle] (tx) {$\x'$};
+    \node [block,right of=tx] (precod) {$\V$};
+    \draw [->] (tx) -- (precod);
+    \node [block,right of=precod] (mult) {$\Hb$};
+    \draw [->,dotted,very thick] (precod) -- node {$\x$} (mult);
+    \node [sum, right of=mult, node distance=2cm, pin={[pinstyle, pin distance=.3cm]above:$\z[n]$}] (sum) {$+$};
+    \draw [->,dotted,very thick] (mult) -- (sum);
+    \node [pinstyle, right of=sum] (rec) {$\y[n]$};
+    \draw [->] (sum) -- (rec);
+\end{tikzpicture}
+ \caption{AWGN MIMO DEC with linear tx. precoding}
+\end{figure}
+ \item Covariance of channel input $\Sb_\x=\V\Sb_{\x}'\V^H$
+ \item $\Sb_\x$ and $\Sb_{\x}'$ square, $\V$ is unitary $\to$ bijective projection of optimal $\Sb_{\x}'$
+\end{itemize}
+ \begin{theorem}[Sylverster's Theorem]
+  For any matrices $\A\in\mathbb{C}^{n,m},\B\in\mathbb{C}^{m,n}$, $\det(\I_n+\A\B)=\det(\I_m+\B\A)$
+ \end{theorem}
+ \begin{equation*}
+  \begin{split}
+    C_{\textnormal{CSIT}}%&= \max_{\Sb_\x}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Hb\Sb_\x\Hb^H\right)\\
+                         &= \max_{\Sb_\x}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\U\Sm\V^H\Sb_\x\V\Sm\U^H\right)\\
+                         &= \max_{\Sb_\x'}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\underset{\A}{\underbrace{\U\Sm}}\underset{\B}{\underbrace{\Sb_{\x'}\Sm\U^H}}\right)\\
+                         &= \max_{\Sb_\x'}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Sb_{\x'}\Sm\U^H\U\Sm\right)\\
+                         &= \max_{\Sb_\x'}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Sb_{\x'}\LL\right)\\
+  \end{split}
+ \end{equation*}
+ \pagebreak
+ \begin{theorem}[Hadamard Inequality]
+  For any non-negative definite matrix $\A$, $\det(\A)\leq \prod A_{i,i}$ where $A_{i,i}$ are the diagonal elements of $\A$. Equality is achieved with diagonal $\A$.
+ \end{theorem}
+ \begin{itemize}
+  \item There is at least one optimal $\Sb_{\x'}$ that is diagonal
+ \end{itemize}
+\begin{columns}
+ \begin{column}{6cm}
+  $$\D_{\x'}=\left(\begin{array}{cccc}
+ P_1&0&\dots&0\\
+ 0&P_2&\dots&0\\
+ \vdots&\vdots&\ddots&\vdots\\
+ 0&0&\dots&P_{\rank(\Hb)}\\
+\end{array}\right)$$  
+ \end{column}
+ \begin{column}{6cm}
+ \begin{equation*}
+  \begin{split}
+    C_{\textnormal{CSIT}}&= \max_{\D_\x'}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\D_{\x'}\LL\right)\\
+        &= \max_{(P_1,P_2,\dots,P_{r_\Hb})}\log\prod_{i=1}^{\rank(\Hb)} \left(1+\frac{P_i\lambda_i}{\sigma^2}\right)\\
+        &= \max_{(P_1,P_2,\dots,P_{r_\Hb})}\sum_{i=1}^{\rank(\Hb)}\log \left(1+\frac{P_i\lambda_i}{\sigma^2}\right)\\
+  \end{split}
+ \end{equation*}
+ \end{column}
+\end{columns}
+}
+
+\frame{\frametitle{Eigenbeamforming}
+\begin{figure}
+ \centering
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    \node [pinstyle] (tx) {$\x'$};
+    \node [block,right of=tx] (precod) {$\V$};
+    \draw [->] (tx) -- (precod);
+    \node [block,right of=precod] (mult) {$\Hb$};
+    \draw [->,dotted,very thick] (precod) -- node {$\x$} (mult);
+    \node [sum, right of=mult, node distance=2cm, pin={[pinstyle, pin distance=.3cm]above:$\z[n]$}] (sum) {$+$};
+    \draw [->,dotted,very thick] (mult) -- (sum);
+    \node [block,right of=sum] (decod) {$\U^H$};
+    \draw [->] (sum) -- node {$\y$} (decod);
+    \node [pinstyle, right of=decod] (rec) {$\y'$};
+    \draw [->] (decod) -- (rec);
+\end{tikzpicture}
+ \caption{AWGN MIMO DEC CSIT Eigenbeamforming}
+\end{figure}
+\begin{itemize}
+ \item Transmitter linear precoding $\x=\V\x'$
+ \item Receiver linear combining $\y'=\U^H\y$
+ \end{itemize}
+ 
+\begin{columns}
+ \begin{column}{6cm}
+\begin{figure}
+ \centering
+\begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    \node [pinstyle] (tx) {$\x'$};
+    \node [block,right of=tx] (mult) {$\Sm$};
+    \draw [->,dotted,very thick] (tx) -- (mult);
+    \node [sum, right of=mult, node distance=2cm, pin={[pinstyle, pin distance=.3cm]above:$\z[n]$}] (sum) {$+$};
+    \draw [->,dotted,very thick] (mult) -- (sum);
+    \node [pinstyle, right of=sum] (rec) {$\y'$};
+    \draw [->] (sum) -- (rec);
+\end{tikzpicture}
+ \caption{Eigenchannels}
+\end{figure}  
+ \end{column}
+ \begin{column}{6cm}
+      $$C_{\textnormal{CSIT}}=\max_{(P_1,P_2,\dots,P_{r_\Hb})}\sum_{i=1}^{\rank(\Hb)}\log \left(1+\frac{P_i\lambda_i}{\sigma^2}\right)$$
+ \end{column}
+\end{columns}
+}
+
+
+\frame[allowframebreaks]{\frametitle{Waterfilling}
+    \begin{itemize}
+     \item What is the optimal allocation of power to Eigenchannels?\\ \ \\
+     \item Convex optimization with constraints
+     $$\max_{\vec{P}} f(\vec{P})\textnormal{ s.t. }\sum P_i=P,\; P_i>0\forall i$$ $$f(\vec{P})=\sum_{i=1}^{\rank(\Hb)}\log \left(1+\frac{P_i\lambda_i}{\sigma^2}\right)$$
+     \item Lagrange Multipliers
+     $$\max_{\vec{P}}\mathscr{L}(\vec{P})$$ $$\mathscr{L}(\vec{P}) = f(\vec{P})-\beta(\sum P_i-P)+\sum \zeta_i(P_i)$$
+     \item Gradient of $\mathscr{L}(\vec{P})=\sum_{i=1}^{\rank(\Hb)}\underset{\ell_i(P_i)}{\underbrace{\left[\log \left(1+\frac{P_i\lambda_i}{\sigma^2}\right)-\beta P_i+\zeta_iP_i\right]}}+\beta P$
+     \begin{equation*}\begin{split}
+     0&=\frac{\partial \mathscr{L}(\vec{P})}{\partial P_i}= \frac{\partial \ell_i(P_i)}{\partial P_i} = \frac{ \lambda_i }{\sigma^2+P_i\lambda_i}-\beta+\zeta_i\\
+    \beta-\zeta_i &= \frac{ \lambda_i }{\sigma^2+P_i\lambda_i}\\
+    \sigma^2+P_i\lambda_i &= \frac{ \lambda_i }{\beta-\zeta_i}\\
+    P_i &= \frac{ 1 }{\beta-\zeta_i}-\frac{\sigma^2}{\lambda_i}\\
+    \end{split}
+     \end{equation*}
+    \item Condition $\zeta_iP_i^*=0\to$ for $P_i^*\neq 0, \zeta_i=0$
+        $$P_i^* = \begin{cases}                 
+                    \frac{ 1 }{\beta}-\frac{\sigma^2}{\lambda_i}&\textnormal{if }\frac{ 1 }{\beta}>\frac{\sigma^2}{\lambda_i}\\
+                    0&\textnormal{otherwise}
+                \end{cases}$$
+    \item Condition $\beta (\sum P_i-P)=0\to$,  for $\beta\neq0, \sum P_i=P$     \\ \ \\
+    \item Optimal power allocation Solution
+     $$P_i^*=\left(\frac{1}{\beta}-\frac{\sigma^2}{\lambda_i}\right)^+\;\leftarrow \textnormal{ substitute in }\sum P_i^*=P \textnormal{ and calculate }\beta$$
+    \end{itemize}
+    
+\begin{columns}
+ \begin{column}{7cm}    
+    \setbeamercolor{postit}{fg=EETblue,bg=EETblue!10}
+    \begin{beamercolorbox}[wd=\textwidth]{postit}
+%     \begin{algorithm}
+%     \caption{WATER FILLING ALGORITHM}
+     \begin{algorithmic}[0]
+      \STATE Define $w=\frac{1}{\beta}$
+      \STATE Initialize $w^{(0)}=\frac{\sigma^2}{\lambda_i}$, $P_i^{(0)}=0$
+      \WHILE{ $\{n=0;\sum P_i^{(n)}<P, n++\}$ }
+        \STATE $P_{unused}=P-\sum P_i^{(n)}$
+        \STATE $w^{(n+1)}=w^{(n)}+\frac{P_{unused}}{\rank(\Hb)}$
+        \STATE $P_i^{(n+1)}=\left(w^{(n+1)}-\frac{\sigma^2}{\lambda_i}\right)^+$
+      \ENDWHILE
+     \end{algorithmic}
+    \end{beamercolorbox}
+%     \end{algorithm}
+\begin{itemize}
+ \item Let $N_{\Hb}=\left|\{P_i^*>0\}\right|$
+\end{itemize}
+
+$$C_{\textnormal{CSIT}}=\sum_{i=1}^{N_{\Hb}}\log\left(\frac{\lambda_i}{\beta\sigma^2}\right)$$
+\end{column}
+ \begin{column}{6cm}
+\begin{figure}[t]
+\centering
+\scalebox{.75}{
+    \begin{tikzpicture}[auto,>=latex']
+        \begin{axis}[
+        ybar stacked,
+        width=\columnwidth,
+        height=4cm,
+        ymin=0,
+        ymax=5,
+%         xtick=1,
+        legend style={
+            cells={anchor=west},
+            legend pos=north west,
+        },
+        reverse legend=true,
+%         xticklabels = {1,2,3,4,5},
+        xlabel={$i$},
+        bar width=1,
+    ]
+        \addplot[draw=black,pattern color=gray,pattern=crosshatch dots] coordinates {
+        (1,1.6)
+        (2,1.2)
+        (3,2.8)
+        (4,2)
+        };
+    \draw[-,VCobalt,very thick] (0,1.2) -- node[VCobalt] {$w^{(0)}$} (5,1.2);
+    \legend {$\frac{\sigma^2}{\lambda_i}$};
+    \end{axis}
+    \end{tikzpicture}
+    }
+    
+\scalebox{.75}{
+    \begin{tikzpicture}[auto,>=latex']
+        \begin{axis}[
+        ybar stacked,
+        width=\columnwidth,
+        height=4cm,
+        ymin=0,
+        ymax=5,
+%         xtick=1,
+        legend style={
+            cells={anchor=west},
+            legend pos=north west,
+        },
+        reverse legend=true,
+%         xticklabels = {1,2,3,4,5},
+        xlabel={$i$},
+        bar width=1,
+    ]
+        \addplot[draw=black,pattern color=gray,pattern=crosshatch dots] coordinates {
+        (1,1.6)
+        (2,1.2)
+        (3,2.8)
+        (4,2)
+        };
+        \addplot[draw=KYJade,pattern color=KYJade,pattern=north east lines] coordinates {
+        (1,.2)
+        (2,.6)
+        (3,0)
+        (4,)
+        };
+        \legend {$\frac{\sigma^2}{\lambda_i}$, $P_i^{(1)}$};
+    \draw[-,VCobalt,very thick] (0,1.8) -- node[VCobalt] {$w^{(1)}$} (5,1.8);
+    \end{axis}
+    \end{tikzpicture}
+    }
+\scalebox{.75}{
+    \begin{tikzpicture}[auto,>=latex']
+        \begin{axis}[
+        ybar stacked,
+        width=\columnwidth,
+        height=4cm,
+        ymin=0,
+        ymax=5,
+%         xtick=1,
+        legend style={
+            cells={anchor=west},
+            legend pos=north west,
+        },
+        reverse legend=true,
+%         xticklabels = {1,2,3,4,5},
+        xlabel={$i$},
+        bar width=1,
+    ]
+        \addplot[draw=black,pattern color=gray,pattern=crosshatch dots] coordinates {
+        (1,1.6)
+        (2,1.2)
+        (3,2.8)
+        (4,2)
+        };
+        \addplot[draw=KYJade,pattern color=KYJade,pattern=north east lines] coordinates {
+        (1,.8)
+        (2,1.2)
+        (3,0)
+        (4,.4)
+        };
+        \legend {$\frac{\sigma^2}{\lambda_i}$, $P_i^{(2)}$};
+    \draw[-,VCobalt,very thick] (0,2.4) -- node[VCobalt] {$w^{(2)}$} (5,2.4);
+    \end{axis}
+    \end{tikzpicture}
+    }
+\end{figure}    
+ \end{column}
+\end{columns}
+}
+
+
+
+\frame[allowframebreaks]{\frametitle{OFDM and MIMO Capacity}
+%      \item With ISI, i.e. $\displaystyle \y=\sum_{m=0}^{M-1}\Hb[n-m]\x[m]+\z[m]$ with $M>1$\\ \ \\
+ \begin{figure}
+ \caption{OFDM frequency-selective channel split into $K$ flat sub-bands}
+    \includegraphics[width=.45\columnwidth]{ofdmexample} 
+ \end{figure}
+    \begin{itemize}
+     \item Independent MIMO subchannels $\y[k]=\Hb[k]\x[k]+\z[k]\;\forall k\in[0,K-1]$
+     \item ``stack'' the vectors as a large MIMO block-diagonal channel
+         $$\Tiny \underset{\y_{tot}}{\underbrace{\left(\begin{array}{c}\y[0]\\\vdots\\\y[K-1]\end{array}\right)}}=\underset{\Hb_{tot}}{\underbrace{\left(\begin{array}{cccc}\Hb[0]&0&\dots&0\\ 0&\Hb[1]&\dots&0\\ \vdots&\vdots&\ddots&\vdots\\ 0&0&\dots&\Hb[K-1] \end{array}\right)}}\underset{\x_{tot}}{\underbrace{\left(\begin{array}{c}\x[0]\\\vdots\\\x[K-1]\end{array}\right)}}+\underset{\z_{tot}}{\underbrace{\left(\begin{array}{c}\z[0]\\ \vdots\\ \z[K-1]\end{array}\right)}}$$
+  
+%  \pagebreak
+\item By M.I. chain rule and properties of block matrix, the capacity is
+          \begin{equation}
+            \begin{split}
+                C&=\sup_{\Sb_{\x_{tot}}}\log\det\left(\I+\frac{1}{\sigma_z}\Hb_{tot}\Sb_{\x_{tot}}\Hb_{tot}^H\right)\\
+                 &=\sup_{\{\Sb_{\x[k]}\}_{k=0}^{K-1}}\sum_{k=0}^{K-1}\log\det\left(\I+\frac{1}{\sigma_z}\Hb[k]\Sb_{\x[k]}\Hb^H[k]\right)\\
+                 &=\sup_{\vec{P}}\sum_{k=0}^{K-1}\sum_{i=0}^{\rank(\Hb[k])}\log\left(1+\frac{P_{k,i}\lambda_i[k]}{\sigma_z}\right)
+            \end{split}
+          \end{equation}
+     \item With CSIT, waterfilling over \textbf{antennas and frequency}
+    \end{itemize}
+}
+
+\frame[allowframebreaks]{\frametitle{Degrees of Freedom}
+\begin{columns}
+\begin{column}{8cm}
+\begin{figure}
+ \centering
+ \caption{Multipath Channel}
+ \includesvg[width=.9\columnwidth]{multipath}
+\end{figure}
+\vspace{.1in}
+\end{column}
+\begin{column}{4cm}
+\begin{itemize}
+ \item System of Linear Equations
+    $$\begin{array}{c}y_1=h_{1,1}x_1+h_{1,2}x_2\\y_2=h_{2,1}x_1+h_{2,2}x_2\end{array}$$    
+ \item Has solution if $h_{1,1},h_{1,2},h_{2,1},h_{2,2}$ are all different
+\end{itemize}
+\end{column}
+\end{columns}
+
+Paradigm shift in interpretation of multipath channel
+\begin{itemize}
+ \item Before: ``multipath is a problem, creates Inter-Symbol Interference''
+ \item Now: ``multipath is an opportunity, creates degrees of freedom''
+\end{itemize}
+
+\pagebreak
+\begin{itemize}
+ \item System of linear equations $\vv=\Hb\x$ has solution(s) if $\rank(\Hb)\stackrel{(>)}{=} n_t$
+ \item How many independent modulation symbols can we send? Does the noise $\y=\vv+\z$ affect?
+ \begin{definition}[Degrees of Freedom (DoF)]
+  $$\textnormal{DoF}=\lim_{SNR_{norm}\to\infty}\frac{C}{\log(SNR_{norm})},\textnormal{ where }SNR_{norm}=\frac{P}{\sigma^2}$$
+ \end{definition}
+ \begin{theorem}
+  If $\Hb$ is full rank, $D=\min(n_t,n_r)$
+ \end{theorem}
+\end{itemize}
+}
+
+
+\frame[allowframebreaks]{\frametitle{Energy Limited Rate}
+\begin{itemize}
+ \item Recall that $\sigma_z^2=BN_o$ and $C$ in bit/channel use
+ $$C(bps)=\sup_{\vec{P}}B\sum_{i=1}^{\rank(\Hb)}\log\left(1+\frac{P_i\lambda_i}{N_oB}\right)$$
+ \item The DoF reveal the \textit{PRELOG} of the big-O approximation $$C\approx\Theta\left( B\min(n_t,n_r)\log\left(1+\frac{P}{N_oB}\frac{n_tn_t}{\min(n_t,n_r)}\right) \right)$$ 
+ \item Spectral efficiency $\eta=\frac{C}{B}$ bits/s/Hz
+ \item For small $B$, rate grows with DoF. 
+    $$\eta \approx\Theta\left( \min(n_t,n_r)  \right)$$ 
+ 
+ \pagebreak
+ \item When bandwidth is very large
+ $$\lim_{B\to\infty}C(bps)=\sup_{\vec{P}}B\frac{\sum_{i=1}^{\rank(\Hb)}P_i\lambda_i}{N_oB}\begin{cases}
+                                                                                           \textnormal{CSIR }\to\frac{P\sum_{i=1}^{\rank(\Hb)}\lambda_i}{n_tN_oB}= \frac{P\|\Hb\|^2}{n_tN_oB}\\
+                                                                                           \textnormal{CSIT }\to\frac{P\lambda_{\max}}{N_oB}\\
+                                                                                          \end{cases}
+$$
+ \item The rate is limited by received energy, $\eta\to0$
+ \begin{figure}
+\includegraphics[width=.35\columnwidth]{widebandcap} 
+\end{figure}
+
+ \item Minimum energy per transmitted bit $\frac{P/N_o}{C_{SISO}}\geq -\log_2 e = -1.56dB$. \\ \ \\
+\end{itemize}
+}
+
+
+
+\frame{\frametitle{Massive MIMO}
+\begin{columns}
+ \begin{column}{6cm}
+ \textbf{Very large} number of antennas
+  \begin{figure}
+   \centering
+   \includegraphics[width=\columnwidth]{starlink-24-phased-array-measurement-980x557}
+   \caption{StarLink dish antennas\\https://www.youtube.com/watch?v=iOmdQnIlnRo}
+  \end{figure}
+ \end{column}
+ \begin{column}{6cm}
+ \begin{itemize}
+    \item Advantages
+    \begin{itemize}
+        \item Unlimited capacity 
+        $$ \lim_{n_t,n_r\to\infty} C=\infty$$
+        \item Random Matrix Theory
+        $$\lim_{n_t\to\infty} \mathcal{CN}(0,\I_{n_t})\to U\textnormal{-sphere}$$\\ \ \\
+    \end{itemize}
+    \item Problems
+    \begin{itemize}
+        \item Hardware Complexity
+        \item RF circuit power
+        \item Channel Estimation
+    \end{itemize}
+ \end{itemize}
+ \end{column}
+\end{columns}
+
+}
+\end{document}
+
+

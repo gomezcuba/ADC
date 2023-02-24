@@ -1,0 +1,164 @@
+\documentclass[xcolor=dvipsnames,aspectratio=169]{beamer}
+
+% INCLUSIÓN DOS PAQUETES IMPRESCINDIBLES DE IDIOMA E CODIFICACIÓN DE CARACTERE.
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+
+%ACRONYMS para engadir un glosario de acronimos automatizado
+% \usepackage[acronyms,nonumberlist,nopostdot,nomain,nogroupskip]{glossaries}
+% \input{./acronyms.tex}
+
+% PAQUETES PARA FIGURAS E GRAFICOS
+\usepackage{graphicx}
+%   \usepackage[pdftex]{graphicx}
+  \usepackage{epstopdf}
+   \graphicspath{{./figures/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+   \DeclareGraphicsExtensions{.eps,.pdf,.png,.jpg}   
+\usepackage{subfigure}
+\usepackage{caption}
+
+%Tikz plots
+\usepackage{tikz}
+\usepackage{tikzscale}
+\usetikzlibrary{plotmarks,patterns,decorations.pathreplacing,backgrounds,calc,arrows,arrows.meta,spy,matrix,backgrounds}
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \UE (#1) {};}
+\newcommand{\DrawBox}[4][]{%
+    \tikz[overlay,remember picture]{%
+        \coordinate (TopLeft)     at ($(#2)+(-0.4em,1.6em)$);
+        \coordinate (BottomRight) at ($(#3)+(0.4em,-1.0em)$);
+        %
+        \path (TopLeft); \pgfgetlastxy{\XCoord}{\IgnoreCoord};
+        \path (BottomRight); \pgfgetlastxy{\IgnoreCoord}{\YCoord};
+        \coordinate (LabelPoint) at ($(\XCoord,\YCoord)!0.5!(BottomRight)$);
+        %
+        \draw [red,#1] (TopLeft) rectangle (BottomRight);
+        \UE [below, #1, fill=none, fill opacity=1] at (LabelPoint) {#4};
+    }
+}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\pgfplotsset{plot coordinates/math parser=false}
+\usepgfplotslibrary{patchplots,groupplots}
+
+% OUTROS PAQUETES DE USO COMUN. HOXE EN DIA OS COMPILADORES SON TAN RAPIDOS QUE EU METO TODOS SEMPRE
+% \usepackage{float}
+% \usepackage{ucs} 
+% \usepackage{subcaption}
+\usepackage{psfrag}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage{amsfonts} 
+\usepackage{amssymb} 
+\usepackage{amsthm}
+\usepackage{pifont}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{stfloats}
+\usepackage{algorithm} 
+\usepackage{algorithmic} 
+\usepackage{url} 
+\usepackage{enumerate}
+\usepackage{multirow}
+\usepackage{wasysym}
+
+\input{EETbeamerconfig.tex}
+\input{mydefinitions.tex}
+
+%---------------
+% LIMIAR
+%---------------
+%configuracion de opcions de beamer persoais, pero alleas ao estilo
+
+% COMANDO QUE INTRODUCE UNHA DIAPOSITIVA CUN ÍNDICE NO QUE APARECEN VELADAS TÓDALAS SECCIÓNS MENOS A ACTUAL. ÚTIL PARA INTRODUCIR OS TÍPICOS ÍNDICES INTERMEDIOS.
+\newcommand{\Inter}{\frame{\tableofcontents[currentsection]}}
+\newcommand{\inter}{\frame{\tableofcontents[currentsection,currentsubsection]}}
+
+% Pes de imaxe
+\renewcommand{\figurename}{Fig.}
+\addto\captionsenglish{\renewcommand{\figurename}{Fig.}}
+\setbeamertemplate{caption}[numbered]
+
+%ESTE PAQUETE PERMITE POÑER A BIBLIOGRAFIA AO PE DE PAXINA CON CONFIGURACIONS ESTETICAS PERSOAIS
+% \usepackage[style=ieee,doi=false,isbn=false,url=true,backend=bibtex]{biblatex}
+% \bibliography{./bibliografia.bib}
+% \newrobustcmd*{\footfullcitenomark}{%
+%   \AtNextCite{%
+%     \let\thefootnote\relax 
+%     \let\mkbibfootnote\mkbibfootnotetext
+%     }%
+%   \footfullcite}
+
+%paquete para engadir notas de guion ao pdf
+\usepackage{pgfpages}
+% \setbeameroption{show only notes} 
+% \setbeameroption{show notes}
+% \setbeameroption{show notes on second screen=right}
+% DATOS DO DOCUMENTO
+\title{Advanced Digital Communications '22}
+\subtitle{Course Organization - Theory Sessions}
+\author[XX]{\underline{Felipe G\'omez-Cuba}}
+\institute[XX]{
+\begin{columns}[T]
+\begin{column}{5cm}\centering
+Monday-Thursday 15:00-16:30\\
+Office A-204\\
+(campus virtual and email during COVID)\\
+\texttt{gomezcuba@gts.uvigo.es}\\
+\end{column}
+\end{columns}
+}
+
+\date{}
+
+\begin{document}
+
+% Diapositiva co título
+\frame[plain]{\titlepage}
+% 
+% \frame{\tableofcontents}
+% \note[itemize]{
+% \item First we will look at what the receiver needs from the CSI
+% \item Second we will look at several ML estimators for vector under known linear expressions
+% \item Finally we will look at delay-support CS estimators for $P_{\tau}$
+% }
+
+% \section{Sparse Wideband OFDM Channel}
+% \subsection{Wideband Sparse Channel}
+\frame{\frametitle{Calendar 2021}
+
+\begin{itemize}
+ \item 7 Theory Sessions: Feb 3,10,17, 24, Mar 10, 24, Apr 7
+ \item 7 Lab Sessions: Feb 4,11,18, Mar 3, 17, 31 Apr 21
+ \item 1 Extra Session: April 28
+\end{itemize}
+
+}
+
+
+\frame{\frametitle{Theory Class Contents}
+
+\begin{itemize}
+ \item Classes 1-5: MIMO
+ \begin{enumerate}
+    \item MIMO Channel Model
+    \item Channel Capacity
+    \item Spatial Multiplexing
+    \item Fading Communications
+    \item Diversity
+ \end{enumerate}
+ \item Classes 6-7: Advanced Waveforms
+ \begin{enumerate}\setcounter{enumi}{5}
+    \item Beyond OFDM % OTFS
+    \item 5G Numerology and HBF %HBF
+ \end{enumerate}
+\end{itemize}
+
+}
+
+\end{document}
+
+

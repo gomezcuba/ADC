@@ -1,0 +1,5 @@
+\ProvidesFile{T1CampusBold.df}
+[2021/06/28 Felipe Gomez Cuba para UVigo]
+\DeclareFontFamily{T1}{CampusBold}{}
+\DeclareFontShape{T1}{CampusBold}{m}{n} {<-> CampusBold} {}
+\endinput

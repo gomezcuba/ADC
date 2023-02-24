@@ -1,0 +1,86 @@
+
+% DECLARACION DAS FONTES DA UVIGO
+\usepackage[sfdefault]{roboto}
+\usepackage{librebaskerville}
+\setbeamerfont{title}{family=\librebaskerville,size=\Huge}
+\setbeamerfont{subtitle}{family=\librebaskerville,size=\large}
+% IMPORTANTE: a fonte 'campus' non queda ben para títulos de papers academicos,ç
+% pero se de verdade se desexa empregar, seguir os seguintes pasos
+% 1) Instalar o comando otftotfm en linux
+% 2) sudo otftotfm -a -e texnansx campus_bold.otf CampusBold
+% 3) asegurarse que o ficheiro auxiliar ./EETtemplateFiles/fonts/T1CampusBold.df está no directorio de traballo
+% 4) descomentar a liña abaixo e comentar a liña que lle asigna librebaskerville arriba
+\input{EETtemplateFiles/fonts/T1CampusBold.df}
+\setbeamerfont{title}{family=\fontfamily{CampusBold},size=\Huge}
+
+% DETLARACIÓN DO TEMA A USAR
+% 
+% ESTES TEMAS TEÑEN CABECEIRAS MOI GRANDES
+% \usetheme{Berkeley} %large titlebar w/side dossier
+% \usetheme{PaloAlto} 
+% \usetheme{Copenhagen} %large titlebar w/2 side index
+% \usetheme{Antibes} %large titlebar w/tree
+% \usetheme{Singapore} %large titlebar w/balls evanescent
+% \usetheme{Berlin} %large titlebar w/balls solid
+% \usetheme{Dresden} %same as above with different color boxing
+% \usetheme{Rochester} %large tittle-only titlebar
+% ESTES TEMAS TEÑEN CABECEIRAS MEDIANAS
+% \usetheme{CambridgeUS} %title titlebar w/current section
+% \usetheme{Malmoe} %title titlebar w/current section Copenhagen style
+% \usetheme{Madrid} %title titlebar w/page counter footer
+% ESTES TEMAS TEÑEN CABECEIRAS DELGADAS
+% \usetheme{Frankfurt} %small titlebar w/ progress balls
+% \usetheme{metropolis} %metal
+% ESTES TEMAS NON TEÑEN CABECEIRA DE COR, PERO SI TITULO SOBRE BRANCO
+% \usetheme{Boadilla} %sombras e decoracion
+\usetheme{Pittsburgh} %rectangulos planos
+% ESTES TEMAS TEÑEN INDICES OU INFO NUNHA BARRA LATERAL GRANDE
+% \usetheme{Goettingen} %right dossier evanescent
+% \usetheme{Marburg} %right dossier fading to black
+% \usetheme{Bergen} %notebook
+
+%aspect modifiers
+\useinnertheme{circles} %this makes item lists nicer
+% \useoutertheme{infolines} %toggle thin info borders
+
+
+% DECLARACIÓN DA COMBINACIÓN DE CORES A USAR. SE NON SE ESPECIFICA NADA TOMA A DEFINIDA POR DEFECTO
+\definecolor{EETblue}{HTML}{0094e0} % a mate dark blue
+\usecolortheme[named=EETblue]{structure} % EET UVigo blue
+% outros temas de cores de beamer
+% \usecolortheme{seagull} %makes title boxes gray color with blackr
+% \usecolortheme{spruce} %makes title boxes pastel blue - gray color
+% cores internos (items)
+% \usecolortheme[named=Red]{structure} 
+% \usecolortheme[named=Green]{structure} 
+% \usecolortheme[named=OliveGreen]{structure} 
+% \usecolortheme[named=PineGreen]{structure} 
+% \usecolortheme[named=TealBlue]{structure} 
+% \usecolortheme[named=SeaGreen]{structure}
+% \usecolortheme[RGB={00,78,135}]{structure} % a dark cobalt blue 
+% \usecolortheme[RGB={155,0,20}]{structure} % a slighlty darkened mate red
+
+% MODIFICACIONS DAS CORES PARA A PAXINA DE TITULO SIMILAR Á OFICIAL
+\setbeamercolor*{title}{use=structure,fg=structure.bg, bg=structure.fg}  
+\setbeamercolor*{subtitle}{use=structure,fg=white}  
+\setbeamercolor*{author}{use=structure,fg=structure.fg}
+% \setbeamercolor*{institute}{use=structure,fg=structure.fg}
+\setbeamercolor*{date}{use=structure,fg=structure.fg}
+\setbeamertemplate{frametitle}[default][left]
+
+% MODIFICACIONS DA SIDEBAR E FOOTLINE PARA INCLUIR AS IMAXES CORPORATIVAS.
+\setbeamertemplate{footline}[text line]{%
+  \parbox{\linewidth}{
+    %ESTE TEXTO DA FOOTLINE PODESE MODIFICAR A GUSTO -----------------------------------------
+    \insertshorttitle\hfill\insertshortauthor\hfill\insertpagenumber / \inserttotalframenumber
+    %----------------------------------------------------------------------------------------
+    \hfill
+  \includegraphics[width=.15\paperwidth,trim={0 2.5cm 3.5cm .75cm},clip]{EETtemplateFiles/img/Logotipo_ESCOLA.pdf}\vspace*{2pt}}}
+\setbeamersize{sidebar width left = .10\paperwidth}
+\setbeamertemplate{sidebar canvas left}{}
+\setbeamertemplate{sidebar left}{%
+  \vspace*{\fill}
+  \includegraphics[width=.15\paperwidth,height=.15\paperwidth]{EETtemplateFiles/img/Simbolo_ESCOLA.pdf}\\
+  \includegraphics[width=.15\paperwidth,trim={.4cm .5cm .4cm 2.25cm},clip]{EETtemplateFiles/img/Logotipo_ESCOLA.pdf}
+  \vspace*{-11pt}%
+}
