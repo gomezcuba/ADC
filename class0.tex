@@ -25,20 +25,6 @@
 \usepackage{tikz}
 \usepackage{tikzscale}
 \usetikzlibrary{plotmarks,patterns,decorations.pathreplacing,backgrounds,calc,arrows,arrows.meta,spy,matrix,backgrounds}
-\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \UE (#1) {};}
-\newcommand{\DrawBox}[4][]{%
-    \tikz[overlay,remember picture]{%
-        \coordinate (TopLeft)     at ($(#2)+(-0.4em,1.6em)$);
-        \coordinate (BottomRight) at ($(#3)+(0.4em,-1.0em)$);
-        %
-        \path (TopLeft); \pgfgetlastxy{\XCoord}{\IgnoreCoord};
-        \path (BottomRight); \pgfgetlastxy{\IgnoreCoord}{\YCoord};
-        \coordinate (LabelPoint) at ($(\XCoord,\YCoord)!0.5!(BottomRight)$);
-        %
-        \draw [red,#1] (TopLeft) rectangle (BottomRight);
-        \UE [below, #1, fill=none, fill opacity=1] at (LabelPoint) {#4};
-    }
-}
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
@@ -98,15 +84,15 @@
 % \setbeameroption{show notes}
 % \setbeameroption{show notes on second screen=right}
 % DATOS DO DOCUMENTO
-\title{Advanced Digital Communications '22}
+\title{Advanced Digital Communications '25}
 \subtitle{Course Organization - Theory Sessions}
 \author[XX]{\underline{Felipe G\'omez-Cuba}}
 \institute[XX]{
 \begin{columns}[T]
 \begin{column}{5cm}\centering
-Monday-Thursday 15:00-16:30\\
+Wed-Thurs 15:00-18:00\\
 Office A-204\\
-(campus virtual and email during COVID)\\
+(presential, campus virtual or email)\\
 \texttt{gomezcuba@gts.uvigo.es}\\
 \end{column}
 \end{columns}
@@ -128,12 +114,12 @@ Office A-204\\
 
 % \section{Sparse Wideband OFDM Channel}
 % \subsection{Wideband Sparse Channel}
-\frame{\frametitle{Calendar 2021}
+\frame{\frametitle{Calendar 2025}
 
 \begin{itemize}
- \item 7 Theory Sessions: Feb 3,10,17, 24, Mar 10, 24, Apr 7
- \item 7 Lab Sessions: Feb 4,11,18, Mar 3, 17, 31 Apr 21
- \item 1 Extra Session: April 28
+ \item 7 Theory Sessions: Jan 30, Feb 6,13,20 Mar 6, 20, Apr 3
+ \item 7 Lab Sessions: Jan 31, Feb 7,14,27 Mar 13, 27 Apr 10
+ \item 1 Extra Session: April 24
 \end{itemize}
 
 }
@@ -147,8 +133,8 @@ Office A-204\\
     \item MIMO Channel Model
     \item Channel Capacity
     \item Spatial Multiplexing
-    \item Fading Communications
-    \item Diversity
+    \item Time-Varying Channel
+    \item Limited CSIT
  \end{enumerate}
  \item Classes 6-7: Advanced Waveforms
  \begin{enumerate}\setcounter{enumi}{5}

@@ -27,41 +27,10 @@
 \usepackage{tikzscale}
 \usetikzlibrary{plotmarks,patterns,decorations.pathreplacing,backgrounds,calc,arrows,arrows.meta,spy,matrix,backgrounds,shapes,math}
 
-\tikzset{
-    block/.style = {draw, rectangle, 
-        minimum height=1cm, 
-        minimum width=1.2cm, align=center},
-    input/.style = {coordinate,node distance=1cm},
-    output/.style = {coordinate,node distance=2cm},
-    arrow/.style={draw, -latex,node distance=1.5cm},
-    pinstyle/.style = {pin edge={latex-, black,node distance=1.5cm}},
-    sum/.style = {draw, circle, node distance=1cm}
-}
-
-\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \UE (#1) {};}
-\newcommand{\DrawBox}[4][]{%
-    \tikz[overlay,remember picture]{%
-        \coordinate (TopLeft)     at ($(#2)+(-0.4em,1.6em)$);
-        \coordinate (BottomRight) at ($(#3)+(0.4em,-1.0em)$);
-        %
-        \path (TopLeft); \pgfgetlastxy{\XCoord}{\IgnoreCoord};
-        \path (BottomRight); \pgfgetlastxy{\IgnoreCoord}{\YCoord};
-        \coordinate (LabelPoint) at ($(\XCoord,\YCoord)!0.5!(BottomRight)$);
-        %
-        \draw [red,#1] (TopLeft) rectangle (BottomRight);
-        \UE [below, #1, fill=none, fill opacity=1] at (LabelPoint) {#4};
-    }
-}
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
 \usepgfplotslibrary{patchplots,groupplots}
-
-\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
-\def\antenna{%
-    -- +(0mm,4.0mm) -- +(2.625mm,7.5mm) -- +(-2.625mm,7.5mm) -- +(0mm,4.0mm) -- +(0mm,0mm)
-}
-
 
 % OUTROS PAQUETES DE USO COMUN. HOXE EN DIA OS COMPILADORES SON TAN RAPIDOS QUE EU METO TODOS SEMPRE
 % \usepackage{float}
@@ -340,7 +309,7 @@ $$y(t)=\sum_n x[n]h(t-nT)+z(t)$$
  \item $K\geq M $, each subcarrier experiences a Non-dispersive channel
     $$y[k]\simeq  h_0[k] x[k]+ z[k]$$
  \item SNR$[k]=\frac{\Ex{}{|x[k]|^2}|h_0[k]|^2}{\Ex{}{|z[k]|^2}}=\frac{\frac{P}{K}|h_0[k]|^2}{N_o\Delta f}=\frac{P|h_0[k]|^2}{N_o K\Delta f}=\frac{P|h_0[k]|^2}{N_o B}$
- \item $h_0[k]\simeq \texttt{FFT}(\{h(mT)\}_{m=0}^{M},K)$
+ \item $h_0[k]\simeq K\texttt{-FFT}(\{h(mT)\}_{m=0}^{M})$
  \end{itemize}
  \end{itemize}
 }
@@ -412,25 +381,25 @@ $$y[n]=\h^H \x[n] +z[n]$$\\ \ \\
 $\y[n]=\left[\begin{array}{c}
  y_1[n]\\
  \vdots\\
- y_{n_r}[n]
+ y_{N_{r}}[n]
 \end{array}\right],\;
 \h=\left[\begin{array}{c}
  h_1\\
  \vdots\\
- h_{n_r}
+ h_{N_{r}}
 \end{array}\right]
 ,\;
 \x[n]=\left[\begin{array}{c}
  x_1[n]\\
  \vdots\\
- x_{n_t}[n]
+ x_{N_{t}}[n]
 \end{array}\right]
  ,\;
 \z[n]
 =\left[\begin{array}{c}
  z_1[n]\\
  \vdots\\
- r_{n_r}[n]
+ r_{N_{r}}[n]
 \end{array}\right]
 $
 }
@@ -467,13 +436,13 @@ $
 \end{tikzpicture}
 \end{figure}
 \begin{itemize}
-\item $n_t\times n_r$ MIMO DEC Matrix Notation
+\item $N_{t}\times N_{r}$ MIMO DEC Matrix Notation
 $$\y[n]=\Hb \x[n] +\z[n]$$
 where $
 \Hb=\left[\begin{array}{cccc}
- h_{1,1}&\dots&h_{1,n_t}\\
+ h_{1,1}&\dots&h_{1,N_{t}}\\
  \vdots&\ddots&\vdots\\
- h_{n_r,1}&\dots&h_{n_r,n_t}\\
+ h_{N_{r},1}&\dots&h_{N_{r},N_{t}}\\
 \end{array}\right]
 $
 \item Sometimes we can omit [n] for clarity $\y=\Hb \x +\z$
@@ -486,39 +455,40 @@ $
     \begin{itemize}
         \item Zero Mean $\Ex{}{z_{j}}=0  \;\Rightarrow\; \Ex{}{\z}=\zero$\\ \ \\
         \item Covariance Matrix 
-        $$\K_{\z}=\Ex{}{\z \z^H}=\Ex{}{\left( \begin{array}{cccc}
-                                                |z_1|^2&z_1z_2^*&\dots &z_1z_{n_r}^*\\
-                                                z_2z_1^*&|z_2|^2&\dots &z_2z_{n_r}^*\\
+        $$\Sg_{\z}=\Ex{}{\z \z^H}=\Ex{}{\left( \begin{array}{cccc}
+                                                |z_1|^2&z_1z_2^*&\dots &z_1z_{N_{r}}^*\\
+                                                z_2z_1^*&|z_2|^2&\dots &z_2z_{N_{r}}^*\\
                                                \vdots&\vdots&\ddots &\vdots\\
-                                                z_{n_r}z_1^*&z_{n_r}z_2^*&\dots &|z_{n_r}|^2\\
+                                                z_{N_{r}}z_1^*&z_{N_{r}}z_2^*&\dots &|z_{N_{r}}|^2\\
                                                \end{array} \right)}$$
-        \item Spatially Uncorrelated i.d. Noise $\Ex{}{z_2z_1^*}=0\Rightarrow \K_{\z}=\sigma_z^2\I$
+        \item Spatially Uncorrelated i.d. Noise $\Ex{}{z_2z_1^*}=0\Rightarrow \Sg_{\z}=\sigma_z^2\I_{N_{r}}$
         \item Total received noise power 
-        $$\Ex{}{\|\z\|^2}=\Ex{}{\z^H\z}=\sum_{j=1}^{n_r} \Ex{}{|z_j|^2}=\tr\{\K_{\z}\}\stackrel{i.i.d.}{=}n_r\sigma_z^2$$
+        $$\Ex{}{\|\z\|^2}=\sum_{j=1}^{N_{r}} \Ex{}{|z_j|^2}=\Ex{}{\z^H\z}=\Ex{}{\tr\{\z\z^H\}}=\tr\{\Sg_{\z}\}\stackrel{i.i.d.}{=}N_{r}\sigma_z^2$$
     \end{itemize}
     \item Input $\x$ Statistical Distribution
     \begin{itemize}
         \item Zero Mean $\Ex{}{x_{i}}=0  \;\Rightarrow\; \Ex{}{\x}=\zero$\\ \ \\
+        \item Transmitted power $P=\sum_{i=1}^{N_t}\Ex{}{x_{i}}=\Ex{}{\|\x\|^2}$\\ \ \\
         \item Covariance Matrix 
-        $$\K_{\x}=\Ex{}{\x \x^H}=\Ex{}{\left( \begin{array}{cccc}
-                                                |x_1|^2&x_1x_2^*&\dots &x_1x_{n_t}^*\\
-                                                x_2x_1^*&|x_2|^2&\dots &x_2x_{n_t}^*\\
+        $$\Sg_{\x}=\Ex{}{\x \x^H}=\Ex{}{\left( \begin{array}{cccc}
+                                                |x_1|^2&x_1x_2^*&\dots &x_1x_{N_{t}}^*\\
+                                                x_2x_1^*&|x_2|^2&\dots &x_2x_{N_{t}}^*\\
                                                \vdots&\vdots&\ddots &\vdots\\
-                                                x_{n_t}x_1^*&x_{n_t}x_2^*&\dots &|x_{n_t}|^2\\
+                                                x_{N_{t}}x_1^*&x_{N_{t}}x_2^*&\dots &|x_{N_{t}}|^2\\
                                                \end{array} \right)}$$
-        \item I.I.D. Transmitted Signal $\Ex{}{x_2x_1^*}=0\Rightarrow \K_{\x}=\frac{P}{n_t}\I$\\ \ \\
-        \item Example: Select $x_i$ from $n_t$ independent QPSK constellations.\\ \ \\
+        \item I.I.D. Transmitted Signal $\Ex{}{x_2x_1^*}=0\Rightarrow \Sg_{\x}=\frac{P}{N_{t}}\I$\\ \ \\
+        \item Example: Select $x_i$ from $N_{t}$ independent QPSK constellations.\\ \ \\
     \end{itemize}
     \pagebreak
     \item Output $\y=\Hb \x +\z$ Statistical Distribution
     \begin{itemize}
         \item Joint variables $f_\y(\y)=\int_{\forall \Hb\x+\z=\y}f_{\x,\z}(\x,\z)=\int_\x f_\x(\x)f_{\z}(\y-\Hb\x)d\x$ \\ \ \\
         \item Zero Mean $\Ex{}{\y}=\Ex{}{\Hb\x+\z}=\Hb\Ex{}{\x}+\Ex{}{\z}=\zero$\\ \ \\
-        \item Covariance Matrix $\K_{\y}=\Ex{}{\y \y^H}=\Hb\K_{\x}\Hb^H+\K_{\z}$\\ \ \\
-        \item Uncorrelated Noise and Transmitted Signal $\K_{\y}=\frac{P}{n_t}\Hb\Hb^H+\sigma_z^2\I$\\ \ \\
+        \item Covariance Matrix $\Sg_{\y}=\Ex{}{\y \y^H}=\Hb\Sg_{\x}\Hb^H+\Sg_{\z}+\cancel{\Ex{}{2\Re\{\Hb\x\z^H\}}}^{0}$\\ \ \\
+        \item Uncorrelated Noise and i.i.d. Symbols $\Sg_{\y}=\frac{P}{N_{t}}\Hb\Hb^H+\sigma_z^2\I$\\ \ \\
         \item SNR at the receiver 
-        $$\frac{\tr\{\frac{P}{n_t}\Hb\K_{\x}\Hb^H\}}{\tr\{\K_{\z}\}}=\frac{P}{n_t}\frac{\tr\{\Hb\Hb^H\}}{n_r\sigma_z^2}=\frac{P}{n_tn_r\sigma_z^2}\|\Hb\|^2=\frac{P}{n_tn_r\sigma_z^2}\sum_{i=1}^{n_t}\sum_{j=1}^{n_r}|h_{i,j}|^2$$\\ \ \\
-        \item Normalized channel matrix $\|\Hb\|^2=n_tn_r\to$ SNR$=\frac{P}{\sigma_z^2}$
+        $$\frac{\tr\{\frac{P}{N_{t}}\Hb\Sg_{\x}\Hb^H\}}{\tr\{\Sg_{\z}\}}=\frac{P}{N_{t}}\frac{\tr\{\Hb\Hb^H\}}{N_{r}\sigma_z^2}=\frac{P}{N_{t}N_{r}\sigma_z^2}\|\Hb\|^2=\frac{P}{N_{t}N_{r}\sigma_z^2}\sum_{i=1}^{N_{t}}\sum_{j=1}^{N_{r}}|h_{i,j}|^2$$\\ \ \\
+        \item Normalized channel matrix $\|\Hb\|^2=N_{t}N_{r}\to$ SNR$=\frac{P}{\sigma_z^2}$
     \end{itemize}
  \end{itemize}
 }
@@ -558,7 +528,7 @@ $
     \end{figure}
  \end{column}
  \begin{column}{7cm}Single-frequency free space planar wave
-        $$v_i(\overrightarrow{P}_i,t)=v_o(t-\tau_i)e^{-\frac{\alpha}{2} d_i }e^{\textcolor{ARust}{j}(d_i\kappa-2\pi f_c (t-\tau_i))}$$
+        $$v_i(\overrightarrow{P}_i,t)=v_o(t-\tau_i)\underset{1/\sqrt{L}}{\underbrace{e^{-\frac{\alpha}{2}d_i} }}\underset{\textnormal{phase}}{\underbrace{e^{j(d_i\kappa-2\pi f_c (t-\tau_i))}}}$$
     \begin{itemize}
      \item Variables
     \begin{itemize}
@@ -612,14 +582,13 @@ $
  \begin{column}{7cm}
     \begin{itemize}
      \item Antennas are very close 
-     $$d_i\simeq \overline{d}=\frac{1}{n_r}\sum d_i\forall i$$
-     $$|\overrightarrow{P}_1-\overrightarrow{P}_2|\ll \overline{d}\forall i$$
+     $$d'=|\overrightarrow{P}_{i+1}-\overrightarrow{P}_{i}|\ll d_i\forall i$$
      \item Narrowband $\tau_i-\tau_1\ll T_s \forall i$
-     \item $G\simeq e^{-\alpha \overline{d}}$
+     \item $v_1(t)\simeq \frac{e^{j\theta_0}}{\sqrt{L}}\cdot x(t-\tau_1)$
      \item Simplified received signal
-        $v_i(t)=\textcolor{ARust}{e^{-j2\pi \frac{d_i-\overline{d}}{\lambda}}}\sqrt{G}x(t-\overline{\tau})$
+        $v_i(t)\simeq\textcolor{ARust}{e^{-j2\pi \frac{d_i-d_1}{\lambda}}}v_1(t)$
      \item Angle of Arrival $\phi$
-        $v_i(t)=\textcolor{ARust}{e^{-j2\pi \frac{id'\cos \phi}{\lambda} }}\sqrt{G}x(t-\overline{\tau})$
+        $v_i(t)=\textcolor{ARust}{e^{-j2\pi \frac{id'\sin \phi}{\lambda} }}v_1(t)$
      \end{itemize}
  \end{column}
 \end{columns}
@@ -632,8 +601,8 @@ $
      \includesvg[width=.6\columnwidth]{multipath}
     \end{figure}
     \begin{itemize}
-     \item Sum of planar waves with different Ao Departure ($\theta$) and AoA ($\phi$)
-     $$h_{i,j}=\sum_{p=1}^{N_{path}}\sqrt{G_p}e^{-j2\pi \frac{d'_i}{\lambda}\cos \theta_p }e^{-j2\pi \frac{d'_j}{\lambda}\cos \phi_p }$$
+     \item Sum of planar waves with different Ao Departure ($\phi_D$) and AoA ($\phi_A$)
+     $$h_{i,j}=\sum_{p=1}^{N_{path}}\frac{1}{\sqrt{L_p}}e^{-j2\pi \frac{d'_i}{\lambda}\sin \phi_{Dp} }e^{-j2\pi \frac{d'_j}{\lambda}\sin \phi_{Ap} }$$
     \end{itemize}
 }
 
@@ -644,12 +613,12 @@ $
 \end{theorem}
 
 \begin{itemize}
- \item \textbf{Rayleigh fading:} No special paths, $N_{path}\gg n_tn_r$
+ \item \textbf{Rayleigh fading:} No special paths, $N_{path}\gg N_{t}N_{r}$
     $$h_{i,j}\sim\mathcal{CN}(0,\sigma_{z}^2),\;|h_{i,j}|\sim\mathrm{Rayleigh}(\sigma),\;|h_{i,j}|^2\sim\mathrm{Exp}(\frac{1}{\sigma_{z}^2})$$
- \item \textbf{Rice fading:} LOS path $\frac{K}{1+K}$ total power, $N_{path}\gg n_tn_r$
+ \item \textbf{Rice fading:} LOS path $\frac{K}{1+K}$ total power, $N_{path}\gg N_{t}N_{r}$
     $$h_{i,j}=\mathcal{CN}(\nu,\sigma_{z}^2),\;K=\frac{\nu^2}{\sigma_{z}^2},\; |h_{i,j}|\sim \mathrm{Rice}(\sigma_{z}^2,K)$$
  \item In MIMO, antennas may or many not be correlated
-    $$\textrm{vec}\{\Hb\} \sim \mathcal{CN}(\vv,\K_{\Hb}),\; \textrm{vec}\{\Hb\}\triangleq (h_{1,1},\dots h_{n_r,1},h_{1,2},\dots h_{n_r,n_t})$$
+    $$\vstack{\Hb} \sim \mathcal{CN}(\vv,\Sg_{\Hb}),\; \vstack{\Hb}\triangleq (h_{1,1},\dots h_{N_{r},1},h_{1,2},\dots h_{N_{r},N_{t}})^T$$
 \end{itemize}
 
 
@@ -661,8 +630,8 @@ The following random distributions are common in textbooks for \textbf{single an
  \item \textbf{Nakagami fading:} agrees better than Rayleigh with experimental measurements by Minoru Nakagami in ionospheric short wave
     $$|h|\sim \mathrm{Nakagami}(\sigma_{z}^2,m),|h_{i,j}|^2\sim \mathrm{Gamma}(\frac{1}{\sigma_{z}^2},m)\stackrel{m\in\mathbb{Z}}{=}\mathrm{Erlang}(\frac{1}{\sigma_{z}^2},m)$$
  \item \textbf{2-wave, 3-wave, etc:} only 2, 3, etc. strong paths
-    $$\textrm{2-wave}\to h=V_1\times 1+ V_2e^{-j \psi },\; \psi \sim U(0,2\pi)$$
- \item \textbf{Two Wave and Diffuse Propagation:} generalices Rice
+    $$\textrm{2-wave}\to h=V_1+ V_2e^{-j \psi },\; \psi \sim U(0,2\pi)$$
+ \item \textbf{2-Wave and Diffuse Propagation:} 2 Strong waves + Gaussian
     $$h\sim \mathcal{CN}(1+e^{-j \psi },\sigma_{z}^2),\; \psi \sim U(0,2\pi)$$
 \end{itemize}
 }
@@ -687,7 +656,7 @@ The following random distributions are common in textbooks for \textbf{single an
 \begin{columns}
  \begin{column}{5cm}
     \begin{figure}
-    \caption{$\frac{\lambda}{2}$ Uniform Linear Array}
+    \caption{$d'=\frac{\lambda}{2}$ Uniform Linear Array}
     \begin{tikzpicture}[auto, node distance=2cm,>=latex', scale=0.6, every node/.style={scale=0.6}]
         \tikzmath{
         function ULA(\x) {
@@ -722,15 +691,14 @@ The following random distributions are common in textbooks for \textbf{single an
         \draw[domain=-1:1, samples=100, TZTeal, dashed] plot ({2-ULA(\x)*cos(deg(\x*pi/2))-2}, {ULA(\x)*sin(deg(\x*pi/2))-2});        
     \end{tikzpicture}
     \end{figure}
-    $$\y=\h x+\z,\;\h=\left(\begin{array}{c}e^{-j\pi \textcolor{ARust}{0\times}\cos\phi}\\e^{-j\pi \textcolor{ARust}{1\times}\cos\phi}\\\vdots\\e^{-j\pi \textcolor{ARust}{(n_r-1)\times}\cos\phi}\end{array}\right)$$
+    $$\y=\h x+\z,\;\h=\left(\begin{array}{c}e^{-j\pi \textcolor{ARust}{0\times}\sin\phi}\\e^{-j\pi \textcolor{ARust}{1\times}\sin\phi}\\\vdots\\e^{-j\pi \textcolor{ARust}{(N_{r}-1)\times}\sin\phi}\end{array}\right)$$
  \end{column}
  \begin{column}{7cm}
+  $$r=\sum_{k=1}^{N_{r}} y_i=\underset{\textnormal{Dirichlett }g(\sin\phi)}{\underbrace{\left(\sum_{k=1}^{N_{r}} e^{-j\pi k \sin\phi}\right)}}x+z'$$
  \begin{itemize}
-  \item Array of antennas with sum
-  $$r=\sum_{k=1}^{n_r} y_i=\underset{\textnormal{Dirichlett }g(\cos\phi)}{\underbrace{\left(\sum_{k=1}^{n_r} e^{-j\pi k \cos\phi}\right)}}x+z'$$
-  \item Equivalent Noise $z'\sim\mathcal{CN}(0,n_r\sigma_{z}^2)$
-  \item Equivalent Array Gain $$|g(x)|^2=n_r^2\left|\frac{\sin(\pi n_r x)}{\sin(\pi x)}\right|^2$$
-  \item Direction $\phi=0$ SNR$=\frac{\Ex{}{|g(0)x|^2}}{\Ex{}{|z'|^2}}=\frac{n_rP}{\sigma_z^2}$
+  \item Equivalent Noise $z'\sim\mathcal{CN}(0,N_{r}\sigma_{z}^2)$
+  \item Equivalent Array Gain $$|g(x)|^2=N_{r}^2\left|\frac{\sin(\pi N_{r} x)}{\sin(\pi x)}\right|^2$$
+  \item Direction $\phi=0$ SNR$=\frac{\Ex{}{|g(0)x|^2}}{\Ex{}{|z'|^2}}=\frac{N_{r}P}{\sigma_z^2}$
  \end{itemize}
  \end{column}
 \end{columns}
@@ -779,22 +747,21 @@ The following random distributions are common in textbooks for \textbf{single an
         \draw[domain=-1:1, samples=100, TZTeal, dashed] plot ({2-ULA(\x)*cos(deg(\x*pi/2))-2}, {ULA(\x)*sin(deg(\x*pi/2))-2});        
     \end{tikzpicture}
     \end{figure}
-    $$\w(\alpha)=\left(\begin{array}{c}e^{-j\pi 0\times \textcolor{TZTeal}{\alpha}}\\e^{-j\pi 1\times\textcolor{TZTeal}{\alpha}}\\\vdots\\e^{-j\pi (n_r-1)\times\textcolor{TZTeal}{\alpha}}\end{array}\right)$$
+    $$\w(\beta)=\left(\begin{array}{c}e^{-j\pi 0\times \textcolor{TZTeal}{\beta}}\\e^{-j\pi 1\times\textcolor{TZTeal}{\beta}}\\\vdots\\e^{-j\pi (N_{r}-1)\times\textcolor{TZTeal}{\beta}}\end{array}\right)$$
 
  \end{column}
  \begin{column}{7cm}
- \begin{itemize}
-  \item Equivalent Channel
     \begin{equation*}
      \begin{split}
-        r&=\w(\alpha)^H\y=(\w(\alpha)^H\h) x+z'\\
-         &= \left(\sum_{k=1}^{n_r} e^{-j\pi k (\cos(\phi)-\textcolor{TZTeal}{\alpha})}\right)x+z'
+        r&=\w(\beta)^H\y=(\w(\beta)^H\h) x+z'\\
+         &= \left(\sum_{k=1}^{N_{r}} e^{-j\pi k (\sin(\phi)-\textcolor{TZTeal}{\beta})}\right)x+z'
      \end{split}
     \end{equation*}
-  \item $\alpha$ changes angle of maximum gain
- $$|\w(\phi)^H\h|^2=|g(\cos(\phi)-\textcolor{TZTeal}{\alpha}))|^2$$
+ \begin{itemize}
+  \item $\beta$ changes angle of maximum gain
+ $$|\w(\phi)^H\h|^2=|g(\sin(\phi)-\textcolor{TZTeal}{\beta}))|^2$$
  \item Optimum 
- $$\alpha^*=\cos\phi\to|\w^H\h|^2=n_r^2\to\textnormal{SNR}=\frac{n_rP}{\sigma_z^2}$$
+ $$\beta^{\textnormal{opt}}=\sin\phi\to|\w^H\h|^2=N_{r}^2\to\textnormal{SNR}=\frac{N_{r}P}{\sigma_z^2}$$
  \item \textbf{Electronically Steerable Antenna / Smart Antenna}
  \end{itemize}
  \end{column}
@@ -821,11 +788,11 @@ The following random distributions are common in textbooks for \textbf{single an
 \end{figure}
  \begin{itemize}
   \item Linear combination with $\y=\h x + \z$
-  $$r=\w^H\y= \w^H\h x + \cancel{\w^H\z}^{z'}$$
-  \item Maximize SNR $\max \frac{\Ex{}{|\w^H\h x|^2}}{\Ex{}{|z'|^2}}=\max \frac{\Ex{}{|\w^H\h|^2}}{\Ex{}{\|\w\|^2}}\frac{P}{\sigma_{z}^2}$
+  $$r=\w^H\y= \w^H\h x + z^{eq}\textnormal{ where }z^{eq}=\w^H\z\sim \mathcal{CN}(0,\|\w\|^2\sigma^2)$$
+  \item Maximize SNR $\max \frac{\Ex{}{|\w^H\h x|^2}}{\Ex{}{|z^{eq}|^2}}=\max \frac{\Ex{}{|\w^H\h|^2}}{\Ex{}{\|\w\|^2}}\frac{P}{\sigma_{z}^2}$
   \item Noise power grows with $\Ex{}{\|\w\|^2}\to$ unitary vector\\ \ \\
   
-  \item \textbf{Maximal Ratio Combining} $\w^H=\frac{\h^H}{\|\h\|}\to$ SNR$=\|\h\|^2\frac{P}{\sigma_{z}^2}=\frac{n_rP}{\sigma_{z}^2}$
+  \item \textbf{Maximal Ratio Combining} $\w^H=\frac{\h^H}{\|\h\|}\to$ SNR$=\|\h\|^2\frac{P}{\sigma_{z}^2}=\frac{N_{r}P}{\sigma_{z}^2}$
  \end{itemize}
 \begin{columns}
  \begin{column}{6cm}
@@ -842,7 +809,7 @@ The following random distributions are common in textbooks for \textbf{single an
     \end{figure}
  \end{column}
 \end{columns}
-    \textbf{\textcolor{ARust}{DIGITAL MIMO SURPASSES SMART ANTENNA ARRAYS}}
+    \textbf{\textcolor{ARust}{DIGITAL BEAMFORMING SURPASSES SMART ANTENNA ARRAYS}}
 }
 \end{document}
 

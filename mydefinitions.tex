@@ -9,41 +9,42 @@
 % \newcommand{\mb}[1]{\mathbf{#1}}
 
 
-\newcommand{\Hb}{\mathbf{H}}
-\newcommand{\Sb}{\mathbf{\boldsymbol{\Sigma}}}
-\newcommand{\Sm}{\mathbf{S}}
-\newcommand{\U}{\mathbf{U}}
-\newcommand{\F}{\mathbf{F}}
-\newcommand{\V}{\mathbf{V}}
 \newcommand{\A}{\mathbf{A}}
 \newcommand{\B}{\mathbf{B}}
 \newcommand{\Cb}{\mathbf{C}}
 \newcommand{\D}{\mathbf{D}}
-% \newcommand{\E}{\mathbf{E}}
+\newcommand{\Eb}{\mathbf{E}}
+\newcommand{\F}{\mathbf{F}}
 \newcommand{\Gb}{\mathbf{G}}
-\newcommand{\T}{\mathbf{T}}
+\newcommand{\Hb}{\mathbf{H}}
 \newcommand{\I}{\mathbf{I}}
-\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\J}{\mathbf{J}}
+\newcommand{\Kb}{\mathbf{K}}
+\newcommand{\Lb}{\mathbf{L}}
 \newcommand{\M}{\mathbf{M}}
 \newcommand{\N}{\mathbf{N}}
-\newcommand{\W}{\mathbf{W}}
-\newcommand{\Z}{\mathbf{Z}}
-\newcommand{\R}{\mathbf{R}}
-\newcommand{\K}{\mathbf{K}}
-\newcommand{\X}{\mathbf{X}}
+\newcommand{\Ob}{\mathbf{O}}
 \newcommand{\Pb}{\mathbf{P}}
-\newcommand{\Lb}{\mathbf{L}}
-\newcommand{\Phib}{\mathbf{\boldsymbol{\Phi}}}
-\newcommand{\Upsb}{\mathbf{\boldsymbol{\Upsilon}}}
-\newcommand{\Delb}{\mathbf{\boldsymbol{\Delta}}}
-\newcommand{\Xib}{\mathbf{\boldsymbol{\Xi}}}
 \newcommand{\Q}{\mathbf{Q}}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\Sb}{\mathbf{S}}
+\newcommand{\T}{\mathbf{T}}
+\newcommand{\U}{\mathbf{U}}
+\newcommand{\V}{\mathbf{V}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\Dl}{\mathbf{\boldsymbol{\Delta}}}
+\newcommand{\Sg}{\mathbf{\boldsymbol{\Sigma}}}
+\newcommand{\Ld}{\mathbf{\boldsymbol{\Lambda}}}
+\newcommand{\Ph}{\mathbf{\boldsymbol{\Phi}}}
+\newcommand{\Ps}{\mathbf{\boldsymbol{\Psi}}}
+\newcommand{\Up}{\mathbf{\boldsymbol{\Upsilon}}}
+\newcommand{\Xib}{\mathbf{\boldsymbol{\Xi}}}
 % \newcommand{\D}{\mathbf{D}}
 \newcommand{\one}{\mathbf{1}}
 \newcommand{\zero}{\mathbf{0}}
-\newcommand{\Rm}{\mathbf{R^{-1}}}
-\newcommand{\LL}{\mathbf{\boldsymbol{\Lambda}}}
-\newcommand{\J}{\mathbf{J}}
 
 \newcommand{\ab}{\mathbf{a}}
 \newcommand{\bb}{\mathbf{b}}
@@ -53,8 +54,13 @@
 \newcommand{\f}{\mathbf{f}}
 \newcommand{\g}{\mathbf{g}}
 \newcommand{\h}{\mathbf{h}}
+\newcommand{\ib}{\mathbf{i}}
+\newcommand{\jb}{\mathbf{j}}
+\newcommand{\kb}{\mathbf{k}}
+\newcommand{\lb}{\mathbf{\ell}}
 \newcommand{\m}{\mathbf{m}}
 \newcommand{\n}{\mathbf{n}}
+\newcommand{\ob}{\mathbf{o}}
 \newcommand{\pp}{\mathbf{p}}
 \newcommand{\q}{\mathbf{q}}
 \newcommand{\rr}{\mathbf{r}}
@@ -69,15 +75,23 @@
 \newcommand{\vmu}{\mathbf{\boldsymbol{\mu}}}
 \newcommand{\vlambda}{\mathbf{\boldsymbol{\lambda}}}
 \newcommand{\vphi}{\mathbf{\boldsymbol{\phi}}}
+\newcommand{\vpsi}{\mathbf{\boldsymbol{\psi}}}
 \newcommand{\vrho}{\mathbf{\boldsymbol{\rho}}}
 \newcommand{\vups}{\mathbf{\boldsymbol{\upsilon}}}
+\newcommand{\vxi}{\mathbf{\boldsymbol{\xi}}}
 
 \newcommand{\rank}{\textnormal{rank}}
 % \newcommand{\trace}{\textnormal{trace}}
 \newcommand{\exptr}{\textnormal{exptr}}
 \newcommand{\tr}{\textnormal{tr}}
-\newcommand{\vstack}{\textnormal{vec}}
-\newcommand{\diag}{\textnormal{diag}}
+% \newcommand{\vstack}{\textnormal{vec}}
+% \newcommand{\diag}{\textnormal{diag}}
+\newcommand{\vstack}[1]{\Xib_{#1}}
+\newcommand{\diag}[1]{\Ld_{#1}}
+\newcommand{\tnsr}[2]{\underline{\mathsf{#1}}_{#2}}
+\newcommand{\tmult}[1]{\underset{#1}{\times}}
+
+\DeclareMathOperator{\Prob}{Prob}
 %  |x>
 \newcommand{\ket}[1]{\left\vert#1\right\rangle}
 %  <x|
@@ -110,14 +124,14 @@
 
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
+\newcommand{\itempro}{\item[\textcolor{KYJade}{\Large \cmark}]}
+\newcommand{\itemcontra}{\item[\textcolor{ARust}{\Large \xmark}]}
 \newcommand\Tau{\mathcal{T}}
 %Figure and format fixes
 
 
 \renewcommand{\figurename}{Fig.}
 \newcommand{\PESrule}{\noindent\rule{.57\columnwidth}{0.1mm}}
-
-% A command to make itemized table contents
 
 %theroem environments
 % If using amsthm package, we need to delete these theorems before giving them our own definition. does not work for theorem
@@ -132,11 +146,11 @@
 \newtheorem{lemma}{Lemma}
 \newtheorem{corollary}{Corollary}
 \newtheorem{conjecture}{Conjecture}
-\newtheorem{example}{Example}
 \theoremstyle{plain}
 \newtheorem{remark}{Remark}
 \newtheorem{proposition}{Proposition}
-   \newtheorem{homework}{Homework}
+\newtheorem{example}{Example}
+\newtheorem{homework}{Homework}
 
 %Colors
    \definecolor{blueH3}{rgb}{0,.5,1}
@@ -153,8 +167,47 @@
    \definecolor{Tangerine}{HTML}{d45500}
    
    
-  \newcommand{\itempro}{\item[\textcolor{KYJade}{\Large \cmark}]}
-  \newcommand{\itemcontra}{\item[\textcolor{ARust}{\Large \xmark}]}
+% Tikz 
+% signal block diagram components
+\tikzset{
+    block/.style = {draw, rectangle, 
+        minimum height=1cm, 
+        minimum width=1.2cm, align=center},
+    input/.style = {coordinate,node distance=1cm},
+    output/.style = {coordinate,node distance=2cm},
+    arrow/.style={draw, -latex,node distance=1.5cm},
+    pinstyle/.style = {pin edge={latex-, black,node distance=1.5cm}},
+    sum/.style = {draw, circle, node distance=1cm}
+}
+\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
+\def\antenna{%
+    -- +(0mm,4.0mm) -- +(2.625mm,7.5mm) -- +(-2.625mm,7.5mm) -- +(0mm,4.0mm) -- +(0mm,0mm)
+}
+% Overlay highlights on top of the page
+\newcommand{\markOverlay}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+\newcommand{\drawOverlayBox}[4][]{%
+    \tikz[overlay,remember picture]{%
+        \coordinate (TopLeft)     at ($(#2)+(-0.4em,1.6em)$);
+        \coordinate (BottomRight) at ($(#3)+(0.4em,-1.0em)$);
+        %
+        \path (TopLeft); \pgfgetlastxy{\XCoord}{\IgnoreCoord};
+        \path (BottomRight); \pgfgetlastxy{\IgnoreCoord}{\YCoord};
+        \coordinate (LabelPoint) at ($(\XCoord,\YCoord)!0.5!(BottomRight)$);
+        %
+        \draw [red,#1] (TopLeft) rectangle (BottomRight);
+        \node [below, #1, fill=none, fill opacity=1] at (LabelPoint) {#4};
+    }
+}
+\newcommand{\drawOverlayLine}[4][]{%
+    \tikz[overlay,remember picture]{%
+        \draw [red,#1] ($(#2)$) -- node{#4} ($(#3)$);
+    }
+}
+\newcommand{\drawOverlayCircle}[4][]{%
+    \tikz[overlay,remember picture]{%
+        \draw [red,#1] ($(#2)$) circle (#3) node{#4};
+    }
+}
    
    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% The following definitions are to extend the LaTeX algorithmic 
