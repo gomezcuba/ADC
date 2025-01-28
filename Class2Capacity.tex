@@ -127,13 +127,13 @@
 \begin{columns}[T]
 \begin{column}{5cm}\centering
 Office A-204\\
-Monday-Thursday 15:00-16:30\\
+Wednesday \& Thursday 15:00-18:00\\
 \texttt{gomezcuba@gts.uvigo.es}\\
 \end{column}
 \end{columns}
 }
 
-\date{}
+\date{2024}
 
 \begin{document}
 
@@ -210,10 +210,10 @@ Communication''
      \item Vectors $\x\in \mathbb{C}^N \triangleq (x_1,x_2,\dots x_N)$
     \end{itemize}
     \begin{theorem}
-     Among and random variables $X$ with support in $\mathbb{C}^N$, zero mean and covariance matrix $\Sb$, the entropy is maximized if $X$ is $\mathcal{CN}(0,\Sb)$
+     Among and random variables $X$ with support in $\mathbb{C}^N$, zero mean and covariance matrix $\Sg$, the entropy is maximized if $X$ is $\mathcal{CN}(0,\Sg)$
      \end{theorem}
-     \begin{remark}[p.d.f. of $\mathcal{CN}(\vec{\mu},\Sb)$]
-        $f(\x)=\pi^{-N}\det(\Sb)^{-1}e^{-(\x-\vec\mu)^H\Sb^{-1}(\x-\vec\mu)}$
+     \begin{remark}[p.d.f. of $\mathcal{CN}(\vec{\mu},\Sg)$]
+        $f(\x)=\pi^{-N}\det(\Sg)^{-1}e^{-(\x-\vec\mu)^H\Sg^{-1}(\x-\vec\mu)}$
      \end{remark}
 
 
@@ -344,33 +344,33 @@ Communication''
 \end{column}
 \begin{column}{6cm}
     $\Hb=\left(\begin{array}{cccc}
- h_{1,1}&\dots&h_{1,n_t}\\
+ h_{1,1}&\dots&h_{1,N_{t}}\\
  \vdots&\ddots&\vdots\\
- h_{n_r,1}&\dots&h_{n_r,n_t}\\
+ h_{N_{r},1}&\dots&h_{N_{r},N_{t}}\\
 \end{array}\right)
 $
 \end{column}
 \end{columns}
  \begin{itemize}
- \item Number of transmit and receive antennas $n_t$, $n_r$
- $$\x\in \mathbb{C}^{n_t},\;\Hb\in \mathbb{C}^{n_r\times n_t},\;\y,\z\in \mathbb{C}^{n_r},\;$$
+ \item Number of transmit and receive antennas $N_{t}$, $N_{r}$
+ $$\x\in \mathbb{C}^{N_{t}},\;\Hb\in \mathbb{C}^{N_{r}\times N_{t}},\;\y,\z\in \mathbb{C}^{N_{r}},\;$$
  \item Total transmitted power constraint (embedded in un-normalized $f(\x)$)
- $$\Ex{}{\sum_{i=1}^{n_t}|x_i[n]|^2}=\Ex{}{\|\x\|^2}=\Ex{}{\x^H\x}\leq P$$
- \item Transmitted signal covariance $\Ex{}{\x\x^H}=\Sb_{\z}$
- $$\underset{\textnormal{tr circular rotation identity}}{\underbrace{\tr{\A\B\Cb}=\tr\{\Cb\A\B\}}}\Rightarrow \Ex{}{\x^H\x}=\Ex{}{\tr\{\x\x^H\}}=\tr\{\Sb_{\x}\}\leq P$$
+ $$\Ex{}{\sum_{i=1}^{N_{t}}|x_i[n]|^2}=\Ex{}{\|\x\|^2}=\Ex{}{\x^H\x}\leq P$$
+ \item Transmitted signal covariance $\Ex{}{\x\x^H}=\Sg_{\x}$
+ $$\underset{\textnormal{tr circular rotation identity}}{\underbrace{\tr{\A\B\Cb}=\tr\{\Cb\A\B\}}}\Rightarrow \Ex{}{\x^H\x}=\Ex{}{\tr\{\x\x^H\}}=\tr\{\Sg_{\x}\}\leq P$$
  \pagebreak
- \item Additive White Gaussian Noise $\Ex{}{\z\z^H}=\Sb_{\z}=\sigma^2\I$
+ \item Additive White Gaussian Noise $\Ex{}{\z\z^H}=\Sg_{\z}=\sigma^2\I$
  \begin{itemize}
     \item Suppose Thermal Noise of PSD $N_o\to\sigma^2=BN_o$\\ \ \\
  \end{itemize} 
- \item What if $x_i=\sqrt{\frac{P}{n_t}}s_i$ where $s_i$ are i.i.d. constellations?
+ \item What if $x_i=\sqrt{\frac{P}{N_{t}}}s_i$ where $s_i$ are i.i.d. constellations?
  \begin{itemize}
-    \item Input covariance $\Sb_\x=\frac{P}{n_t}\I_{n_t}$
-    \item Received Signal Power $\tr\{\Hb\Sb_\x\Hb^H\}=\frac{P}{n_t}\tr\{\Hb\Hb^H\}=\frac{P}{n_t}\sum_{i,j=1}^{n_t,n_r} |h_{i,j}|^2=\frac{P\|\Hb\|^2}{n_t}$
-    \item Noise Power $\tr\{\Sb_\z\}=n_r\sigma^2$
-    \item Receiver SNR $\frac{P\|\Hb\|^2}{n_tn_r \sigma^2}$\\ \ \\
+    \item Input covariance $\Sg_\x=\frac{P}{N_{t}}\I_{N_{t}}$
+    \item Received Signal Power $\tr\{\Hb\Sg_\x\Hb^H\}=\frac{P}{N_{t}}\tr\{\Hb\Hb^H\}=\frac{P}{N_{t}}\sum_{i,j=1}^{N_{t},N_{r}} |h_{i,j}|^2=\frac{P\|\Hb\|^2}{N_{t}}$
+    \item Noise Power $\tr\{\Sg_\z\}=N_{r}\sigma^2$
+    \item Receiver SNR $\frac{P\|\Hb\|^2}{N_{t}N_{r} \sigma^2}$\\ \ \\
  \end{itemize} 
- \item Normalized Channel Matrix $\|\Hb\|^2=n_tn_r\to$ SNR (of i.i.d. inputs) $=\frac{P}{\sigma^2}$ \\ \ \\
+ \item Normalized Channel Matrix $\|\Hb\|^2=N_{t}N_{r}\to$ SNR (of i.i.d. inputs) $=\frac{P}{\sigma^2}$ \\ \ \\
  \item \textbf{In this DEC, $P$ [Joules] energy received (w. pathloss), $\frac{P}{T_s}=PB$ [Watts]}
 \end{itemize}
 }
@@ -379,27 +379,27 @@ $
 \begin{itemize}
  \item Capacity is the maximum M.I. over all input distributions
  $$C\triangleq \max_{f(\x)} \Inf{\x}{\y}$$
- \item Gaussian $\y$ maximizes M.I. over all cases with $\Sb_\y=\Hb\Sb_\x\Hb^H+\Sb_\z$
+ \item Gaussian $\y$ maximizes M.I. over all cases with $\Sg_\y=\Hb\Sg_\x\Hb^H+\Sg_\z$
     $$\Inf{\x}{\y}=\underset{\textnormal{max if }\y\textnormal{ is Gaussian}}{\underbrace{\Ent{\y}}}-\underset{\y|\x \sim  \mathcal{CN}(\Hb\x,\sigma^2\I)\textnormal{ always } \forall f(\x)}{\underbrace{\CEnt{\y}{\x}}}$$
  \item If $\x$ is Gaussian, so is $\y=\Hb\x+\z$
- \item Gaussian $\vv$ p.d.f. $f(\vv)=\pi^{-N}\det(\Sb_\vv)^{-1}e^{-(\vv-\vec\mu)^H\Sb_\vv^{-1}(\vv-\vec\mu)}$
- $$C= \max_{\Sb_\x} \Inf{\x}{\y} \big|_{\x\sim \mathcal{CN}(0,\Sb_\x)} = \max_{\Sb_\x}\log\det \left(\I_{n_r}+\Sb_\z^{-1}\Hb\Sb_\x\Hb^H\right)$$
+ \item Gaussian $\vv$ p.d.f. $f(\vv)=\pi^{-N}\det(\Sg_\vv)^{-1}e^{-(\vv-\vec\mu)^H\Sg_\vv^{-1}(\vv-\vec\mu)}$
+ $$C= \max_{\Sg_\x} \Inf{\x}{\y} \big|_{\x\sim \mathcal{CN}(0,\Sg_\x)} = \max_{\Sg_\x}\log\det \left(\I_{N_{r}}+\Sg_\z^{-1}\Hb\Sg_\x\Hb^H\right)$$
 \end{itemize}
 
 What about optimization constraints?
- $$C= \max_{\Sb_\x}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Hb\Sb_\x\Hb^H\right)\textnormal{ s.t. \textcolor{ARust}{????????}}$$
+ $$C= \max_{\Sg_\x}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\Hb\Sg_\x\Hb^H\right)\textnormal{ s.t. \textcolor{ARust}{????????}}$$
  \begin{itemize}
-  \item Total average transmitted power $\tr\{\Sb_\x\}\leq P$?
-  \item RF power amplifier in each antenna $x_i\leq P/n_t\forall i$?
+  \item Total average transmitted power $\tr\{\Sg_\x\}\leq P$?
+  \item RF power amplifier in each antenna $x_i\leq P/N_{t}\forall i$?
   \item Does the receiver know $\Hb$?
   \item Does the transmitter know $\Hb$? 
  \end{itemize}
  
  \begin{definition}[$C$ with only Channel State Information at the Receiver]
-    $$C_{\textnormal{CSIR}}= \max_{\Sb_\x}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Hb\Sb_\x\Hb^H\right)\textnormal{ s.t. }\tr\{\Sb_\x\}\leq P, \Sb_x\textnormal{ const. }\forall \Hb$$
+    $$C_{\textnormal{CSIR}}= \max_{\Sg_\x}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\Hb\Sg_\x\Hb^H\right)\textnormal{ s.t. }\tr\{\Sg_\x\}\leq P, \Sg_x\textnormal{ const. }\forall \Hb$$
  \end{definition}
  \begin{definition}[$C$ with Channel State Information at the Transmitter]
-    $$C_{\textnormal{CSIT}}= \max_{\Sb_\x}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Hb\Sb_\x\Hb^H\right)\textnormal{ s.t. }\tr\{\Sb_\x\}\leq P, \Sb_x=\mathscr{F}(\Hb)$$
+    $$C_{\textnormal{CSIT}}= \max_{\Sg_\x}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\Hb\Sg_\x\Hb^H\right)\textnormal{ s.t. }\tr\{\Sg_\x\}\leq P, \Sg_x=\mathscr{F}(\Hb)$$
  \end{definition}
 
 }
@@ -411,36 +411,36 @@ What about optimization constraints?
     \begin{theorem}[M.I. Unitary Transform]
      For any unitary matrix $\U$, the channels $\y=\Hb\x+\z$ and $\y=\Hb'\x'+\z$ with $\Hb'=\Hb\U^H$, $\x'=\U\x$ have equal output and capacity $\Inf{\y}{\x}=\Inf{\y}{\U\x}$.
     \end{theorem}
-    \item so we choose the input covariance $\Sb_\x= \frac{P}{n_t}\I_{n_t}$
-    $$C_{\textnormal{CSIR}}= \log\det \left(\I_{n_r}+\frac{P}{n_t\sigma^2}\Hb\Hb^H\right)$$
+    \item so we choose the input covariance $\Sg_\x= \frac{P}{N_{t}}\I_{N_{t}}$
+    $$C_{\textnormal{CSIR}}= \log\det \left(\I_{N_{r}}+\frac{P}{N_{t}\sigma^2}\Hb\Hb^H\right)$$
     \end{itemize}
 }
 
 \frame[allowframebreaks]{\frametitle{Channel Eigenvalue Decomposition}
     \begin{itemize}
-     \item $\Hb\Hb^H$ is square $n_r\times n_r$, admits \textit{eigenvalues} analysis
+     \item $\Hb\Hb^H$ is square $N_{r}\times N_{r}$, admits \textit{eigenvalues} analysis
      \item $\Hb\Hb^H$ is Hermitian
      \begin{itemize}
-        \item Non-negative eigenvalues $\lambda_1\geq \lambda_2\geq\dots\geq\lambda_{n_r}\geq 0$
-        \item Decompositoin $\Hb\Hb^H=\U\LL\U^H$
-        $$\U^H\U=\U^H\U=\I,\;\LL_{n_r}=\left(\begin{array}{cccc}
+        \item Non-negative eigenvalues $\lambda_1\geq \lambda_2\geq\dots\geq\lambda_{N_{r}}\geq 0$
+        \item Decompositoin $\Hb\Hb^H=\U\Ld\U^H$
+        $$\U^H\U=\U^H\U=\I,\;\Ld_{N_{r}}=\left(\begin{array}{cccc}
  \lambda_1&0&\dots&0\\
  0&\lambda_2&\dots&0\\
  \vdots&\vdots&\ddots&\vdots\\
- 0&0&\dots&\lambda_{n_r}\\
+ 0&0&\dots&\lambda_{N_{r}}\\
 \end{array}\right)$$
      \end{itemize}
     \end{itemize}
     \begin{equation*}
      \begin{split}
-      C&=\log\det \left(\I_{n_r}+\frac{P}{n_t\sigma^2}\Hb\Hb^H\right)=\log\cancel{\det(\U)}^{1}\det\left(\I_{n_r}+\frac{P}{n_t\sigma^2}\LL\right)\cancel{\det(\U^H)}^{1}\\
-       &=\log\prod_{j=1}^{n_r} (1+\frac{P}{n_t\sigma^2}\lambda_j)=\sum_{j=1}^{n_r}\log (1+\frac{P}{n_t\sigma^2}\lambda_j)
+      C&=\log\det \left(\I_{N_{r}}+\frac{P}{N_{t}\sigma^2}\Hb\Hb^H\right)=\log\cancel{\det(\U)}^{1}\det\left(\I_{N_{r}}+\frac{P}{N_{t}\sigma^2}\Ld\right)\cancel{\det(\U^H)}^{1}\\
+       &=\log\prod_{j=1}^{N_{r}} (1+\frac{P}{N_{t}\sigma^2}\lambda_j)=\sum_{j=1}^{N_{r}}\log (1+\frac{P}{N_{t}\sigma^2}\lambda_j)
      \end{split}
     \end{equation*}
 
 \pagebreak
      \begin{definition}[Rank]
-        Number of non-zero eigenvalues $\rank(\Hb) \triangleq \texttt{count}(|\lambda_i|\neq0)\leq \min(n_r,n_t)$
+        Number of non-zero eigenvalues $\rank(\Hb) \triangleq \mathrm{count}(|\lambda_i|\neq0)\leq \min(N_{r},N_{t})$
      \end{definition}
      \begin{definition}[Eigenchannels]
       The MIMO capacity is the sum of $\rank(\Hb)$ SISO channel with gains $\lambda_i$
@@ -448,7 +448,7 @@ What about optimization constraints?
      \begin{figure}
         \centering
         \begin{tikzpicture}[auto, node distance=2cm,>=latex']
-            \node [pinstyle] (tx) {$x_i$ s.t. $\Ex{}{|x_i|^2}=\frac{P}{n_t}$};
+            \node [pinstyle] (tx) {$x_i$ s.t. $\Ex{}{|x_i|^2}=\frac{P}{N_{t}}$};
             \node [output,right of=tx] (txant) {};
             \draw [-,ARust] (tx) -- (txant) \antenna;
             \node [sum,color=ARust, right of=txant, pin={[pinstyle, pin distance=.3cm,color=ARust]above:$\sqrt{\lambda_i}$}] (mult) {$\times$};
@@ -462,17 +462,18 @@ What about optimization constraints?
         \end{tikzpicture}
         \caption{AWGN SISO Discrete Equivalent Channel}
         \end{figure}
-    $$C=\sum_{j=1}^{\rank(\Hb)}C_i^{SISO}=\sum_{j=1}^{\rank(\Hb)}\log(1+\frac{P\lambda_i}{n_t\sigma^2})$$
+    $$C=\sum_{j=1}^{\rank(\Hb)}C_i^{SISO}=\sum_{j=1}^{\rank(\Hb)}\log(1+\frac{P\lambda_i}{N_{t}\sigma^2})$$
 \pagebreak
     \begin{itemize}
-     \item $\|\Hb\|^2=\sum_{i,j=1}^{n_t,n_r} |h_{i,j}|^2=\sum_{j=1}^{n_r}\lambda_j$
-     \item Best case scenario: $n_t=n_r=N$, $\lambda_i=\lambda$, $\|\Hb\|^2=\sum_{j=1}^{n_r}\lambda_j=N\lambda=N^2$
+     \item $\|\Hb\|^2=\sum_{i,j=1}^{N_{t},N_{r}} |h_{i,j}|^2=\sum_{j=1}^{N_{r}}\lambda_j$
+     \item Best case scenario: $N_{t}=N_{r}=N$, $\lambda_i=\lambda$, $\|\Hb\|^2=\sum_{j=1}^{N_{r}}\lambda_j=N\lambda=N^2$
      $$C=\textcolor{ARust}{N}\log(1+\frac{P}{\sigma^2})$$
     \begin{itemize}
      \item Capacity grows \textbf{linearly} with $N$\\ \ \\
      \end{itemize}
-     \item Least favorable scenario: $\rank(\Hb)=1$, $\lambda_1=n_tn_r=\|\Hb\|^2$
-     $$C=\log(1+\frac{P\cancel{n_t}\textcolor{ARust}{n_R}}{\cancel{n_t}\sigma^2})$$
+\pagebreak
+     \item Least favorable scenario: $\rank(\Hb)=1$, $\lambda_1=N_{t}N_{r}=\|\Hb\|^2$
+     $$C=\log(1+\frac{P\cancel{N_{t}}\textcolor{ARust}{N_{r}}}{\cancel{N_{t}}\sigma^2})$$
     \begin{itemize}
      \item Receive-only \textbf{MRC array gain}\\ \ \\
      \end{itemize}
@@ -483,13 +484,13 @@ What about optimization constraints?
 
 \frame[allowframebreaks]{\frametitle{AWGN MIMO CSIT Capacity}
 \begin{itemize}
- \item Singular Value Decomposition of $\Hb=\U\Sm\V^H$
-        $$\small \U^H\U=\I_{n_r},\;\V^H\V=\I_{n_t},\;\Sm=\left(\begin{array}{cccc}
+ \item Singular Value Decomposition of $\Hb=\U\Ld^{\frac{1}{2}}\V^H$
+        $$\small \U^H\U=\I_{N_{r}},\;\V^H\V=\I_{N_{t}},\;\Ld^{\frac{1}{2}}=\left(\begin{array}{cccc}
  \sqrt{\lambda_1}&0&\dots&0\\
  0&\sqrt{\lambda_2}&\dots&0\\
  \vdots&\vdots&\ddots&\vdots\\
  0&0&\dots&\sqrt{\lambda_{\rank(\Hb)}}\\
-\end{array}\right),\;\LL_{\rank(\Hb)}=\Sm^H\Sm=\Sm^2$$
+\end{array}\right),\;\Ld_{\rank(\Hb)}=(\Ld^{\frac{1}{2}})^H\Ld^{\frac{1}{2}}$$
  \item Introduce the change of variable $\x=\V\x'$
  
 \begin{figure}
@@ -507,19 +508,19 @@ What about optimization constraints?
 \end{tikzpicture}
  \caption{AWGN MIMO DEC with linear tx. precoding}
 \end{figure}
- \item Covariance of channel input $\Sb_\x=\V\Sb_{\x}'\V^H$
- \item $\Sb_\x$ and $\Sb_{\x}'$ square, $\V$ is unitary $\to$ bijective projection of optimal $\Sb_{\x}'$
+ \item Covariance of channel input $\Sg_\x=\V\Sg_{\x}'\V^H$
+ \item $\Sg_\x$ and $\Sg_{\x}'$ square, $\V$ is unitary $\to$ bijective projection of optimal $\Sg_{\x}'$
 \end{itemize}
  \begin{theorem}[Sylverster's Theorem]
   For any matrices $\A\in\mathbb{C}^{n,m},\B\in\mathbb{C}^{m,n}$, $\det(\I_n+\A\B)=\det(\I_m+\B\A)$
  \end{theorem}
  \begin{equation*}
   \begin{split}
-    C_{\textnormal{CSIT}}%&= \max_{\Sb_\x}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Hb\Sb_\x\Hb^H\right)\\
-                         &= \max_{\Sb_\x}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\U\Sm\V^H\Sb_\x\V\Sm\U^H\right)\\
-                         &= \max_{\Sb_\x'}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\underset{\A}{\underbrace{\U\Sm}}\underset{\B}{\underbrace{\Sb_{\x'}\Sm\U^H}}\right)\\
-                         &= \max_{\Sb_\x'}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Sb_{\x'}\Sm\U^H\U\Sm\right)\\
-                         &= \max_{\Sb_\x'}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\Sb_{\x'}\LL\right)\\
+    C_{\textnormal{CSIT}}%&= \max_{\Sg_\x}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\Hb\Sg_\x\Hb^H\right)\\
+                         &= \max_{\Sg_\x}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\U\Ld^{\frac{1}{2}}\V^H\Sg_\x\V(\Ld^{\frac{1}{2}})^H\U^H\right)\\
+                         &= \max_{\Sg_\x'}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\underset{\A}{\underbrace{\U\Ld^{\frac{1}{2}}}}\underset{\B}{\underbrace{\Sg_{\x'}(\Ld^{\frac{1}{2}})^H\U^H}}\right)\\
+                         &= \max_{\Sg_\x'}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\Sg_{\x'}(\Ld^{\frac{1}{2}})^H\U^H\U\Ld^{\frac{1}{2}}\right)\\
+                         &= \max_{\Sg_\x'}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\Sg_{\x'}\Ld_{\rank(\Hb)}\right)\\
   \end{split}
  \end{equation*}
  \pagebreak
@@ -527,7 +528,7 @@ What about optimization constraints?
   For any non-negative definite matrix $\A$, $\det(\A)\leq \prod A_{i,i}$ where $A_{i,i}$ are the diagonal elements of $\A$. Equality is achieved with diagonal $\A$.
  \end{theorem}
  \begin{itemize}
-  \item There is at least one optimal $\Sb_{\x'}$ that is diagonal
+  \item There is at least one optimal $\Sg_{\x'}$ that is diagonal
  \end{itemize}
 \begin{columns}
  \begin{column}{6cm}
@@ -541,7 +542,7 @@ What about optimization constraints?
  \begin{column}{6cm}
  \begin{equation*}
   \begin{split}
-    C_{\textnormal{CSIT}}&= \max_{\D_\x'}\log\det \left(\I_{n_r}+\frac{1}{\sigma^2}\D_{\x'}\LL\right)\\
+    C_{\textnormal{CSIT}}&= \max_{\D_\x'}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\D_{\x'}\Ld\right)\\
         &= \max_{(P_1,P_2,\dots,P_{r_\Hb})}\log\prod_{i=1}^{\rank(\Hb)} \left(1+\frac{P_i\lambda_i}{\sigma^2}\right)\\
         &= \max_{(P_1,P_2,\dots,P_{r_\Hb})}\sum_{i=1}^{\rank(\Hb)}\log \left(1+\frac{P_i\lambda_i}{\sigma^2}\right)\\
   \end{split}
@@ -579,7 +580,7 @@ What about optimization constraints?
  \centering
 \begin{tikzpicture}[auto, node distance=2cm,>=latex']
     \node [pinstyle] (tx) {$\x'$};
-    \node [block,right of=tx] (mult) {$\Sm$};
+    \node [block,right of=tx] (mult) {$\Ld^{\frac{1}{2}}$};
     \draw [->,dotted,very thick] (tx) -- (mult);
     \node [sum, right of=mult, node distance=2cm, pin={[pinstyle, pin distance=.3cm]above:$\z[n]$}] (sum) {$+$};
     \draw [->,dotted,very thick] (mult) -- (sum);
@@ -769,8 +770,8 @@ $$C_{\textnormal{CSIT}}=\sum_{i=1}^{N_{\Hb}}\log\left(\frac{\lambda_i}{\beta\sig
 \item By M.I. chain rule and properties of block matrix, the capacity is
           \begin{equation}
             \begin{split}
-                C&=\sup_{\Sb_{\x_{tot}}}\log\det\left(\I+\frac{1}{\sigma_z}\Hb_{tot}\Sb_{\x_{tot}}\Hb_{tot}^H\right)\\
-                 &=\sup_{\{\Sb_{\x[k]}\}_{k=0}^{K-1}}\sum_{k=0}^{K-1}\log\det\left(\I+\frac{1}{\sigma_z}\Hb[k]\Sb_{\x[k]}\Hb^H[k]\right)\\
+                C&=\sup_{\Sg_{\x_{tot}}}\log\det\left(\I+\frac{1}{\sigma_z}\Hb_{tot}\Sg_{\x_{tot}}\Hb_{tot}^H\right)\\
+                 &=\sup_{\{\Sg_{\x[k]}\}_{k=0}^{K-1}}\sum_{k=0}^{K-1}\log\det\left(\I+\frac{1}{\sigma_z}\Hb[k]\Sg_{\x[k]}\Hb^H[k]\right)\\
                  &=\sup_{\vec{P}}\sum_{k=0}^{K-1}\sum_{i=0}^{\rank(\Hb[k])}\log\left(1+\frac{P_{k,i}\lambda_i[k]}{\sigma_z}\right)
             \end{split}
           \end{equation}
@@ -805,13 +806,13 @@ Paradigm shift in interpretation of multipath channel
 
 \pagebreak
 \begin{itemize}
- \item System of linear equations $\vv=\Hb\x$ has solution(s) if $\rank(\Hb)\stackrel{(>)}{=} n_t$
+ \item System of linear equations $\vv=\Hb\x$ has solution(s) if $\rank(\Hb)\stackrel{(>)}{=} N_{t}$
  \item How many independent modulation symbols can we send? Does the noise $\y=\vv+\z$ affect?
  \begin{definition}[Degrees of Freedom (DoF)]
   $$\textnormal{DoF}=\lim_{SNR_{norm}\to\infty}\frac{C}{\log(SNR_{norm})},\textnormal{ where }SNR_{norm}=\frac{P}{\sigma^2}$$
  \end{definition}
  \begin{theorem}
-  If $\Hb$ is full rank, $D=\min(n_t,n_r)$
+  If $\Hb$ is full rank, $D=\min(N_{t},N_{r})$
  \end{theorem}
 \end{itemize}
 }
@@ -821,15 +822,16 @@ Paradigm shift in interpretation of multipath channel
 \begin{itemize}
  \item Recall that $\sigma_z^2=BN_o$ and $C$ in bit/channel use
  $$C(bps)=\sup_{\vec{P}}B\sum_{i=1}^{\rank(\Hb)}\log\left(1+\frac{P_i\lambda_i}{N_oB}\right)$$
- \item The DoF reveal the \textit{PRELOG} of the big-O approximation $$C\approx\Theta\left( B\min(n_t,n_r)\log\left(1+\frac{P}{N_oB}\frac{n_tn_t}{\min(n_t,n_r)}\right) \right)$$ 
+ \item The DoF reveal the \textit{PRELOG} of the big-O capacity scaling
+ $$C\approx\Theta\left( B\min(N_{t},N_{r})\log\left(1+\frac{P}{N_oB}\frac{N_{t}N_{t}}{\min(N_{t},N_{r})}\right) \right)$$ 
  \item Spectral efficiency $\eta=\frac{C}{B}$ bits/s/Hz
  \item For small $B$, rate grows with DoF. 
-    $$\eta \approx\Theta\left( \min(n_t,n_r)  \right)$$ 
+    $$\eta \approx\Theta\left( \min(N_{t},N_{r})  \right)$$ 
  
  \pagebreak
  \item When bandwidth is very large
  $$\lim_{B\to\infty}C(bps)=\sup_{\vec{P}}B\frac{\sum_{i=1}^{\rank(\Hb)}P_i\lambda_i}{N_oB}\begin{cases}
-                                                                                           \textnormal{CSIR }\to\frac{P\sum_{i=1}^{\rank(\Hb)}\lambda_i}{n_tN_oB}= \frac{P\|\Hb\|^2}{n_tN_oB}\\
+                                                                                           \textnormal{CSIR }\to\frac{P\sum_{i=1}^{\rank(\Hb)}\lambda_i}{N_{t}N_oB}= \frac{P\|\Hb\|^2}{N_{t}N_oB}\\
                                                                                            \textnormal{CSIT }\to\frac{P\lambda_{\max}}{N_oB}\\
                                                                                           \end{cases}
 $$
@@ -859,9 +861,9 @@ $$
     \item Advantages
     \begin{itemize}
         \item Unlimited capacity 
-        $$ \lim_{n_t,n_r\to\infty} C=\infty$$
+        $$ \lim_{N_{t},N_{r}\to\infty} C=\infty$$
         \item Random Matrix Theory
-        $$\lim_{n_t\to\infty} \mathcal{CN}(0,\I_{n_t})\to U\textnormal{-sphere}$$\\ \ \\
+        $$\lim_{N_{t}\to\infty} \mathcal{CN}(0,\I_{N_{t}})\to U\textnormal{-sphere}$$\\ \ \\
     \end{itemize}
     \item Problems
     \begin{itemize}
