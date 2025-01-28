@@ -148,21 +148,21 @@ Monday-Thursday 15:00-16:30\\
     \caption{SDM Transmitter-Receiver Block Diagram}
     \begin{tikzpicture}[auto, node distance=1.5cm,>=latex']
         \node [pinstyle] (input)  {$b_i$};
-        \node [block, right of=input] (sp) {$n_t$ Serial/\\Parallel};
+        \node [block, right of=input] (sp) {$N_t$ Serial/\\Parallel};
         \draw[->] (input) -- (sp);
         \node [block, right of=sp, node distance=3cm] (mod1) {Mod.\\$|\mathcal{C}|=2^M$};
         \node [block, below of=mod1] (mod2) {Mod.\\$|\mathcal{C}|=2^M$};
         \node [below of=mod2, node distance=.75cm] (moddots) {$\vdots$};
         \node [block, below of=moddots, node distance=1cm] (modn) {Mod.\\$|\mathcal{C}|=2^M$};
-        \draw[->] (sp) -- node{$b_{\lfloor i/n_t\rfloor}$} (mod1);
-        \draw[->] (sp) -| ($(sp)!.5!(mod2)$) |- node{$b_{\lfloor (i+1)/n_t\rfloor}$}  (mod2);
-        \draw[->] (sp) -| ($(sp)!.5!(mod2)$) |- node{$b_{\lfloor (i+n_t-1)/n_t\rfloor}$}  (modn);
+        \draw[->] (sp) -- node{$b_{\lfloor i/N_t\rfloor}$} (mod1);
+        \draw[->] (sp) -| ($(sp)!.5!(mod2)$) |- node{$b_{\lfloor (i+1)/N_t\rfloor}$}  (mod2);
+        \draw[->] (sp) -| ($(sp)!.5!(mod2)$) |- node{$b_{\lfloor (i+N_t-1)/N_t\rfloor}$}  (modn);
         \node [output, right of=mod1, node distance=1.5cm] (ant1) {};
         \node [output, right of=mod2, node distance=1.5cm] (ant2) {};
         \node [output, right of=modn, node distance=1.5cm] (antn) {};
         \draw [-] (mod1) -- node {$x_1[n]$} (ant1) \antenna;            
         \draw [-] (mod2) -- node {$x_2[n]$} (ant2) \antenna;            
-        \draw [-] (modn) -- node {$x_{n_t}[n]$} (antn) \antenna;
+        \draw [-] (modn) -- node {$x_{N_t}[n]$} (antn) \antenna;
         \node [block,minimum height=3cm,ARust] (ch) at ($(ant1)!.5!(antn)+(1,0)$) {$\Hb$} ;
         \draw [->,dotted,very thick,ARust] (ant1) -- (ch);
         \draw [->,dotted,very thick,ARust] (ant2) -- (ch);
@@ -171,12 +171,12 @@ Monday-Thursday 15:00-16:30\\
         \draw [->,dotted,very thick,ARust] (ch) -- (sum);
         \node [block, right of=sum] (deco) {Decider};
         \draw [->] (sum) -- node{$\y$} (deco);
-        \node [pinstyle, right of=deco,anchor=west,node distance=1cm] (soft) {$\hat{\x}=\left(\begin{array}{c}\hat{x}_1\\\hat{x}_2\\\vdots\\\hat{x}_{n_t}\end{array}\right)$};
+        \node [pinstyle, right of=deco,anchor=west,node distance=1cm] (soft) {$\hat{\x}=\left(\begin{array}{c}\hat{x}_1\\\hat{x}_2\\\vdots\\\hat{x}_{N_t}\end{array}\right)$};
         \draw [->] (deco) -- (soft);
     \end{tikzpicture}
     \end{figure}
     \begin{itemize}
-     \item SDM greatly increases spectral efficiency $\eta=n_tM$
+     \item SDM greatly increases spectral efficiency $\eta=N_tM$
      \item Cannot use Gaussian Codebooks in a real circuit
      \pagebreak
      \item Define the ``M-QAM achievable rate''
@@ -196,11 +196,11 @@ Monday-Thursday 15:00-16:30\\
 \frame[allowframebreaks]{\frametitle{Optimal Symbol Decoding}
 \begin{definition}[Decoding Error]
  Occurs if \textbf{any} of the transmitted symbols is not recovered correctly
- $$\{\hat{x}_1\neq x_1\}\cup\{\hat{x}_2\neq x_2\}\cup\dots\cup\{\hat{x}_{n_t}\neq x_{n_t}\}\equiv \hat{\x}\neq \x$$
+ $$\{\hat{x}_1\neq x_1\}\cup\{\hat{x}_2\neq x_2\}\cup\dots\cup\{\hat{x}_{N_t}\neq x_{N_t}\}\equiv \hat{\x}\neq \x$$
 \end{definition}
 \begin{theorem}[Maximum A Posteriori (MAP) criterion]
  Minimizes the error probability over all symbols of the constellation $\hat{x}_i\in\mathcal{C}$, 
- $$\min_{\mathcal{C}^{n_t}} P(\hat{\x}\neq\x|\y)=\min_{\mathcal{C}^{n_t}} 1-P(\hat{\x}=\x|\y)\Leftrightarrow \hat{\x}_{MAP}=\arg\max_{\mathcal{C}^{n_t}} P(\x|\y)$$
+ $$\min_{\mathcal{C}^{N_t}} P(\hat{\x}\neq\x|\y)=\min_{\mathcal{C}^{N_t}} 1-P(\hat{\x}=\x|\y)\Leftrightarrow \hat{\x}_{MAP}=\arg\max_{\mathcal{C}^{N_t}} P(\x|\y)$$
 \end{theorem}    
 \pagebreak
 \begin{definition}[Likelihood Function]
@@ -210,20 +210,20 @@ $$\mathcal{L}_{\y}(\x)=f(Y=\y|\x)$$
 
 \begin{theorem}[Maximum Likelihood (ML) criterion]
 If symbols are equiprobable $P(x_i)=\frac{1}{|\mathcal{C}|}$, is equivalent to the MAP criterion and achieves minimum error probability.
-$$\min P(\hat{\x}\neq \x) \Leftrightarrow \hat{\x}\stackrel{\textnormal{Bayes}}{=}\arg\max_{\x\in\mathcal{C}^{n_t}} \frac{f(\y|\x)P(\x)}{f(\y)}=\arg\max_{\x\in\mathcal{C}^{n_t}} \mathcal{L}_{\y}(\x)\cancel{\frac{1}{|\mathcal{C}|f(\y)}}$$
+$$\min P(\hat{\x}\neq \x) \Leftrightarrow \hat{\x}\stackrel{\textnormal{Bayes}}{=}\arg\max_{\x\in\mathcal{C}^{N_t}} \frac{f(\y|\x)P(\x)}{f(\y)}=\arg\max_{\x\in\mathcal{C}^{N_t}} \mathcal{L}_{\y}(\x)\cancel{\frac{1}{|\mathcal{C}|f(\y)}}$$
 \end{theorem}
 
 \begin{itemize}
- \item For the AWGN case, the p.d.f. of $(\y|\x)$ is $\mathcal{CN}(\Hb\x,\sigma_z^2\I_{n_r}$)
+ \item For the AWGN case, the p.d.f. of $(\y|\x)$ is $\mathcal{CN}(\Hb\x,\sigma_z^2\I_{N_{r}}$)
  \begin{equation}
     \begin{split}
      \mathcal{L}_{\y}(\x)&=f(\y|\x)\\
-             &=\pi^{-n_r}\det(\sigma_z^2\I_{n_r})^{-1}e^{-(\y-\Hb\x)^H(\sigma_z^2\I_{n_r})^{-1}(\y-\Hb\x)}\\
-             &=\frac{1}{(\pi\sigma_z^2)^{n_r}}e^{-\frac{\|\y-\Hb\x\|^2}{\sigma_z^2}}
+             &=\pi^{-N_{r}}\det(\sigma_z^2\I_{N_{r}})^{-1}e^{-(\y-\Hb\x)^H(\sigma_z^2\I_{N_{r}})^{-1}(\y-\Hb\x)}\\
+             &=\frac{1}{(\pi\sigma_z^2)^{N_{r}}}e^{-\frac{\|\y-\Hb\x\|^2}{\sigma_z^2}}
     \end{split}
  \end{equation}
  \item It suffices to minimize the euclidean distance
-$$\max_{\x\in\mathcal{C}^{n_t}} \mathcal{L}_{\y}(\x) \equiv \min_{\x\in\mathcal{C}^{n_t}}  \|\y-\Hb\x\|^2$$
+$$\max_{\x\in\mathcal{C}^{N_t}} \mathcal{L}_{\y}(\x) \equiv \min_{\x\in\mathcal{C}^{N_t}}  \|\y-\Hb\x\|^2$$
 \end{itemize}
 }
 
@@ -267,7 +267,7 @@ $$\max_{\x\in\mathcal{C}^{n_t}} \mathcal{L}_{\y}(\x) \equiv \min_{\x\in\mathcal{
  \begin{column}{6cm}
   \begin{itemize}
      \item SISO ML expression
- $$\min_{\x\in\mathcal{C}^{n_t}}  \|\y-\Hb\x\|^2=\min_{x\in\mathcal{C}}  |y/h_o-x|^2$$
+ $$\min_{\x\in\mathcal{C}^{N_t}}  \|\y-\Hb\x\|^2=\min_{x\in\mathcal{C}}  |y/h_o-x|^2$$
      \item \textit{Nearest Neighbor} criterion\\ \ \\
      \item ``Textbook'' receiver is the ML
      \begin{itemize}
@@ -285,11 +285,11 @@ $$\max_{\x\in\mathcal{C}^{n_t}} \mathcal{L}_{\y}(\x) \equiv \min_{\x\in\mathcal{
 \frame{\frametitle{Computational Complexity}
 
 \begin{itemize}
-    \item In the \textbf{estimation problem} of an arbitrary vector from continuous support  $\x\in\mathbb{C}^{n_t}$ the ML detector is \textbf{Least Squares}
+    \item In the \textbf{estimation problem} of an arbitrary vector from continuous support  $\x\in\mathbb{C}^{N_t}$ the ML detector is \textbf{Least Squares}
     $$\hat{\x} = \arg\max_{\x\in\mathcal{X}} f(\y|\x) = \arg\min_{\x\in\mathbb{C}^{N_t}} \|\y-\Hb\x\|^2=(\Hb^H\Hb)^{-1}\Hb^H\y$$
-    \item In the \textbf{decoding problem} with a discrete contellation $\x\in\mathcal{C}^{n_t}$ ML is a \textbf{NP-hard combinatorial problem}
-    $$\hat{\x} = \arg\max_{\x\in\mathcal{X}} f(\y|\x) = \arg\min_{\x\in\textcolor{ARust}{\mathcal{C}^{N_t}}} \|\y-\Hb\x\|^2=\texttt{exhaustive\_search}(2^{n_tM})$$
-    \item For $n_t>1$ equalizer + symbol-by-symbol decision is not ML\\ \ \\
+    \item In the \textbf{decoding problem} with a discrete contellation $\x\in\mathcal{C}^{N_t}$ ML is a \textbf{NP-hard combinatorial problem}
+    $$\hat{\x} = \arg\max_{\x\in\mathcal{X}} f(\y|\x) = \arg\min_{\x\in\textcolor{ARust}{\mathcal{C}^{N_t}}} \|\y-\Hb\x\|^2=\texttt{exhaustive\_search}(2^{N_tM})$$
+    \item For $N_t>1$ equalizer + symbol-by-symbol decision is not ML\\ \ \\
    
     \item \textit{Gaussian Codebook} in Shannon's Theorem also NP-hard: \textbf{discrete random constellation} $\mathcal{C}$ of size $|\mathcal{C}|=2^R$ with Gaussian values
     \end{itemize}
@@ -348,21 +348,21 @@ $$\max_{\x\in\mathcal{C}^{n_t}} \mathcal{L}_{\y}(\x) \equiv \min_{\x\in\mathcal{
   \begin{itemize}
             \item QR decomposition 
             $$\Hb=\Q\R\textnormal{ s.t. }\Q^H\Q=I,\;\R=\left(\begin{array}{cccc}
-            r_{1,1}&r_{1,2}&\dots&r_{1,n_t}\\
-            0&r_{2,2}&\dots&r_{2,n_t}\\
+            r_{1,1}&r_{1,2}&\dots&r_{1,N_t}\\
+            0&r_{2,2}&\dots&r_{2,N_t}\\
             \vdots&\vdots&\ddots&\vdots\\
-            0&0&\dots&r_{n_t,n_t}\\
+            0&0&\dots&r_{N_t,N_t}\\
 \end{array}\right)$$
 %           \item Choleski decomposition 
 % $$ \Hb^H\Hb=\U^H\U,\textnormal{ s.t. }\U=\left(\begin{array}{cccc}
-%             u_{1,1}&u_{1,2}&\dots&u_{1,n_t}\\
-%             0&u_{2,2}&\dots&u_{2,n_t}\\
+%             u_{1,1}&u_{1,2}&\dots&u_{1,N_t}\\
+%             0&u_{2,2}&\dots&u_{2,N_t}\\
 %             \vdots&\vdots&\ddots&\vdots\\
-%             0&0&\dots&u_{n_t,n_t}\\
+%             0&0&\dots&u_{N_t,N_t}\\
 % \end{array}\right)$$
             \item Recursive distance sum
-$$\|\Hb(\hat{\x}-\overline{\x})\|^2=\|\R(\hat{\x}-\overline{\x})\|^2=\sum_{i=1}^{n_t}r_{i,i}^2\Big[\underset{\alpha_i}{\underbrace{\hat{x}_i-\overline{x}_i}}+\underset{\beta_i}{\underbrace{\sum_{j=i+1}^{n_t}\frac{r_{i,j}}{r_{i,i}}(\hat{x}_j-\overline{x}_j)}}\Big]$$
-            \item Recursive $\beta_i=r_{i,i}\sum_{j=i+1}^{n_t}r_{i,j}\alpha_j$, starting $\beta_{n_t}=0$
+$$\|\Hb(\hat{\x}-\overline{\x})\|^2=\|\R(\hat{\x}-\overline{\x})\|^2=\sum_{i=1}^{N_t}r_{i,i}^2\Big[\underset{\alpha_i}{\underbrace{\hat{x}_i-\overline{x}_i}}+\underset{\beta_i}{\underbrace{\sum_{j=i+1}^{N_t}\frac{r_{i,j}}{r_{i,i}}(\hat{x}_j-\overline{x}_j)}}\Big]$$
+            \item Recursive $\beta_i=r_{i,i}\sum_{j=i+1}^{N_t}r_{i,j}\alpha_j$, starting $\beta_{N_t}=0$
             \item If $\beta_{i+1}>r\Rightarrow \|\Hb(\hat{\x}-\overline{\x})\|^2>r$
         \end{itemize}
   \begin{columns}
@@ -373,7 +373,7 @@ $$\|\Hb(\hat{\x}-\overline{\x})\|^2=\|\R(\hat{\x}-\overline{\x})\|^2=\sum_{i=1}^
 %     \begin{algorithm}
 %     \caption{Sphere Decoder tree}
      \begin{algorithmic}[0]
-      \FOR{level $i\in n_t \dots 1$}      
+      \FOR{level $i\in N_t \dots 1$}      
         \FOR{each open branch}
             \IF {$\beta_i<r$}
                 \STATE Expand branch
@@ -403,36 +403,36 @@ edge from parent/.style = {draw,-latex},
                         \tikzstyle{level 2}=[sibling distance=40mm]
                         \tikzstyle{level 3}=[sibling distance=20mm]
                         \tikzstyle{level 4}=[sibling distance=20mm]
-                        \node[square,draw,thick,label=90:{$\beta_{n_t}=0$}] {$\emptyset$} 
+                        \node[square,draw,thick,label=90:{$\beta_{N_t}=0$}] {$\emptyset$} 
                         child{
-                            node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{n_t-1}<r}$}] {$\hat{x}_{n_t}=1$}
+                            node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{N_t-1}<r}$}] {$\hat{x}_{N_t}=1$}
                             child{
-                                node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{n_t-2}<r}$}] {$\hat{x}_{n_t-1}=1$}
+                                node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{N_t-2}<r}$}] {$\hat{x}_{N_t-1}=1$}
                                 child{
-                                    node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{n_t-3}<r}$}] {$\hat{x}_{n_t-2}=1$}
+                                    node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{N_t-3}<r}$}] {$\hat{x}_{N_t-2}=1$}
                                     child{
-                                        node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{n_t-4}<r}$}] {$\hat{x}_{n_t-3}=1$}
+                                        node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{N_t-4}<r}$}] {$\hat{x}_{N_t-3}=1$}
                                     } child {
-                                        node[square,draw=ARust,thick,label=90:{$\textcolor{ARust}{\beta_{n_t-4}>r}$}] {$\hat{x}_{n_t-3}=0$}
+                                        node[square,draw=ARust,thick,label=90:{$\textcolor{ARust}{\beta_{N_t-4}>r}$}] {$\hat{x}_{N_t-3}=0$}
                                     }
                                 } child {
-                                    node[square,draw=ARust,thick,label=90:{$\textcolor{ARust}{\beta_{n_t-3}>r}$}] {$\hat{x}_{n_t-2}=0$}
+                                    node[square,draw=ARust,thick,label=90:{$\textcolor{ARust}{\beta_{N_t-3}>r}$}] {$\hat{x}_{N_t-2}=0$}
                                 }
                             } child {
-                                node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{n_t-2}<r}$}] {$\hat{x}_{n_t-1}=0$}
+                                node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{N_t-2}<r}$}] {$\hat{x}_{N_t-1}=0$}
                                 child{
-                                    node[square,draw=ARust,thick,label=90:{$\textcolor{ARust}{\beta_{n_t-3}>r}$}] {$\hat{x}_{n_t-2}=1$}
+                                    node[square,draw=ARust,thick,label=90:{$\textcolor{ARust}{\beta_{N_t-3}>r}$}] {$\hat{x}_{N_t-2}=1$}
                                 } child {
-                                    node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{n_t-3}<r}$}] {$\hat{x}_{n_t-2}=0$}
+                                    node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{N_t-3}<r}$}] {$\hat{x}_{N_t-2}=0$}
                                     child{
-                                        node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{n_t-4}<r}$}] {$\hat{x}_{n_t-3}=1$}
+                                        node[square,draw=KYJade,thick,label=90:{$\textcolor{KYJade}{\beta_{N_t-4}<r}$}] {$\hat{x}_{N_t-3}=1$}
                                     } child {
-                                        node[square,draw=ARust,thick,label=90:{$\textcolor{ARust}{\beta_{n_t-4}>r}$}] {$\hat{x}_{n_t-3}=0$}
+                                        node[square,draw=ARust,thick,label=90:{$\textcolor{ARust}{\beta_{N_t-4}>r}$}] {$\hat{x}_{N_t-3}=0$}
                                     }
                                 }
                             }
                         } child {
-                            node[square,draw=ARust,thick,label=90:{$\textcolor{ARust}{\beta_{n_t-1}>r}$}] {$\hat{x}_{n_t}=0$}
+                            node[square,draw=ARust,thick,label=90:{$\textcolor{ARust}{\beta_{N_t-1}>r}$}] {$\hat{x}_{N_t}=0$}
                     };
                     \end{tikzpicture}
                     }
@@ -465,10 +465,10 @@ edge from parent/.style = {draw,-latex},
         \node [block, below of=dmoddots, node distance=1cm] (dmodn) {$\texttt{Q}_{\mathcal{C}}(.)$};
         \draw[->] (wf) -| ($(wf)!.5!(dmod2)$) |- node[anchor=south east]{$r_1$}  (dmod1);
         \draw[->] (wf) -- node[anchor=south east]{$r_2$} (dmod2);
-        \draw[->] (wf) -| ($(wf)!.5!(dmod2)$) |- node[anchor=south east]{$r_{n_t}$}  (dmodn);
+        \draw[->] (wf) -| ($(wf)!.5!(dmod2)$) |- node[anchor=south east]{$r_{N_t}$}  (dmodn);
         \node [pinstyle,right of = dmod1,node distance=1.2cm] (out1)  {$\hat{x}_1$};
         \node [pinstyle,right of = dmod2,node distance=1.2cm] (out2)  {$\hat{x}_2$};
-        \node [pinstyle,right of = dmodn,node distance=1.2cm] (outn)  {$\hat{x}_{n_t}$};
+        \node [pinstyle,right of = dmodn,node distance=1.2cm] (outn)  {$\hat{x}_{N_t}$};
         \draw[->] (dmod1) -- (out1);
         \draw[->] (dmod2) -- (out2);
         \draw[->] (dmodn) -- (outn);
@@ -478,7 +478,7 @@ edge from parent/.style = {draw,-latex},
  \begin{column}{6cm}
  \begin{itemize}
         \item Linear matrix filter 
-        $$\rr=\W^H\y=\left(\begin{array}{c}r_1\\r_2\\\vdots\\r_{n_t}\end{array}\right)$$
+        $$\rr=\W^H\y=\left(\begin{array}{c}r_1\\r_2\\\vdots\\r_{N_t}\end{array}\right)$$
         \item Design $\W$ so that $r_i$ associated to one $x_i$\\ \ \\
         \item Symbol-by-symbol decision
         $$\hat{x}_i=\texttt{Q}_{\mathcal{C}}(r_i)=\arg\min_{x'\in\mathcal{C}}|r_i-x'|$$
@@ -500,7 +500,7 @@ edge from parent/.style = {draw,-latex},
         \node [block, right of=sum, node distance=1.5cm] (w2) {$\w_2^H$};
         \node [block, above of=w2] (w1) {$\w_1^H$};
         \node [below of=w2, node distance=.75cm] (wdots) {$\vdots$};
-        \node [block, below of=wdots, node distance=1cm] (wn) {$\w_{n_t}^H$};
+        \node [block, below of=wdots, node distance=1cm] (wn) {$\w_{N_t}^H$};
         \draw[->] (sum) -| ($(sum)!.25!(w2)$) |-  (w1);
         \draw[->] (sum) -- (w2);
         \draw[->] (sum) -| ($(sum)!.25!(w2)$) |-  (wn);
@@ -511,10 +511,10 @@ edge from parent/.style = {draw,-latex},
         \node [block, below of=dmoddots, node distance=1cm] (dmodn) {$\texttt{Q}_{\mathcal{C}}(.)$};
         \draw[->] (w1) -- node[anchor=south]{$r_1$}  (dmod1);
         \draw[->] (w2) -- node[anchor=south]{$r_2$} (dmod2);
-        \draw[->] (wn) -- node[anchor=south]{$r_{n_t}$}  (dmodn);
+        \draw[->] (wn) -- node[anchor=south]{$r_{N_t}$}  (dmodn);
         \node [pinstyle,right of = dmod1,node distance=1.2cm] (out1)  {$\hat{x}_1$};
         \node [pinstyle,right of = dmod2,node distance=1.2cm] (out2)  {$\hat{x}_2$};
-        \node [pinstyle,right of = dmodn,node distance=1.2cm] (outn)  {$\hat{x}_{n_t}$};
+        \node [pinstyle,right of = dmodn,node distance=1.2cm] (outn)  {$\hat{x}_{N_t}$};
         \draw[->] (dmod1) -- (out1);
         \draw[->] (dmod2) -- (out2);
         \draw[->] (dmodn) -- (outn);
@@ -524,14 +524,14 @@ edge from parent/.style = {draw,-latex},
  \begin{column}{6cm}
  \begin{itemize}
     \item Row-column matrix product
-        $$\W^H\Hb=\left[\begin{array}{c}\w_1^H\\\hline\w_2^H\\\hline\vdots\\\hline\w_{n_t}^H\end{array}\right]\left[\h_1|\h_2|\dots|\h_{n_t}\right]$$
+        $$\W^H\Hb=\left[\begin{array}{c}\w_1^H\\\hline\w_2^H\\\hline\vdots\\\hline\w_{N_t}^H\end{array}\right]\left[\h_1|\h_2|\dots|\h_{N_t}\right]$$
     \item Equivalent channel
     $$r_i=\underset{\textnormal{Data}}{\underbrace{\w_i^H\h_i x_i}} +\underset{\textnormal{Inter Sym. Interf.}}{\underbrace{\sum_{j\neq i}\w_i^H\h_j x_j}} +\underset{\textnormal{Noise}}{\underbrace{\w_i^H\z}}$$
      \end{itemize}
  \end{column}
 \end{columns} 
 \begin{definition}[Signal to Interference plus Noise Ratio (SINR)]
- $ \textnormal{SINR}_i=\gamma_i=\frac{\Ex{}{ \|\w_i^H\h_i x_i\|^2}}{\Ex{}{ \|\w_i^H\h_j x_j\|^2}+\Ex{}{ \|\w_i^H\z_i\|^2}}=\frac{\|\w_i^H\h_i\|^2\frac{P}{n_t}}{\sum_{j\neq i}\|\w_i^H\h_j\|^2\frac{P}{n_t}+\cancel{\|\w_i\|^2}^{1}\sigma^2}$
+ $ \textnormal{SINR}_i=\gamma_i=\frac{\Ex{}{ \|\w_i^H\h_i x_i\|^2}}{\Ex{}{ \|\w_i^H\h_j x_j\|^2}+\Ex{}{ \|\w_i^H\z_i\|^2}}=\frac{\|\w_i^H\h_i\|^2\frac{P}{N_t}}{\sum_{j\neq i}\|\w_i^H\h_j\|^2\frac{P}{N_t}+\cancel{\|\w_i\|^2}^{1}\sigma^2}$
 \end{definition}
 \begin{theorem}[Treating Interference as Noise (TIN)]
  The Gaussian distribution is the worst (i.e. lowest ``achievable rate'') of all the possible random noise distributions of the same variance
@@ -564,11 +564,11 @@ edge from parent/.style = {draw,-latex},
     \end{tikzpicture}
     \end{figure}
     \begin{itemize}
-     \item \textbf{Matched filter} maximizes SNR $\W^H=\Hb^H\to \w_i^H=\h_i^H\to \max \frac{|\w_i^H\h|^2}{\|\w_i\|^2\sigma^2}\frac{P}{n_t}$
+     \item \textbf{Matched filter} maximizes SNR $\W^H=\Hb^H\to \w_i^H=\h_i^H\to \max \frac{|\w_i^H\h|^2}{\|\w_i\|^2\sigma^2}\frac{P}{N_t}$
      \vspace{-.2in}
-     $$\gamma_i=\frac{\left|\|\h_i\|^2\right|^2\frac{P}{n_t}}{\sum_{j\neq i}|\h_i^H\h_j|^2\frac{P}{n_t}+\|\h_i\|^2\sigma^2}=\frac{\|\h_i\|^2}{\frac{\|\h_i^H\Hb\|^2-\|\h_i\|^2}{\|\h_i\|^2}+\frac{n_t\sigma^2}{P}}\;\neq $$
-%      $$SNR=\frac{\|\Hb^H\Hb\|^2P}{\|\Hb\|^2n_t\sigma^2_1}=\frac{P\left(\sum_{i=1}^{n_t} \frac{\lambda_i^2}{\left(\sum_{i=1}^{n_t} \lambda_i^2\right)}\right)}{\sigma^2_z}$$
-     \item MRC optimum in SIMO ($n_t=1$) and orthogonal channels $\h_i^H\h_j= 0$
+     $$\gamma_i=\frac{\left|\|\h_i\|^2\right|^2\frac{P}{N_t}}{\sum_{j\neq i}|\h_i^H\h_j|^2\frac{P}{N_t}+\|\h_i\|^2\sigma^2}=\frac{\|\h_i\|^2}{\frac{\|\h_i^H\Hb\|^2-\|\h_i\|^2}{\|\h_i\|^2}+\frac{N_t\sigma^2}{P}}\;\neq SNR $$
+%      $$SNR=\frac{\|\Hb^H\Hb\|^2P}{\|\Hb\|^2N_t\sigma^2_1}=\frac{P\left(\sum_{i=1}^{N_t} \frac{\lambda_i^2}{\left(\sum_{i=1}^{N_t} \lambda_i^2\right)}\right)}{\sigma^2_z}$$
+     \item MRC optimum in SIMO ($N_t=1$) and orthogonal channels $\h_i^H\h_j= 0$
      \item In \textit{Massive MIMO} $\h_i^H\h_j\approx 0$
     \end{itemize}      
     
@@ -596,12 +596,9 @@ edge from parent/.style = {draw,-latex},
     \end{figure}
     \vspace{-.1in}
     \begin{itemize}
-     \item \textbf{Zero Forcing Equalizer} eliminates interference $\W^H\Hb=\I \to\rr=\x+\W^H\z$
+     \item \textbf{Zero Forcing Equalizer} (decorrelator) $\W^H\Hb=\I \to\rr=\x+\W^H\z$
      \item Pseudoinverse $\W^H=(\Hb^{H}\Hb)^{-1}\Hb^H=\arg\min \Ex{}{\|\W^H\z\|^2} \textnormal{ s.t. }\W^H\Hb=\I$ 
-     
-     $$SNR=\frac{\Ex{}{\|\x\|^2}}{\Ex{}{\|\W^H\z\|^2}}=\frac{P}{\tr\{\left(\Hb\Hb^H\right)^{-1}\}\sigma_z^2}=\frac{P}{\sigma_z^2\left(\sum_{i=1}^{n_t}\frac{1}{\lambda_1}\right)}$$
-     \item $\w_i$'s are ``decorrelators''
-     \item Optimum in high-SNR regime 
+     $$\textnormal{SNR}_{ZF}=\frac{\Ex{}{\|\x\|^2}}{\Ex{}{\|\W^H\z\|^2}}=\frac{P}{\tr\{\left(\Hb\Hb^H\right)^{-1}\}\sigma_z^2}=\frac{P}{\sigma_z^2\left(\sum_{i=1}^{N_t}\frac{1}{\lambda_1}\right)}< SNR^{MF}$$
     \end{itemize}
     \pagebreak
     
@@ -621,21 +618,21 @@ edge from parent/.style = {draw,-latex},
      \item Rotation of the trace $\ab^H\B\cc=\tr\{\ab^H\B\cc\}=\tr\{\cc\ab^H\B\}$
      $$\Ex{}{\|\e\|^2}=\Ex{}{\tr\{\x\x^H(\I-\W^H\Hb)^H(\I-\W^H\Hb\}}+\Ex{}{\tr\{\z\z^H\W\W^H\}}$$
      \item Average and trace are linear operators
-     $$\Ex{}{\|\e\|^2}=\tr\{\K_{\x}(\I-\W^H\Hb)^H(\I-\W^H\Hb\}+\tr\{\K_{\z}\W\W^H\}$$
+     $$\Ex{}{\|\e\|^2}=\tr\{\Sg_{\x}(\I-\W^H\Hb)^H(\I-\W^H\Hb\}+\tr\{\Sg_{\z}\W\W^H\}$$
      \item I.i.d. noise and data 
-     $$\Ex{}{\|\e\|^2}=\frac{P}{n_t}\left(\tr\{\I_{n_t}\}-\tr\{\Hb^H\W\}-\tr\{\W^H\Hb\}+\tr\{\W^H\Hb\Hb^H\W\}\right)+\sigma_z^2\tr\{\W\W^H\}\}$$
+     $$\Ex{}{\|\e\|^2}=\frac{P}{N_t}\left(\tr\{\I_{N_t}\}-\tr\{\Hb^H\W\}-\tr\{\W^H\Hb\}+\tr\{\W^H\Hb\Hb^H\W\}\right)+\sigma_z^2\tr\{\W\W^H\}\}$$
      \item Group the terms of a 2nd order ``polynomial'' (and $\A^H+\A=2\Re\{\A\}$)
-     $$\Ex{}{\|\e\|^2}==P+\frac{P}{n_t}\underset{\mathscr{F}(\W)}{\underbrace{\left[-2\tr\{\Re\{\Hb^H\W\}\}+\tr\left\{\W^H\left(\Hb\Hb^H+\frac{n_t\sigma_z}{P}\I_{n_r}\right)\W\right\}\right]}}$$
+     $$\Ex{}{\|\e\|^2}==P+\frac{P}{N_t}\underset{\mathscr{F}(\W)}{\underbrace{\left[-2\tr\{\Re\{\Hb^H\W\}\}+\tr\left\{\W^H\left(\Hb\Hb^H+\frac{N_t\sigma_z}{P}\I_{N_{r}}\right)\W\right\}\right]}}$$
      \item Gradient equal to zero
        \begin{equation*}
         \begin{split}
-        \zero &= \nabla \mathscr{F}(\W) =-\Hb^H+\W^H\left(\Hb\Hb^H+\frac{n_t\sigma_z}{P}\I\right)\\
-                        \Hb^H&=\W^H\left(\Hb\Hb^H+\frac{n_t\sigma_z}{P}\I_{n_r}\right)\\
-                        \W^H&=\Hb^H\left(\Hb\Hb^H+\frac{n_t\sigma_z}{P}\I_{n_r}\right)^{-1}\\
+        \zero &= \nabla \mathscr{F}(\W) =-\Hb^H+\W^H\left(\Hb\Hb^H+\frac{N_t\sigma_z}{P}\I\right)\\
+                        \Hb^H&=\W^H\left(\Hb\Hb^H+\frac{N_t\sigma_z}{P}\I_{N_{r}}\right)\\
+                        \W^H&=\Hb^H\left(\Hb\Hb^H+\frac{N_t\sigma_z}{P}\I_{N_{r}}\right)^{-1}\\
         \end{split}
         \end{equation*}
      \item Matrix Inversion Lemma
-     $$\underset{n\times m}{\underbrace{\B}}\left(\I_{n}+\A\B\right)^{-1}=\left(\I_{m}+\B\A\right)^{-1}\B\to \W^H=\left(\Hb^H\Hb+\frac{n_t\sigma_z}{P}\I_{n_t}\right)^{-1}\Hb^H$$
+     $$\underset{n\times m}{\underbrace{\B}}\left(\I_{n}+\A\B\right)^{-1}=\left(\I_{m}+\B\A\right)^{-1}\B\to \W^H=\left(\Hb^H\Hb+\frac{N_t\sigma_z}{P}\I_{N_t}\right)^{-1}\Hb^H$$
     \end{itemize}
     
 \begin{figure}
@@ -649,7 +646,7 @@ edge from parent/.style = {draw,-latex},
         \draw [->,very thick] (ch) -- (sum);
         \node [block, right of = sum,node distance=1.5cm] (mf) {$\Hb^H$} ;
         \draw[->] (sum) -- (mf);
-        \node [block, right of = mf,node distance=2.5cm] (if) {$(\Hb^H\Hb+\frac{n_t\sigma_z}{P})^{-1}$} ;
+        \node [block, right of = mf,node distance=2.5cm] (if) {$(\Hb^H\Hb+\frac{N_t\sigma_z}{P})^{-1}$} ;
         \draw[->] (mf) -- (if);
         \node [block, right of=if,node distance=2.5cm] (qtz) {$\{\texttt{Q}_{\mathcal{C}}()\}^N$};        
         \node [block,dotted,thick,minimum height=1.3cm,minimum width=5cm,label=90:{$\W^H$}] at ($(mf)!.6!(if)$) (wf) {} ;
@@ -662,7 +659,7 @@ edge from parent/.style = {draw,-latex},
     \begin{itemize}
      \item \textbf{Minimum MSE Equalizer} maximizes the SINR     
      $$\rr=\x+\e\to \textnormal{SINR}=\frac{\Ex{}{\|\x\|^2}}{\Ex{}{\|\e\|^2}}\geq \frac{P}{\textnormal{MMSE}}$$
-     $$\textnormal{SINR}_{\textnormal{MMSE}}=\frac{P}{\tr\{\left(\Hb\Hb^H+\frac{n_t\sigma_z^2}{P}\I\right)^{-1}\}\sigma_z^2}=\frac{P}{\sigma_z^2\left(\sum_{i=1}^{n_t}\frac{1}{\lambda_1+\frac{n_t\sigma_z^2}{P}}\right)}>\textnormal{SNR}_{ZF}$$
+     $$\textnormal{SINR}_{\textnormal{MMSE}}=\frac{P}{\tr\{\left(\Hb\Hb^H+\frac{N_t\sigma_z^2}{P}\I\right)^{-1}\}\sigma_z^2}=\frac{P}{\sigma_z^2\left(\sum_{i=1}^{N_t}\frac{1}{\lambda_1+\frac{N_t\sigma_z^2}{P}}\right)}>\textnormal{SNR}_{ZF}$$
     \end{itemize}   
 }
 % 
@@ -703,7 +700,7 @@ edge from parent/.style = {draw,-latex},
  \begin{itemize}
   \item Cholesky matrix inverse algorithm
     \begin{enumerate}
-       \item Solve $\Lb^H\Delb\vv_{aux}=\rr_{MF}$ with $\rr_{MF}=\Hb^H\y$
+       \item Solve $\Lb^H\Dl\vv_{aux}=\rr_{MF}$ with $\rr_{MF}=\Hb^H\y$
        \item Solve $\Lb\rr=\vv_{aux}$
     \end{enumerate}
   
@@ -719,7 +716,7 @@ edge from parent/.style = {draw,-latex},
         \draw [->,very thick] (ch) -- (sum);
         \node [block, right of = sum,node distance=1.5cm] (mf) {$\Hb^H$} ;
         \draw[->] (sum) -- (mf);
-        \node [block, right of = mf,node distance=2cm] (lf) {$\Delb^{-1}\Lb^{-H}$} ;
+        \node [block, right of = mf,node distance=2cm] (lf) {$\Dl^{-1}\Lb^{-H}$} ;
         \draw[->] (mf) -- node {$\rr_{MF}$} (lf);
         \node [block, right of = lf,node distance=2cm] (if) {$\Lb^{-1}$} ;
         \draw[->] (lf) -- node {$\vv_{aux}$} (if);
@@ -731,17 +728,17 @@ edge from parent/.style = {draw,-latex},
     \end{figure}
 \vspace{-.1in}
 \begin{definition}[Cholesky Decomposition]
-Hermitian matrix $\M=\Lb^H\Delb\Lb$ where
+Hermitian matrix $\M=\Lb^H\Dl\Lb$ where
 $$\Lb=\left(\begin{array}{cccc}
             1&0&\dots&0\\
             \ell_{2,1}&1&\dots&0\\
             \vdots&\vdots&\ddots&\vdots\\
-            \ell_{n_t,1}&\ell_{n_t,2}&\dots&1\\
-\end{array}\right),\;\Delb_{n_t}=\left(\begin{array}{cccc}
+            \ell_{N_t,1}&\ell_{N_t,2}&\dots&1\\
+\end{array}\right),\;\Dl_{N_t}=\left(\begin{array}{cccc}
  \delta_1&0&\dots&0\\
  0&\delta_2&\dots&0\\
  \vdots&\vdots&\ddots&\vdots\\
- 0&0&\dots&\delta_{n_t}\\
+ 0&0&\dots&\delta_{N_t}\\
 \end{array}\right)$$
 \end{definition}
       
@@ -836,7 +833,7 @@ $$\Lb=\left(\begin{array}{cccc}
         \draw [->] (ch) -- (sum);
         \node [block, right of = sum, node distance=1.5cm] (mf) {$\Hb^H$} ;
         \draw [->] (sum) -- (mf);
-        \node [block, right of = mf, node distance=2cm] (ff) {$\Delb^{-1}\Lb^{-H}$} ;
+        \node [block, right of = mf, node distance=2cm] (ff) {$\Dl^{-1}\Lb^{-H}$} ;
         \draw [->] (mf) -- node {$\rr_{MF}$}(ff);
         \node [sum, right of=ff, node distance=2cm] (sum2) {$+$};
         \draw [->] (ff) -- node {$\rr$} (sum2);
@@ -852,9 +849,9 @@ $$\Lb=\left(\begin{array}{cccc}
     \pagebreak
      \begin{itemize}
      \item QR decomposition of $\Hb=\Q\R$ (Lower triangular $\R$)\\ \ \\
-     \item Choleski decomposition $\Hb^H\Hb=\Lb^H\Delb\Lb$ ($\R=\Delb^{\frac{1}{2}}\Lb$)\\ \ \\
+     \item Choleski decomposition $\Hb^H\Hb=\Lb^H\Dl\Lb$ ($\R=\Dl^{\frac{1}{2}}\Lb$)\\ \ \\
      \item Triangular equivalent channel
-        $$\rr=\Delb^{-\frac{1}{2}}\Q^H\y=\Delb^{-\frac{1}{2}}\R\x+\Delb^{-\frac{1}{2}}\Q\z=\Lb\x+\Delb^{-\frac{1}{2}}\z'$$
+        $$\rr=\Dl^{-\frac{1}{2}}\Q^H\y=\Dl^{-\frac{1}{2}}\R\x+\Dl^{-\frac{1}{2}}\Q\z=\Lb\x+\Dl^{-\frac{1}{2}}\z'$$
     \end{itemize}
         
 \begin{figure}
@@ -869,7 +866,7 @@ $$\Lb=\left(\begin{array}{cccc}
         \draw [->] (ch) -- (sum);
         \node [block, right of = sum, node distance=1.5cm] (mf) {$\Q^H$} ;
         \draw [->] (sum) -- (mf);
-        \node [block, right of = mf, node distance=2cm] (ff) {$\Delb^{-\frac{1}{2}}$} ;
+        \node [block, right of = mf, node distance=2cm] (ff) {$\Dl^{-\frac{1}{2}}$} ;
         \draw [->] (mf) -- (ff);
         \node [sum, right of=ff, node distance=2cm] (sum2) {$+$};
         \draw [->] (ff) -- node {$\rr$} (sum2);
@@ -891,7 +888,7 @@ $$\Lb=\left(\begin{array}{cccc}
         \STATE $\hat{x}_1=\texttt{Q}_{\mathcal{C}}(r_1)$ //does not have interference (triangular $\Lb$)
         \STATE Substract $L_{1,2}\hat{x}_1$ from $r_2$ 
         \STATE Decode $\hat{x}_2=\texttt{Q}_{\mathcal{C}}(r_2-L_{1,2}\hat{x}_1)$
-        \FOR{$i\in\{3\dots  n_t\}$}
+        \FOR{$i\in\{3\dots  N_t\}$}
         \STATE Substract $L_{1,i}x_1\dots L_{i-1,i}x_{i-1}$ from $r_i$
         \STATE Decode $\hat{x}_i=\texttt{Q}_{\mathcal{C}}(r_i-L_{1,i}x_1-\dots - L_{i-1,i}x_{i-1})$
         \ENDFOR
@@ -899,18 +896,18 @@ $$\Lb=\left(\begin{array}{cccc}
      \end{beamercolorbox}
      \begin{itemize}
       \item If all decisions are correct, 
-         $$\vv=\rr-(\Lb-\I)\hat{\x}=\x+\Delb^{-\frac{1}{2}}\z'$$
+         $$\vv=\rr-(\Lb-\I)\hat{\x}=\x+\Dl^{-\frac{1}{2}}\z'$$
         \item DF even better than ZF in high SNR
-            $$SINR_{DF}\simeq \frac{P}{\tr\{\Delb^{-1}\}}\geq\frac{P}{\tr\{(\Hb^H\Hb)^{-1}\}}=\frac{P}{\tr\{(\Lb^H\Delb\Lb)^{-1}\}}=SNR_{ZF}$$
+            $$SINR_{DF}\simeq \frac{P}{\tr\{\Dl^{-1}\}}\geq\frac{P}{\tr\{(\Hb^H\Hb)^{-1}\}}=\frac{P}{\tr\{(\Lb^H\Dl\Lb)^{-1}\}}=SNR_{ZF}$$
      \end{itemize}
 
 \pagebreak
 
 \begin{itemize}
  \item Different SINR in each branch suffers \textbf{Error propagation}
- $$\gamma_i\approx\frac{P\delta_i}{n_t\sigma_z^2+\sum_{j=1}^{i-1}P(\hat{x_j}\neq x_j)\|L_{i,j}d_{min}\|^2}$$
+ $$\gamma_i\approx\frac{P\delta_i}{N_t\sigma_z^2+\sum_{j=1}^{i-1}P(\hat{x_j}\neq x_j)\|L_{i,j}d_{min}\|^2}$$
  \begin{definition}[Permutation Matrix]
-  $\Pb=\sum_{i=1}^{n_t}\e_i\e_{\pi(i)}^H$ changes the order of rows and columns of another matrix according to the permutation $\pi(1),\pi(2),\dots \pi(n_t)$. For example
+  $\Pb=\sum_{i=1}^{N_t}\e_i\e_{\pi(i)}^H$ changes the order of rows and columns of another matrix according to the permutation $\pi(1),\pi(2),\dots \pi(N_t)$. For example
    $$\begin{array}{ccc}i&\to&\pi(i)\\\hline
       1&\to&2\\
       2&\to&1\\
@@ -940,7 +937,7 @@ $$\Lb=\left(\begin{array}{cccc}
         \draw [->] (sum) -- (pf);
         \node [block, right of = pf, node distance=1.5cm] (mf) {$\Pb^H$} ;
         \draw [->] (pf) -- (mf);
-        \node [block, right of = mf, node distance=1.7cm] (ff) {$\Delb^{-\frac{1}{2}}\Lb^{-H}$} ;
+        \node [block, right of = mf, node distance=1.7cm] (ff) {$\Dl^{-\frac{1}{2}}\Lb^{-H}$} ;
         \draw [->] (mf) -- (ff);
         \node [sum, right of=ff, node distance=1.5cm] (sum2) {$+$};
         \draw [->] (ff) -- node {$\rr$} (sum2);
@@ -956,7 +953,7 @@ $$\Lb=\left(\begin{array}{cccc}
 
     \begin{itemize}
         \item Cholesky decomposition of $\Pb^H\Hb^H\Hb\Pb$ 
-        \item Different values $\delta_1\dots\delta_{n_t}$  for each $\Pb$
+        \item Different values $\delta_1\dots\delta_{N_t}$  for each $\Pb$
         \item Optimal $\Pb^*$ NP-Hard combinatorial search
         \begin{itemize}
             \item $\max\min \delta_{i}$ (worst SNR)
@@ -1004,9 +1001,9 @@ $$\Lb=\left(\begin{array}{cccc}
    &$\F^H$&$\B$\\\hline
    MF&$\Hb^H$&$\zero$\\
    ZF&$(\Hb^H\Hb)^{-1}\Hb^H$&$\zero$\\
-   MMSE&$(\Hb^H\Hb+\frac{n_t\sigma_z^2}{P}\I)^{-1}\Hb^H$&$\zero$\\
+   MMSE&$(\Hb^H\Hb+\frac{N_t\sigma_z^2}{P}\I)^{-1}\Hb^H$&$\zero$\\
    PIC&$\Hb^H$&$\I-\M$\\
-   SIC&$\Delb^{-\frac{1}{2}}\Q^H$&$\I-\Lb$\\
+   SIC&$\Dl^{-\frac{1}{2}}\Q^H$&$\I-\Lb$\\
   \end{tabular}
  \end{table}
  \end{column}

@@ -422,8 +422,8 @@ What about optimization constraints?
      \item $\Hb\Hb^H$ is Hermitian
      \begin{itemize}
         \item Non-negative eigenvalues $\lambda_1\geq \lambda_2\geq\dots\geq\lambda_{N_{r}}\geq 0$
-        \item Decompositoin $\Hb\Hb^H=\U\Ld\U^H$
-        $$\U^H\U=\U^H\U=\I,\;\Ld_{N_{r}}=\left(\begin{array}{cccc}
+        \item Decompositoin $\Hb\Hb^H=\U\Ld_{N_{r}}\U^H$
+        $$\U^H\U=\U\U^H=\I,\;\Ld_{N_{r}}=\left(\begin{array}{cccc}
  \lambda_1&0&\dots&0\\
  0&\lambda_2&\dots&0\\
  \vdots&\vdots&\ddots&\vdots\\
@@ -433,7 +433,7 @@ What about optimization constraints?
     \end{itemize}
     \begin{equation*}
      \begin{split}
-      C&=\log\det \left(\I_{N_{r}}+\frac{P}{N_{t}\sigma^2}\Hb\Hb^H\right)=\log\cancel{\det(\U)}^{1}\det\left(\I_{N_{r}}+\frac{P}{N_{t}\sigma^2}\Ld\right)\cancel{\det(\U^H)}^{1}\\
+      C&=\log\det \left(\I_{N_{r}}+\frac{P}{N_{t}\sigma^2}\Hb\Hb^H\right)=\log\cancel{\det(\U)}^{1}\det\left(\I_{N_{r}}+\frac{P}{N_{t}\sigma^2}\Ld_{N_{r}}\right)\cancel{\det(\U^H)}^{1}\\
        &=\log\prod_{j=1}^{N_{r}} (1+\frac{P}{N_{t}\sigma^2}\lambda_j)=\sum_{j=1}^{N_{r}}\log (1+\frac{P}{N_{t}\sigma^2}\lambda_j)
      \end{split}
     \end{equation*}
@@ -484,13 +484,13 @@ What about optimization constraints?
 
 \frame[allowframebreaks]{\frametitle{AWGN MIMO CSIT Capacity}
 \begin{itemize}
- \item Singular Value Decomposition of $\Hb=\U\Ld^{\frac{1}{2}}\V^H$
-        $$\small \U^H\U=\I_{N_{r}},\;\V^H\V=\I_{N_{t}},\;\Ld^{\frac{1}{2}}=\left(\begin{array}{cccc}
+ \item Singular Value Decomposition of $\Hb=\U\Ld_{\rank(\Hb)}^{\frac{1}{2}}\V^H$
+        $$\small \U^H\U=\I_{N_{r}},\;\V^H\V=\I_{N_{t}},\;\Ld_{\rank(\Hb)}^{\frac{1}{2}}=\left(\begin{array}{cccc}
  \sqrt{\lambda_1}&0&\dots&0\\
  0&\sqrt{\lambda_2}&\dots&0\\
  \vdots&\vdots&\ddots&\vdots\\
  0&0&\dots&\sqrt{\lambda_{\rank(\Hb)}}\\
-\end{array}\right),\;\Ld_{\rank(\Hb)}=(\Ld^{\frac{1}{2}})^H\Ld^{\frac{1}{2}}$$
+\end{array}\right)$$
  \item Introduce the change of variable $\x=\V\x'$
  
 \begin{figure}
@@ -517,13 +517,12 @@ What about optimization constraints?
  \begin{equation*}
   \begin{split}
     C_{\textnormal{CSIT}}%&= \max_{\Sg_\x}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\Hb\Sg_\x\Hb^H\right)\\
-                         &= \max_{\Sg_\x}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\U\Ld^{\frac{1}{2}}\V^H\Sg_\x\V(\Ld^{\frac{1}{2}})^H\U^H\right)\\
-                         &= \max_{\Sg_\x'}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\underset{\A}{\underbrace{\U\Ld^{\frac{1}{2}}}}\underset{\B}{\underbrace{\Sg_{\x'}(\Ld^{\frac{1}{2}})^H\U^H}}\right)\\
-                         &= \max_{\Sg_\x'}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\Sg_{\x'}(\Ld^{\frac{1}{2}})^H\U^H\U\Ld^{\frac{1}{2}}\right)\\
+                         &= \max_{\Sg_\x}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\U\Ld_{\rank(\Hb)}^{\frac{1}{2}}\V^H\Sg_\x\V(\Ld_{\rank(\Hb)}^{\frac{1}{2}})^H\U^H\right)\\
+                         &= \max_{\Sg_\x'}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\underset{\A}{\underbrace{\U\Ld_{\rank(\Hb)}^{\frac{1}{2}}}}\underset{\B}{\underbrace{\Sg_{\x'}(\Ld_{\rank(\Hb)}^{\frac{1}{2}})^H\U^H}}\right)\\
+                         &= \max_{\Sg_\x'}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\Sg_{\x'}(\Ld_{\rank(\Hb)}^{\frac{1}{2}})^H\U^H\U\Ld_{\rank(\Hb)}^{\frac{1}{2}}\right)\\
                          &= \max_{\Sg_\x'}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\Sg_{\x'}\Ld_{\rank(\Hb)}\right)\\
   \end{split}
  \end{equation*}
- \pagebreak
  \begin{theorem}[Hadamard Inequality]
   For any non-negative definite matrix $\A$, $\det(\A)\leq \prod A_{i,i}$ where $A_{i,i}$ are the diagonal elements of $\A$. Equality is achieved with diagonal $\A$.
  \end{theorem}
@@ -532,7 +531,7 @@ What about optimization constraints?
  \end{itemize}
 \begin{columns}
  \begin{column}{6cm}
-  $$\D_{\x'}=\left(\begin{array}{cccc}
+  $$\D_{\vec{P}}=\left(\begin{array}{cccc}
  P_1&0&\dots&0\\
  0&P_2&\dots&0\\
  \vdots&\vdots&\ddots&\vdots\\
@@ -542,7 +541,7 @@ What about optimization constraints?
  \begin{column}{6cm}
  \begin{equation*}
   \begin{split}
-    C_{\textnormal{CSIT}}&= \max_{\D_\x'}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\D_{\x'}\Ld\right)\\
+    C_{\textnormal{CSIT}}&= \max_{\D_{\vec{P}}}\log\det \left(\I_{N_{r}}+\frac{1}{\sigma^2}\D_{\vec{P}}\Ld_{\rank(\Hb)}\right)\\
         &= \max_{(P_1,P_2,\dots,P_{r_\Hb})}\log\prod_{i=1}^{\rank(\Hb)} \left(1+\frac{P_i\lambda_i}{\sigma^2}\right)\\
         &= \max_{(P_1,P_2,\dots,P_{r_\Hb})}\sum_{i=1}^{\rank(\Hb)}\log \left(1+\frac{P_i\lambda_i}{\sigma^2}\right)\\
   \end{split}
