@@ -29,43 +29,10 @@
 \usepackage{tikz-dimline}
 \usetikzlibrary{plotmarks,patterns,decorations.pathreplacing,backgrounds,calc,arrows,arrows.meta,spy,matrix,backgrounds,shapes,math}
 
-\tikzset{
-    block/.style = {draw, rectangle, 
-        minimum height=1cm, 
-        minimum width=1.2cm, align=center},
-    input/.style = {coordinate,node distance=1cm},
-    output/.style = {coordinate,node distance=2cm},
-    arrow/.style={draw, -latex,node distance=1.5cm},
-    pinstyle/.style = {pin edge={latex-, black,node distance=1.5cm}},
-    sum/.style = {draw, circle, node distance=1cm}
-}
-
-\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \UE (#1) {};}
-\newcommand{\DrawBox}[4][]{%
-    \tikz[overlay,remember picture]{%
-        \coordinate (TopLeft)     at ($(#2)+(-0.4em,1.6em)$);
-        \coordinate (BottomRight) at ($(#3)+(0.4em,-1.0em)$);
-        %
-        \path (TopLeft); \pgfgetlastxy{\XCoord}{\IgnoreCoord};
-        \path (BottomRight); \pgfgetlastxy{\IgnoreCoord}{\YCoord};
-        \coordinate (LabelPoint) at ($(\XCoord,\YCoord)!0.5!(BottomRight)$);
-        %
-        \draw [red,#1] (TopLeft) rectangle (BottomRight);
-        \UE [below, #1, fill=none, fill opacity=1] at (LabelPoint) {#4};
-    }
-}
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
 \usepgfplotslibrary{patchplots,groupplots,fillbetween,polar}
-
-\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
-\def\antenna{%
-    -- +(0mm,4.0mm) -- +(2.625mm,7.5mm) -- +(-2.625mm,7.5mm) -- +(0mm,4.0mm) -- +(0mm,0mm)
-}
-\pgfmathdeclarefunction{gauss}{3}{%
-        \pgfmathparse{1/(#3*sqrt(2*pi))*exp(-((#1-#2)^2)/(2*#3^2))}%
-     }
    
 % OUTROS PAQUETES DE USO COMUN. HOXE EN DIA OS COMPILADORES SON TAN RAPIDOS QUE EU METO TODOS SEMPRE
 % \usepackage{float}
@@ -131,13 +98,14 @@
 \begin{columns}[T]
 \begin{column}{5cm}\centering
 Office A-204\\
-Monday-Thursday 15:00-16:30\\
+Wednesday \& Thursday 15:00-18:00\\
 \texttt{gomezcuba@gts.uvigo.es}\\
 \end{column}
 \end{columns}
 }
 
-\date{}
+\date{2025}
+
 
 \begin{document}
 
