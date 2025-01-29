@@ -27,43 +27,10 @@
 \usepackage{tikzscale}
 \usetikzlibrary{plotmarks,patterns,decorations.pathreplacing,backgrounds,calc,arrows,arrows.meta,spy,matrix,backgrounds,shapes,math}
 
-\tikzset{
-    block/.style = {draw, rectangle, 
-        minimum height=1cm, 
-        minimum width=1.2cm, align=center},
-    input/.style = {coordinate,node distance=1cm},
-    output/.style = {coordinate,node distance=2cm},
-    arrow/.style={draw, -latex,node distance=1.5cm},
-    pinstyle/.style = {pin edge={latex-, black,node distance=1.5cm}},
-    sum/.style = {draw, circle, node distance=1cm}
-}
-
-\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \UE (#1) {};}
-\newcommand{\DrawBox}[4][]{%
-    \tikz[overlay,remember picture]{%
-        \coordinate (TopLeft)     at ($(#2)+(-0.4em,1.6em)$);
-        \coordinate (BottomRight) at ($(#3)+(0.4em,-1.0em)$);
-        %
-        \path (TopLeft); \pgfgetlastxy{\XCoord}{\IgnoreCoord};
-        \path (BottomRight); \pgfgetlastxy{\IgnoreCoord}{\YCoord};
-        \coordinate (LabelPoint) at ($(\XCoord,\YCoord)!0.5!(BottomRight)$);
-        %
-        \draw [red,#1] (TopLeft) rectangle (BottomRight);
-        \UE [below, #1, fill=none, fill opacity=1] at (LabelPoint) {#4};
-    }
-}
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
 \usepgfplotslibrary{patchplots,groupplots,fillbetween,polar}
-
-\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
-\def\antenna{%
-    -- +(0mm,4.0mm) -- +(2.625mm,7.5mm) -- +(-2.625mm,7.5mm) -- +(0mm,4.0mm) -- +(0mm,0mm)
-}
-\pgfmathdeclarefunction{gauss}{3}{%
-        \pgfmathparse{1/(#3*sqrt(2*pi))*exp(-((#1-#2)^2)/(2*#3^2))}%
-     }
 
 % OUTROS PAQUETES DE USO COMUN. HOXE EN DIA OS COMPILADORES SON TAN RAPIDOS QUE EU METO TODOS SEMPRE
 % \usepackage{float}
@@ -129,13 +96,13 @@
 \begin{columns}[T]
 \begin{column}{5cm}\centering
 Office A-204\\
-Monday-Thursday 15:00-16:30\\
+Wednesday \& Thursday 15:00-18:00\\
 \texttt{gomezcuba@gts.uvigo.es}\\
 \end{column}
 \end{columns}
 }
 
-\date{}
+\date{2025}
 
 \begin{document}
 
@@ -177,10 +144,10 @@ Monday-Thursday 15:00-16:30\\
         \draw[->] (sumacc) -- (output);
         \end{tikzpicture}
 \end{figure}
-%     $$\rho=\frac{P\sum_{i=1}^{n_r}|h_i|^2}{\sigma_z^2}\sim \frac{P}{\sigma_z^2\sqrt{2}}\chi^2(2n_r)$$
+%     $$\rho=\frac{P\sum_{i=1}^{N_{r}}|h_i|^2}{\sigma_z^2}\sim \frac{P}{\sigma_z^2\sqrt{2}}\chi^2(2N_{r})$$
 % \begin{itemize}
-%  \item Array Gain $\overline{\rho}=n_r\frac{P}{\sigma_z^2}$
-%  \item Diversity $P_o\propto \overline{\rho}^{-n_r}$
+%  \item Array Gain $\overline{\rho}=N_{r}\frac{P}{\sigma_z^2}$
+%  \item Diversity $P_o\propto \overline{\rho}^{-N_{r}}$
 %  \end{itemize}
  \end{column}
  \begin{column}{6cm}    
@@ -216,20 +183,20 @@ Monday-Thursday 15:00-16:30\\
         \draw[->] (sumacc) -- (output);
         \end{tikzpicture}
 \end{figure}
-%     $$\rho=\frac{ P\max_{\{1\dots n_r\}} |h_i|^2}{\sigma_z^2}\sim \textnormal{MaxExp}(n_r,\frac{\sigma_z^2}{P})$$
+%     $$\rho=\frac{ P\max_{\{1\dots N_{r}\}} |h_i|^2}{\sigma_z^2}\sim \textnormal{MaxExp}(N_{r},\frac{\sigma_z^2}{P})$$
 % \begin{itemize}
-%  \item $\overline{\rho}=\left(\sum_{k=1}^{n_r}{n_r \choose k}\frac{(1)^{k-1}}{k}\right)\frac{P}{\sigma_z^2}$
-%  \item Diversity $P_o\propto \overline{\rho}^{-n_r}$
+%  \item $\overline{\rho}=\left(\sum_{k=1}^{N_{r}}{N_{r} \choose k}\frac{(1)^{k-1}}{k}\right)\frac{P}{\sigma_z^2}$
+%  \item Diversity $P_o\propto \overline{\rho}^{-N_{r}}$
 %  \end{itemize}
  \end{column}
 \end{columns}
 \begin{table}
   \begin{tabular}{c|c|c}
    &Maximal Ratio Combining& Selection Combining\\\hline
-   $\rho=$&$\frac{P\sum_{i=1}^{n_r}|h_i|^2}{\sigma_z^2}$& $\rho=\frac{ P\max_{\{1\dots n_r\}} |h_i|^2}{\sigma_z^2}$\\
-   $f(\frac{\rho}{P/\sigma_z^2})\sim$&$\frac{1}{\sqrt{2}}\chi^2(2n_r)$& $\max\textnormal{-}n_r\textnormal{-}\textnormal{Exp}(1)$\\
-   Array Gain&$\overline{\rho}=n_r\frac{P}{\sigma_z^2}$& $\overline{\rho}=\left(\sum_{k=1}^{n_r}{n_r \choose k}\frac{(1)^{k-1}}{k}\right)\frac{P}{\sigma_z^2}$\\\hline
-   Diversity& \multicolumn{2}{c}{$P_o\approx\overline{\rho}^{-n_r}$}
+   $\rho=$&$\frac{P\sum_{i=1}^{N_{r}}|h_i|^2}{\sigma_z^2}$& $\rho=\frac{ P\max_{\{1\dots N_{r}\}} |h_i|^2}{\sigma_z^2}$\\
+   $f(\frac{\rho}{P/\sigma_z^2})\sim$&$\frac{1}{\sqrt{2}}\chi^2(2N_{r})$& $\max\textnormal{-}N_{r}\textnormal{-}\textnormal{Exp}(1)$\\
+   Array Gain&$\overline{\rho}=N_{r}\frac{P}{\sigma_z^2}$& $\overline{\rho}=\left(\sum_{k=1}^{N_{r}}{N_{r} \choose k}\frac{(1)^{k-1}}{k}\right)\frac{P}{\sigma_z^2}$\\\hline
+   Diversity& \multicolumn{2}{c}{$P_o\approx\overline{\rho}^{-N_{r}}$}
   \end{tabular}
 \end{table}
 }
@@ -270,10 +237,10 @@ Monday-Thursday 15:00-16:30\\
     \draw[->] (fb) -| ($(mult1)+(0,1.25)$);
         \end{tikzpicture}
 \end{figure}
-%     $$\rho=\frac{P\sum_{i=1}^{n_r}|h_i|^2}{\sigma_z^2}\sim \frac{P}{\sigma_z^2\sqrt{2}}\chi^2(2n_r)$$
+%     $$\rho=\frac{P\sum_{i=1}^{N_{r}}|h_i|^2}{\sigma_z^2}\sim \frac{P}{\sigma_z^2\sqrt{2}}\chi^2(2N_{r})$$
 % \begin{itemize}
-%  \item Array Gain $\overline{\rho}=n_r\frac{P}{\sigma_z^2}$
-%  \item Diversity $P_o\propto \overline{\rho}^{-n_r}$
+%  \item Array Gain $\overline{\rho}=N_{r}\frac{P}{\sigma_z^2}$
+%  \item Diversity $P_o\propto \overline{\rho}^{-N_{r}}$
 %  \end{itemize}
  \end{column}
  \begin{column}{6cm} 
@@ -309,21 +276,21 @@ Monday-Thursday 15:00-16:30\\
         \end{tikzpicture}
 %   
 \end{figure}
-% %     $$\rho=\frac{ P\max_{\{1\dots n_r\}} |h_i|^2}{\sigma_z^2}\sim \textnormal{MaxExp}(n_r,\frac{\sigma_z^2}{P})$$
+% %     $$\rho=\frac{ P\max_{\{1\dots N_{r}\}} |h_i|^2}{\sigma_z^2}\sim \textnormal{MaxExp}(N_{r},\frac{\sigma_z^2}{P})$$
 % % \begin{itemize}
-% %  \item $\overline{\rho}=\left(\sum_{k=1}^{n_r}{n_r \choose k}\frac{(1)^{k-1}}{k}\right)\frac{P}{\sigma_z^2}$
-% %  \item Diversity $P_o\propto \overline{\rho}^{-n_r}$
+% %  \item $\overline{\rho}=\left(\sum_{k=1}^{N_{r}}{N_{r} \choose k}\frac{(1)^{k-1}}{k}\right)\frac{P}{\sigma_z^2}$
+% %  \item Diversity $P_o\propto \overline{\rho}^{-N_{r}}$
 % %  \end{itemize}
  \end{column}
 \end{columns}
 \begin{table}
   \begin{tabular}{c|c|c}
    &Maximal Ratio Combining& Selection Combining\\\hline
-   Required CSIT & $\h$ ($2n_t\times$ \texttt{\color{KYJade}float}) & $i^*$ ($1\times$ \texttt{\color{KYJade} int})\\
-   $\rho=$&$\frac{P\sum_{i=1}^{n_t}|h_i|^2}{\sigma_z^2}$& $\rho=\frac{ P\max_{\{1\dots n_t\}} |h_i|^2}{\sigma_z^2}$\\
-   $f(\frac{\rho}{P/\sigma_z^2})\sim$&$\frac{1}{\sqrt{2}}\chi^2(2n_t)$& $\max\textnormal{-}n_t\textnormal{-}\textnormal{Exp}(1)$\\
-   Array Gain&$\overline{\rho}=n_t\frac{P}{\sigma_z^2}$& $\overline{\rho}=\left(\sum_{k=1}^{n_t}{n_t \choose k}\frac{(1)^{k-1}}{k}\right)\frac{P}{\sigma_z^2}$\\\hline
-   Diversity& \multicolumn{2}{c}{$P_o\approx\overline{\rho}^{-n_t}$}
+   Required CSIT & $\h$ ($2N_{t}\times$ \texttt{\color{KYJade}float}) & $i^*$ ($1\times$ \texttt{\color{KYJade} int})\\
+   $\rho=$&$\frac{P\sum_{i=1}^{N_{t}}|h_i|^2}{\sigma_z^2}$& $\rho=\frac{ P\max_{\{1\dots N_{t}\}} |h_i|^2}{\sigma_z^2}$\\
+   $f(\frac{\rho}{P/\sigma_z^2})\sim$&$\frac{1}{\sqrt{2}}\chi^2(2N_{t})$& $\max\textnormal{-}N_{t}\textnormal{-}\textnormal{Exp}(1)$\\
+   Array Gain&$\overline{\rho}=N_{t}\frac{P}{\sigma_z^2}$& $\overline{\rho}=\left(\sum_{k=1}^{N_{t}}{N_{t} \choose k}\frac{(1)^{k-1}}{k}\right)\frac{P}{\sigma_z^2}$\\\hline
+   Diversity& \multicolumn{2}{c}{$P_o\approx\overline{\rho}^{-N_{t}}$}
   \end{tabular}
 \end{table}
 }
@@ -361,7 +328,7 @@ Monday-Thursday 15:00-16:30\\
  \end{column}
  \begin{column}{6cm}
  
-    $$\rho=\frac{P|\sum_{i=1}^{n_t}h_i|^2}{n_t\sigma_z^2}\sim \frac{P}{\sigma_z^2}Exp(1)$$
+    $$\rho=\frac{P|\sum_{i=1}^{N_{t}}h_i|^2}{N_{t}\sigma_z^2}\sim \frac{P}{\sigma_z^2}Exp(1)$$
 \begin{itemize}
  \item No Array Gain $\overline{\rho}=\frac{P}{\sigma_z^2}$
  \item No Diversity $P_o\propto \overline{\rho}^{-1}$
@@ -400,9 +367,9 @@ Monday-Thursday 15:00-16:30\\
             \draw [draw,loosely dotted,-,align=center] (txant\a)  -- node {$h_\a^*$} (rxant1);
             }
             \draw [draw] (rxant1) \antenna;
-    \node [sum, right of=rxant1, node distance=.75cm, pin={[pinstyle, pin distance=.5cm]above:$\left(\begin{array}{c}z[n]\\z[n+1]\\\vdots\\z[n+n_t]\end{array}\right)$}] (sumacc) {$+$};
+    \node [sum, right of=rxant1, node distance=.75cm, pin={[pinstyle, pin distance=.5cm]above:$\left(\begin{array}{c}z[n]\\z[n+1]\\\vdots\\z[n+N_{t}]\end{array}\right)$}] (sumacc) {$+$};
     \draw [draw,->,align=center] (rxant1) -- (sumacc);
-    \node [pinstyle, right of=sumacc, node distance=2cm, name=output] {$\left(\begin{array}{c}y[n]\\y[n+1]\\\vdots\\y[n+n_t]\end{array}\right)$};  
+    \node [pinstyle, right of=sumacc, node distance=2cm, name=output] {$\left(\begin{array}{c}y[n]\\y[n+1]\\\vdots\\y[n+N_{t}]\end{array}\right)$};  
     \draw[->] (sumacc) -- (output);
         \end{tikzpicture}
 \end{figure}
@@ -414,18 +381,18 @@ Monday-Thursday 15:00-16:30\\
   \begin{itemize}
    \item Virtual SIMO equivalent
    $$\y
-%    =\left(\begin{array}{c}y[n]\\y[n+1]\\\vdots\\y[n+n_t]\end{array}\right)
-%    =\left(\begin{array}{c}h_1\\h_2\\\vdots\\h_{n_t}\end{array}\right)x[n]+\left(\begin{array}{c}z[n]\\z[n+1]\\\vdots\\z[n+n_t]\end{array}\right)
+%    =\left(\begin{array}{c}y[n]\\y[n+1]\\\vdots\\y[n+N_{t}]\end{array}\right)
+%    =\left(\begin{array}{c}h_1\\h_2\\\vdots\\h_{N_{t}}\end{array}\right)x[n]+\left(\begin{array}{c}z[n]\\z[n+1]\\\vdots\\z[n+N_{t}]\end{array}\right)
 =\h x[n]+\z $$
-   \item MRC/Selection Diversity $P_o\approx \overline{\rho}^{-n_t}$\\ \ \\
-   \item Array Gain $\overline{\rho}=\frac{n_tP}{\sigma_z^2}$\\ \ \\
-   \item Space-Time Code rate $\frac{1}{n_t}$
+   \item MRC/Selection Diversity $P_o\approx \overline{\rho}^{-N_{t}}$\\ \ \\
+   \item Array Gain $\overline{\rho}=\frac{N_{t}P}{\sigma_z^2}$\\ \ \\
+   \item Space-Time Code rate $\frac{1}{N_{t}}$
    $$\Gb_{x[n]}=\left(\begin{array}{cccc}
             x[n]&0&0\\
             0&x[n]&0\\
             \vdots&\vdots&\ddots&\vdots\\
             0&0&\dots&x[n]\\
-\end{array}\right)=\I_{n_t}x[n]$$
+\end{array}\right)=\I_{N_{t}}x[n]$$
    $$\y=\Gb_{x[n]}\h+\z$$
   \end{itemize}
  \end{column}
@@ -471,7 +438,7 @@ Monday-Thursday 15:00-16:30\\
             \draw [draw] (rxant1) \antenna;
     \node [sum, right of=rxant1, node distance=.75cm, pin={[pinstyle, pin distance=.5cm]above:$\z$}] (sumacc) {$+$};
     \draw [draw,->,align=center] (rxant1) -- (sumacc);
-    \node [block, right of=sumacc, node distance=1.75cm, name=wf] {$\Gb_{\h}^H\Delb_{(1,-1^*)}$};  
+    \node [block, right of=sumacc, node distance=1.75cm, name=wf] {$\Gb_{\h}^H\Dl_{(1,-1^*)}$};  
     \node [pinstyle, right of=wf, node distance=1.5cm, name=output] {$\rr$};  
     \draw[->] (sumacc) -- node {$\y$} (wf);
     \draw[->] (wf) -- (output);
@@ -517,13 +484,13 @@ Monday-Thursday 15:00-16:30\\
         \node [block, below of=moddots, node distance=1cm] (modn) {Mod.\\$|\mathcal{C}|=2^M$};
         \draw[->] (sp) -- node{$\cc_1$} (mod1);
         \draw[->] (sp) -| ($(sp)!.5!(mod2)$) |- node{$\cc_2$}  (mod2);
-        \draw[->] (sp) -| ($(sp)!.5!(mod2)$) |- node{$\cc_{n_t}$}  (modn);
+        \draw[->] (sp) -| ($(sp)!.5!(mod2)$) |- node{$\cc_{N_{t}}$}  (modn);
         \node [output, right of=mod1, node distance=2cm] (ant1) {};
         \node [output, right of=mod2, node distance=2cm] (ant2) {};
         \node [output, right of=modn, node distance=2cm] (antn) {};
         \draw [-] (mod1) -- node {$x_1[n]$} (ant1) \antenna;            
         \draw [-] (mod2) -- node {$x_2[n]$} (ant2) \antenna;            
-        \draw [-] (modn) -- node {$x_{n_t}[n]$} (antn) \antenna;    
+        \draw [-] (modn) -- node {$x_{N_{t}}[n]$} (antn) \antenna;    
     \end{tikzpicture}
 \end{figure}
  \end{column}
@@ -547,14 +514,14 @@ Monday-Thursday 15:00-16:30\\
         STC $\Gb_{\s}$} ;
         \draw [->] (mod1) -- node{$s_1[n]$}  ($(mod1)+(1.5,0)$) |- (sstc);
         \draw [->] (mod2) -- node {$s_2[n]$} (sstc);
-        \draw [->] (modn) -- node {$s_{n_t}[n]$} ($(modn)+(1.5,0)$) |- (sstc);
+        \draw [->] (modn) -- node {$s_{N_{t}}[n]$} ($(modn)+(1.5,0)$) |- (sstc);
         \node [output, right of=sstc,node distance=1.75cm] (ant2) {};
         \node [output, above of=ant2, node distance=1.5cm] (ant1) {};
         \node [below of=ant2, node distance=.75cm] (antdots) {$\vdots$};
         \node [output, below of=antdots, node distance=1.5cm] (antn) {};
         \draw [-] (sstc) -- ($(sstc)+(1.25,0)$) |- node {$x_1[n]$} (ant1) \antenna;            
         \draw [-] (sstc) -- node {$x_2[n]$} (ant2) \antenna;            
-        \draw [-] (sstc) -- ($(sstc)+(1.25,0)$) |- node {$x_{n_t}[n]$} (antn) \antenna;   
+        \draw [-] (sstc) -- ($(sstc)+(1.25,0)$) |- node {$x_{N_{t}}[n]$} (antn) \antenna;   
     \end{tikzpicture}
     \end{figure}
  \end{column}
@@ -575,19 +542,19 @@ Monday-Thursday 15:00-16:30\\
 \begin{itemize}
  \item Unitary Matrix property of Alamoutti code permits fast ML
  $$\Gb_\h^H\Gb_\h=(|h_1|^2+|h_2|^2)\I_{2}$$
- \item Objective: find OSTBC matrices $\Gb_\h$ for $n_t>2$ with rate=$1$
- $$\Gb_\h^H\Gb_\h=\|\h\|^2\I_{n_t}, ,\textnormal{ where } r=\frac{\mathrm{nrows}(\Gb_\h)}{\mathrm{ncols}(\Gb_\h)}=1$$
+ \item Objective: find OSTBC matrices $\Gb_\h$ for $N_{t}>2$ with rate=$1$
+ $$\Gb_\h^H\Gb_\h=\|\h\|^2\I_{N_{t}}, ,\textnormal{ where } r=\frac{\mathrm{nrows}(\Gb_\h)}{\mathrm{ncols}(\Gb_\h)}=1$$
  \item Methodology: NP-Hard combinatorial problem, but \textbf{offline}
  \pagebreak
- \item For \textbf{Real} Modulations: rate 1 OSTBCs exist for any $n_t$
+ \item For \textbf{Real} Modulations: rate 1 OSTBCs exist for any $N_{t}$
  $$ \Gb_{2\times 2}=\left(\begin{array}{cc}s_1&-s_2\\s_2&s_1\end{array}\right)$$
  $$\Gb_{4\times 4}=\left(\begin{array}{cccc}s_1&-s_2&-s_3&-s_4\\s_2&s_1&s_4&-s_3\\s_3&-s_4&s_1&s_2\\s_4&s_3&-s_2&s_1\end{array}\right)$$
  \item However, there is a $\frac{1}{2}$ rate loss due to not exploiting \textbf{quadrature}
  \pagebreak
- \item For \textbf{Complex} Modulations there are not rate-1 OSTBCs for $n_t>2$, the Alamoutti scheme is the only rate-1 code\\ \ \\
- \item Trivial: rate $\frac{1}{2}$ OSTBCs for any $n_t>2$
+ \item For \textbf{Complex} Modulations there are not rate-1 OSTBCs for $N_{t}>2$, the Alamoutti scheme is the only rate-1 code\\ \ \\
+ \item Trivial: rate $\frac{1}{2}$ OSTBCs for any $N_{t}>2$
  $$\tiny \Gb_{4\times 8}=\left(\begin{array}{cccccccc}s_1&-s_2&-s_3&-s_4&s_1^*&-s_2^*&-s_3^*&-s_4^* \\s_2&s_1&s_4&-s_3&s_2^*&s_1^*&s_4^*&-s_3^*\\s_3&-s_4&s_1&s_2&s_3^*&-s_4^*&s_1^*&s_2^*\\s_4&s_3&-s_2&s_1&s_4^*&s_3^*&-s_2^*&s_1^*\end{array}\right)$$
- \item Hard: Special Cases of rate$>\frac{1}{2}$ \textbf{and} $n_t>2$ OSTBCs
+ \item Hard: Special Cases of rate$>\frac{1}{2}$ \textbf{and} $N_{t}>2$ OSTBCs
  $$\Gb_{3\times 4}=\left(\begin{array}{cccc}s_1&-s_2^*&\frac{s_3^*}{\sqrt{2}}&\frac{s_3^*}{\sqrt{2}} \\s_2&s_1^*&\frac{s_3^*}{\sqrt{2}}&\frac{-s_3^*}{\sqrt{2}}\\\frac{s_3}{\sqrt{2}}&\frac{s_3}{\sqrt{2}}& \frac{-s_1-s_1^*+s_2-s_2^*}{2}& \frac{s_1-s_1^*+s_2+s_2^*}{2} \end{array}\right)$$
  
 \end{itemize}
@@ -629,7 +596,7 @@ Monday-Thursday 15:00-16:30\\
             \draw [draw] (rxant\a) \antenna;
             \node [sum, right of=rxant\a, node distance=.75cm, pin={[pinstyle, pin distance=.5cm]above:$z_i$}] (sumz\a) {$+$};
             \draw [draw,->,align=center] (rxant\a) -- (sumz\a);
-            \node [block, right of=sumz\a, node distance=2.5cm, name=wf\a] {$\Gb_{\h}^H\Delb_{(1,-1^*)}$}; 
+            \node [block, right of=sumz\a, node distance=2.5cm, name=wf\a] {$\Gb_{\h}^H\Dl_{(1,-1^*)}$}; 
             \draw[->] (sumz\a) -- node {$\y_{\a}$} (wf\a);             
             \node [block, right of=wf\a, node distance=3cm, name=mrc\a] {$\w_\a^H$};
             \draw[->]  (wf\a) -- node {$\rr_{STC-\a}$} (mrc\a);             
@@ -647,7 +614,7 @@ Monday-Thursday 15:00-16:30\\
         \end{tikzpicture}
 \end{figure}
 \begin{itemize}
- \item Alamoutti decoding $\rr_{STC-j}=\Gb_{\h}^H\Delb_{(1,-1^*)}\y_i=(|h_{j,1}|^2+|h_{j,2}|^2)\I\x =\|\h_j\|^2 \x$
+ \item Alamoutti decoding $\rr_{STC-j}=\Gb_{\h}^H\Dl_{(1,-1^*)}\y_i=(|h_{j,1}|^2+|h_{j,2}|^2)\I\x =\|\h_j\|^2 \x$
  \item MRC $\rr=\left(\begin{array}{c}r_1\\r_2\end{array}\right)=\frac{(\|\h_1\|^2)^*}{\|\Hb\|}\rr_{STC-1}+\frac{(\|\h_2\|^2)^*}{\|\Hb\|}\rr_{STC-2}$
  \item Equivalent Channel $\rr=\frac{\|\Hb\|^2}{\sqrt{2}}\I_2\x+\z'\to$ Array gain $2\times$, Diversity $4\times$. 
 \end{itemize}
@@ -703,11 +670,11 @@ Monday-Thursday 15:00-16:30\\
 
  \end{column}
  \begin{column}{5cm}    
-$$\rho=\frac{P}{\sigma_z^2}\max_{i\in\{1\dots n_t\}}\left(\sum_{j=1}^{n_r}|h_{j_i}|^2\right)$$
-$$f(\frac{\rho}{P/\sigma_z^2})\sim\max\textnormal{-}n_t\textnormal{-}\frac{1}{\sqrt{2}}\chi^2(2n_r)$$
+$$\rho=\frac{P}{\sigma_z^2}\max_{i\in\{1\dots N_{t}\}}\left(\sum_{j=1}^{N_{r}}|h_{j_i}|^2\right)$$
+$$f(\frac{\rho}{P/\sigma_z^2})\sim\max\textnormal{-}N_{t}\textnormal{-}\frac{1}{\sqrt{2}}\chi^2(2N_{r})$$
 \begin{itemize}
- \item Array Gain $$\overline{\rho}=\left(\sum_{k=1}^{n_t}{n_t \choose k}\frac{(1)^{k-1}}{k}\right)\frac{n_rP}{\sigma_z^2}$$
- \item Diversity $$P_o\approx\overline{\rho}^{-n_rn_t}$$
+ \item Array Gain $$\overline{\rho}=\left(\sum_{k=1}^{N_{t}}{N_{t} \choose k}\frac{(1)^{k-1}}{k}\right)\frac{N_{r}P}{\sigma_z^2}$$
+ \item Diversity $$P_o\approx\overline{\rho}^{-N_{r}N_{t}}$$
 \end{itemize}
  \end{column}
 \end{columns}
@@ -720,7 +687,7 @@ $$f(\frac{\rho}{P/\sigma_z^2})\sim\max\textnormal{-}n_t\textnormal{-}\frac{1}{\s
 \begin{itemize}
 \item Choose $M$ largest $|h_{i,j}|^2$
 \item \textbf{Different column and row}
-\item $(n_r-1)(n_t-1)$ choices
+\item $(N_{r}-1)(N_{t}-1)$ choices
 \end{itemize}
 
  $$\Hb=\left(\begin{array}{cccc}
@@ -762,7 +729,7 @@ $$f(\frac{\rho}{P/\sigma_z^2})\sim\max\textnormal{-}n_t\textnormal{-}\frac{1}{\s
     \caption{Another Intuition of DMT}
     \begin{tikzpicture}[auto, node distance=2cm,>=latex', scale=0.7, every node/.style={scale=0.7}]
         \node [pinstyle, name=input1] {$\x[n]$};
-        \node [sum, right of=input1, name=split, node distance=1.25cm] {${n_t \choose M}$};
+        \node [sum, right of=input1, name=split, node distance=1.25cm] {${N_{t} \choose M}$};
         \draw [draw,->,align=center] (input1) -- (split);        
             \node [sum,right of=split, node distance=1.25cm] (mult1) {};
         \foreach \a [evaluate=\a as \prev using int(\a-1)] in {2,3}{
@@ -807,17 +774,17 @@ $$f(\frac{\rho}{P/\sigma_z^2})\sim\max\textnormal{-}n_t\textnormal{-}\frac{1}{\s
  \begin{column}{6cm}    
 \begin{itemize}
 \item Matrix Columns
-    $$\Hb=\left[\h_1|\h_2|\dots|\h_{n_r}\right]$$
+    $$\Hb=\left[\h_1|\h_2|\dots|\h_{N_{r}}\right]$$
 \item Choose $M$ largest $\|\h_i\|^2$
 \begin{itemize}
-    \item Diversity $(n_t-M)$
+    \item Diversity $(N_{t}-M)$
 \end{itemize}
 \item Linear Receiver
     $$\W^H=\left[\begin{array}{c}\w_1^H\\\hline\w_2^H\\\hline\vdots\\\hline \w_{M}^H\end{array}\right]$$
     \vspace{-.1in}
     \begin{itemize}
      \item ZF $M-1$ ISI terms
-     \item Leftover array gain $(n_r-M)$
+     \item Leftover array gain $(N_{r}-M)$
     \end{itemize}
 \end{itemize}
  \end{column}
@@ -831,13 +798,13 @@ $$f(\frac{\rho}{P/\sigma_z^2})\sim\max\textnormal{-}n_t\textnormal{-}\frac{1}{\s
     \caption{Limited Feedback Precoding}
     \begin{tikzpicture}[auto, node distance=2cm,>=latex']%, scale=0.7, every node/.style={scale=0.7}]
         \node [pinstyle, name=input] {$\x[n]$};
-        \node [block, right of=input, name=precod,label={$n_t\times M$}] {$\V$};        
+        \node [block, right of=input, name=precod,label={$N_{t}\times M$}] {$\V$};        
         \draw [->] (input) -- (precod);
-        \node [block, right of= precod, name=ch,label={$n_r\times n_t$}] {$\Hb$};
+        \node [block, right of= precod, name=ch,label={$N_{r}\times N_{t}$}] {$\Hb$};
         \draw [->,dashed] (precod) -- (ch);
         \node [sum, right of= ch, node distance=1.5cm, pin={[pinstyle,pin distance=.2cm]above:$\z$}] (sumz) {$+$};
         \draw [->,dashed] (ch) -- (sumz);
-        \node [block, right of= sumz, name=wf,label={$M\times n_r$}] {$\W$};
+        \node [block, right of= sumz, name=wf,label={$M\times N_{r}$}] {$\W$};
         \draw [->] (sumz) -- node {$\y$} (wf);
         \node [pinstyle, right of=wf, name=output] {$\rr$};
         \draw[->] (wf) -- (output);
@@ -850,14 +817,14 @@ $$f(\frac{\rho}{P/\sigma_z^2})\sim\max\textnormal{-}n_t\textnormal{-}\frac{1}{\s
 \end{figure}
 \begin{definition}[Precoding Codebook]
  A finite collection of several \textbf{possible} precoding matrices
-  $$\mathcal{V}_{CB}=\left\{\V_1,\V_2|\dots|\V_{_{CB}}\right\},\textnormal{ where }\V_i\in\mathbb{C}^{n_t\times M}$$
+  $$\mathcal{V}_{CB}=\left\{\V_1,\V_2|\dots|\V_{_{CB}}\right\},\textnormal{ where }\V_i\in\mathbb{C}^{N_{t}\times M}$$
 \end{definition}
 
  
 \pagebreak
  \begin{itemize}
   \item When matrix $\V_i\in \mathcal{V}_{CB}$ is selected, the equivalent channel is
-    $$\rr=\underset{M\times n_r}{\W}\underset{n_r\times n_t}{\Hb}\underset{n_t\times M}{\V_i}\x+\z$$  
+    $$\rr=\underset{M\times N_{r}}{\W}\underset{N_{r}\times N_{t}}{\Hb}\underset{N_{t}\times M}{\V_i}\x+\z$$  
   \item Admits MF/ZF/MMSE linear and non-linear receiver 
     $$\W=(\V_i^H\Hb^H\Hb\V_i+\frac{\sigma_z^2}{P}\I_{M})\V_i^H\Hb^H$$
  \end{itemize}
@@ -931,7 +898,7 @@ The receiver knows $\Hb$, computes a prediction of performance for all $\V_i\in 
   \end{column}
   \begin{column}{6cm}
   \begin{itemize}
-   \item LOS BF $\vv(\theta)=\left(\begin{array}{c}e^{j\pi 0\times \cos(\theta)}\\e^{j\pi 1\times\cos(\theta)}\\\vdots\\e^{j\pi (n_t-1)\times\cos(\theta)}\end{array}\right)$\\ \ \\
+   \item LOS BF $\vv(\theta)=\left(\begin{array}{c}e^{j\pi 0\times \cos(\theta)}\\e^{j\pi 1\times\cos(\theta)}\\\vdots\\e^{j\pi (N_{t}-1)\times\cos(\theta)}\end{array}\right)$\\ \ \\
    \item $\mathcal{V}$ as matrix columns $\V_{CB} =\left[\vv(\theta_1)|\vv(\theta_2)|\dots|\vv(\theta_{N_{CB}})\right]$\\ \ \\
    \item \textbf{Sector-Antenna selection} over the columns of $\Hb\V_{CB}$
   \end{itemize}
@@ -1115,7 +1082,7 @@ $$\theta_i=\{0,\acos(\frac{\pm 1}{2N_{CB}}),\acos(\frac{\pm 2}{2N_{CB}})\dots\}$
 \end{array}\right)$$
 \item FFT $O(\log(N_{CB}))$ complexity 
 \begin{itemize}
-\item Sometimes alt. $O(Mn_t)$
+\item Sometimes alt. $O(MN_{t})$
 \end{itemize}
 \end{itemize}
  \end{column}
@@ -1171,10 +1138,10 @@ Matrix $\V_{CB}$ with coefficients designed by algorithms
  \item Small sidelobes
 \end{itemize}
 \item Unitary, not orthonormal
-  $$\|\vv_i\|^2 \cancel{\Rightarrow} \V_{CB}^H\V_{CB}=\I_{N_{CB}}$$
-\item Matrix product $O(N_{CB}n_t)$
+  $$\|\vv_i\|^2=1 \cancel{\Rightarrow} \V_{CB}^H\V_{CB}=\I_{N_{CB}}$$
+\item Matrix product $O(N_{CB}N_{t})$
 \begin{itemize}
-\item Always simplified to $O(Mn_t)$
+\item Always simplified to $O(MN_{t})$
 \end{itemize}
 \end{itemize}
  \end{column}
@@ -1224,19 +1191,19 @@ Matrix $\V_{CB}$ with coefficients designed by algorithms
 \frame[allowframebreaks]{\frametitle{Statistical properties of Angular Channel}
 \begin{theorem}[Correlated Gaussian Multiplication]
  If $\h$ is a White Gaussian vector, then $\ab=\W_{CB}\h$ is Gaussian with covariance
- $$\K_{\ab}=\Ex{}{\ab\ab^H}=\Ex{}{\W_{CB}\h\h^H\W_{CB}^H}=\W_{CB}\W_{CB}^H$$
+ $$\Sg_{\ab}=\Ex{}{\ab\ab^H}=\Ex{}{\W_{CB}\h\h^H\W_{CB}^H}=\W_{CB}\W_{CB}^H$$
 \end{theorem}
 \begin{definition}[Kroenecker Product]
  $$\W\odot\V=\left[\begin{array}{c|c|c}
- w_{1,1}\V&\dots&v_{1,n_r}\V\\\hline
+ w_{1,1}\V&\dots&v_{1,N_{r}}\V\\\hline
  \vdots&\ddots&\vdots\\\hline
- w_{M,1}\V&\dots&h_{M,n_r}\V\\\hline
+ w_{M,1}\V&\dots&h_{M,N_{r}}\V\\\hline
 \end{array}\right],\;\to \textnormal{vec}(\W\Hb\V)=(\V^H\odot\W)\textnormal{vec}(\Hb)$$
 \end{definition}
 \pagebreak
 \begin{itemize}
- \item Rich scattering ($N_{path}\gg n_tn_r$): I.i.d. Rayleigh $\A$ 
- \item Sparse Multipath  ($N_{path}\ll n_tn_r$): Low Rank $\A$ 
+ \item Rich scattering ($N_{path}\gg N_{t}N_{r}$): I.i.d. Rayleigh $\A$ 
+ \item Sparse Multipath  ($N_{path}\ll N_{t}N_{r}$): Low Rank $\A$ 
 \end{itemize}
 
 
@@ -1256,14 +1223,14 @@ Matrix $\V_{CB}$ with coefficients designed by algorithms
 
 \frame[allowframebreaks]{\frametitle{Long-Term Beamforming}
 \begin{definition}[Left and Right Covariance Matrices]
- Transmit antennas: $\K_{T}=\Ex{}{\Hb^H\Hb}$, Receive antennas: $\K_{R}=\Ex{}{\Hb\Hb^H}$
+ Transmit antennas: $\Sg_{T}=\Ex{}{\Hb^H\Hb}$, Receive antennas: $\Sg_{R}=\Ex{}{\Hb\Hb^H}$
 \end{definition}
 
 \begin{itemize}
  \item I.i.d. vs correlated channel model
- $$\Hb=\K_{R}^{\frac{1}{2}}\Hb_{i.i.d.}\K_{T}^{\frac{1}{2}}\textnormal{ where } \Hb_{i.i.d.}\sim\mathcal{CN}(0,\sigma^2_h\I)$$
- \item Eigenvalue decomposition $\K_{T}=\V\LL\V^H$, $\K_{R}=\U\LL\U^H$
- $$\Hb=\U\LL^{\frac{1}{2}}\Hb_{i.i.d.}\LL^{\frac{1}{2}}\V$$
+ $$\Hb=\Sg_{R}^{\frac{1}{2}}\Hb_{i.i.d.}\Sg_{T}^{\frac{1}{2}}\textnormal{ where } \Hb_{i.i.d.}\sim\mathcal{CN}(0,\sigma^2_h\I)$$
+ \item Eigenvalue decomposition $\Sg_{T}=\V\Ld\V^H$, $\Sg_{R}=\U\Ld\U^H$
+ $$\Hb=\U\Ld^{\frac{1}{2}}\Hb_{i.i.d.}\Ld^{\frac{1}{2}}\V$$
 \end{itemize}
 
 \begin{definition}[Long Term Stochastic Beamforming]

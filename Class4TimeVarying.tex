@@ -22,48 +22,16 @@
 \usepackage{caption}
 \usepackage[inkscapelatex=false]{svg}
 
+
 %Tikz plots
 \usepackage{tikz}
 \usepackage{tikzscale}
 \usetikzlibrary{plotmarks,patterns,decorations.pathreplacing,backgrounds,calc,arrows,arrows.meta,spy,matrix,backgrounds,shapes,math}
 
-\tikzset{
-    block/.style = {draw, rectangle, 
-        minimum height=1cm, 
-        minimum width=1.2cm, align=center},
-    input/.style = {coordinate,node distance=1cm},
-    output/.style = {coordinate,node distance=2cm},
-    arrow/.style={draw, -latex,node distance=1.5cm},
-    pinstyle/.style = {pin edge={latex-, black,node distance=1.5cm}},
-    sum/.style = {draw, circle, node distance=1cm}
-}
-
-\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \UE (#1) {};}
-\newcommand{\DrawBox}[4][]{%
-    \tikz[overlay,remember picture]{%
-        \coordinate (TopLeft)     at ($(#2)+(-0.4em,1.6em)$);
-        \coordinate (BottomRight) at ($(#3)+(0.4em,-1.0em)$);
-        %
-        \path (TopLeft); \pgfgetlastxy{\XCoord}{\IgnoreCoord};
-        \path (BottomRight); \pgfgetlastxy{\IgnoreCoord}{\YCoord};
-        \coordinate (LabelPoint) at ($(\XCoord,\YCoord)!0.5!(BottomRight)$);
-        %
-        \draw [red,#1] (TopLeft) rectangle (BottomRight);
-        \UE [below, #1, fill=none, fill opacity=1] at (LabelPoint) {#4};
-    }
-}
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
 \usepgfplotslibrary{patchplots,groupplots,fillbetween}
-
-\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
-\def\antenna{%
-    -- +(0mm,4.0mm) -- +(2.625mm,7.5mm) -- +(-2.625mm,7.5mm) -- +(0mm,4.0mm) -- +(0mm,0mm)
-}
-\pgfmathdeclarefunction{gauss}{3}{%
-        \pgfmathparse{1/(#3*sqrt(2*pi))*exp(-((#1-#2)^2)/(2*#3^2))}%
-     }
 
 % OUTROS PAQUETES DE USO COMUN. HOXE EN DIA OS COMPILADORES SON TAN RAPIDOS QUE EU METO TODOS SEMPRE
 % \usepackage{float}
@@ -129,13 +97,13 @@
 \begin{columns}[T]
 \begin{column}{5cm}\centering
 Office A-204\\
-Monday-Thursday 15:00-16:30\\
+Wednesday \& Thursday 15:00-18:00\\
 \texttt{gomezcuba@gts.uvigo.es}\\
 \end{column}
 \end{columns}
 }
 
-\date{}
+\date{2025}
 
 \begin{document}
 
@@ -504,14 +472,14 @@ $$S_h(\tau,\nu)=\mathcal{F.T.}_{\Delta t}\left[A_{h}(\tau,\Delta t)\right]=\int_
     \begin{itemize}
      \item Matrix channel notation $\y[n]= \Hb[n]\x[n]+\z[n]$
      \item Fast/Block/Slow fading $\to$ correlation of $\Hb[\dot{n}_1,b_1]$ vs $\Hb[\dot{n}_2,b_2]$ 
-     \item Spatial correlation $\to$ $\K_{\textrm{vec}\{\Hb\}}=\Ex{}{\textrm{vec}\{\Hb\}\textrm{vec}\{\Hb\}^H}\neq \I_{n_tn_r}$ 
+     \item Spatial correlation $\to$ $\Sg_{\textrm{vec}\{\Hb\}}=\Ex{}{\textrm{vec}\{\Hb\}\textrm{vec}\{\Hb\}^H}\neq \I_{N_{t}N_{r}}$ 
     \end{itemize}
     \begin{definition}[Instantaneous SNR]
-     $$\rho(\Hb[n])=\frac{P\|\Hb[n]\|^2}{n_tn_r\sigma_z^2}$$
+     $$\rho(\Hb[n])=\frac{P\|\Hb[n]\|^2}{N_{t}N_{r}\sigma_z^2}$$
     \end{definition}
     \begin{definition}[Average SNR]
-     $$\overline{\rho}=\frac{P\Ex{}{\|\Hb[n]\|^2}}{n_tn_r\sigma_z^2}\stackrel{\textnormal{white}}{=}\frac{P\cancel{n_tn_r}\sigma_h^2}{\cancel{n_tn_r}\sigma_z^2}=\frac{P\sigma_h^2}{\sigma_z^2}$$
-     Normalization $\Ex{}{\|\Hb[n]\|^2}=n_tn_r\to\sigma_h^2=1$
+     $$\overline{\rho}=\frac{P\Ex{}{\|\Hb[n]\|^2}}{N_{t}N_{r}\sigma_z^2}\stackrel{\textnormal{white}}{=}\frac{P\cancel{N_{t}N_{r}}\sigma_h^2}{\cancel{N_{t}N_{r}}\sigma_z^2}=\frac{P\sigma_h^2}{\sigma_z^2}$$
+     Normalization $\Ex{}{\|\Hb[n]\|^2}=N_{t}N_{r}\to\sigma_h^2=1$
     \end{definition}
 }
 
@@ -742,7 +710,7 @@ $$P_o=P(\rho(h)<\xi)=P(|h|^2<\xi)=F_{|h|^2}(\xi)$$
  \item {Chain rule} of M.I.  $\qquad \Inf{\{\x[n]\}_{n=0}^{N_f}}{\{\y[n]\}_{n=0}^{N_f}}\stackrel{}{=}\Inf{\x[0]}{\{\y[n]\}_{n=0}^{N_f}}+\CInf{\{\x[n]\}_{\textcolor{ARust}{n=1}}^{N_f}}{\{\y[n]\}_{n=0}^{N_f}}{\textcolor{ARust}{\x[0]}}\dots$\\ \ \\
  \item $C$ defined $\max R$ s.t. \textbf{probability of error is as low as desired}.
     \begin{itemize}
-    \item $R\leq C$ if and \underline{only if} $\displaystyle\lim_{N_f\to\infty} P(\hat{x}\neq x) = 0 $\\ \ \\
+    \item $R\leq C$ if and \textbf{only if} $\displaystyle\lim_{N_f\to\infty} P(\hat{x}\neq x) = 0 $\\ \ \\
     \end{itemize}
  \item Instantaneous M.I. is a function of channel $\CInf{\x}{\y}{\Hb}=\mathcal{I}(\Hb)$\\ \ \\
  \item \textcolor{ARust}{Formally, the Shannon capacity of fading channels is zero!}
@@ -1004,9 +972,9 @@ In \textbf{Slow Fading} only a single value of $\Hb$ observed per frame
 \end{figure}
 \begin{itemize}
  \item MRC with CSIR
-    $$\rho=\frac{(|h_1|^2+|h_2|^2+\dots)P}{\sigma_z^2}\sim \frac{P}{\sigma_z^2\sqrt{2}}\chi^2(2n_r)$$
- \item Array Gain $\overline{\rho}=\frac{Pn_r}{\sigma_z^2}$
- \item Diversity $P_o\propto \overline{\rho}^{-n_r}$
+    $$\rho=\frac{(|h_1|^2+|h_2|^2+\dots)P}{\sigma_z^2}\sim \frac{P}{\sigma_z^2\sqrt{2}}\chi^2(2N_{r})$$
+ \item Array Gain $\overline{\rho}=\frac{PN_{r}}{\sigma_z^2}$
+ \item Diversity $P_o\propto \overline{\rho}^{-N_{r}}$
  \end{itemize}
  \end{column}
  \begin{column}{6cm}
@@ -1034,7 +1002,7 @@ In \textbf{Slow Fading} only a single value of $\Hb$ observed per frame
 \end{figure}
 \begin{itemize}
  \item CSIR $\to$ 
-    $$\rho=\frac{|\overset{Gaussian}{\overbrace{h_1+h_2+\dots}}|^2P}{n_t\sigma_z^2}\sim \frac{\cancel{n_t}P}{\cancel{n_t}\sigma_z^2}\textnormal{Exp}(1)$$
+    $$\rho=\frac{|\overset{Gaussian}{\overbrace{h_1+h_2+\dots}}|^2P}{N_{t}\sigma_z^2}\sim \frac{\cancel{N_{t}}P}{\cancel{N_{t}}\sigma_z^2}\textnormal{Exp}(1)$$
  \item CSIT $\to$ as in MRC SIMO
  \end{itemize}
  \end{column}
@@ -1048,10 +1016,10 @@ In \textbf{Slow Fading} only a single value of $\Hb$ observed per frame
  \item Capacity $\to$ Eigenchannels $\to$ Spatial Multiplexing\\ \ \\
  \item Ergodic/Outage Capacity $\to$ Fast/Slow Fading $\to$ Diversity\\ \ \\
  \item What is best to do in random \textbf{MIMO} channels?\\ \ \\
- \item Example: Consider Rayleigh $\Hb\in\mathbb{C}^{n_t,n_r}$
+ \item Example: Consider Rayleigh $\Hb\in\mathbb{C}^{N_{t},N_{r}}$
     \begin{itemize}
-        \item Maximum diversity gain $D=\Ex{}{\|\Hb\|^2}=n_rn_t$, \textcolor{ARust}{but 1 symbol}\\ \ \\
-        \item Maximum DoF $P(\mathrm{rank}(\Hb)=\min(n_r,n_t))\approx 1$, \textcolor{ARust}{but $D=1$}\\ \ \\
+        \item Maximum diversity gain $D=\Ex{}{\|\Hb\|^2}=N_{r}N_{t}$, \textcolor{ARust}{but 1 symbol}\\ \ \\
+        \item Maximum DoF $P(\mathrm{rank}(\Hb)=\min(N_{r},N_{t}))\approx 1$, \textcolor{ARust}{but $D=1$}\\ \ \\
     \end{itemize}
 \end{itemize}
 
@@ -1065,10 +1033,10 @@ $$M=\lim_{\overline{\rho}\to\infty}\frac{R}{\log(\overline{\rho})}\Rightarrow M\
 \begin{theorem}[Diversity-Multiplexing Trade-off]
 The collection of values of rate multiplexing ($M$) that can be achieved with outage robustness corresponding to diversity $D(M)$
 $$D(M)=\lim_{\overline{\rho}\to\infty}\frac{-\log\left[P\left(\mathcal{I}>M\log(\overline{\rho})\right)\right]}{\log(\overline{\rho})}\to \xi\propto \overline{\rho}^{M}$$
- In a Rayleigh fading channel $\Hb\in\mathbb{C}^{n_t,n_r}$ we can achieve
+ In a Rayleigh fading channel $\Hb\in\mathbb{C}^{N_{t},N_{r}}$ we can achieve
  $$\textnormal{DMT-Rayleigh}=\begin{cases}
-                            M\in\{0,\dots \min(n_t,n_r)\}\\
-                            D(M)\leq (n_t-M)(n_r-M)
+                            M\in\{0,\dots \min(N_{t},N_{r})\}\\
+                            D(M)\leq (N_{t}-M)(N_{r}-M)
                            \end{cases}$$
 \end{theorem}
  \begin{itemize}
@@ -1095,9 +1063,9 @@ $$D(M)=\lim_{\overline{\rho}\to\infty}\frac{-\log\left[P\left(\mathcal{I}>M\log(
             axis x line=bottom,
             axis y line=left,
             xtick = {0,.6,1.53,2.25,3,4},
-            xticklabels= {{$0$},{$1$},{$2$},{$\dots$},{$\min(n_t,n_r)-1$},{$\min(n_t,n_r)$}},
+            xticklabels= {{$0$},{$1$},{$2$},{$\dots$},{$\min(N_{t},N_{r})-1$},{$\min(N_{t},N_{r})$}},
             ytick = {.25,2.07,4.25,6.26,16},
-            yticklabels= {{$1$},{$4$},{$\vdots$},{$(n_t-1)(n_r-1)$},{$n_tn_r$}},
+            yticklabels= {{$1$},{$4$},{$\vdots$},{$(N_{t}-1)(N_{r}-1)$},{$N_{t}N_{r}$}},
             xticklabel style={rotate=15},
             ]
             \addplot[domain=0:1,dotted,gray,samples=100] { 16-16*x};
@@ -1114,42 +1082,69 @@ $$D(M)=\lim_{\overline{\rho}\to\infty}\frac{-\log\left[P\left(\mathcal{I}>M\log(
         \end{axis}
     \end{tikzpicture}
 \end{figure}
-\pagebreak
-\textcolor{VCobalt}{Intuition of DMT}
+}
+
+
+\frame{\frametitle{Intuition of DMT}
+
 \begin{columns}
 \begin{column}{6cm}
 \begin{itemize}
 \item Choose $M$ largest $|h_{i,j}|^2$
 \item \textbf{Different column and row}
-\item $(n_r-1)(n_t-1)$ choices
+\item $(N_{r}-1)(N_{t}-1)$ choices
 \end{itemize}
 
- $$\Hb=\left(\begin{array}{cccc}
-              h_{1,1}&h_{1,2}&h_{1,3}\\
-              h_{2,1}&h_{2,2}&h_{2,3}\\
-              h_{3,1}&h_{3,2}&h_{3,3}\\
-              h_{4,1}&h_{4,2}&h_{4,3}\\
+  $$\Hb=\left(\begin{array}{cccc}
+              \markOverlay{vert3i}h_{1,1}&\markOverlay{vert1i}h_{1,2}&\markOverlay{vert2i}h_{1,3}\\
+             \markOverlay{hor1i}h_{2,1}&\markOverlay{ch1}h_{2,2}&h_{2,3}\markOverlay{hor1f}\\
+             \markOverlay{hor2i}h_{3,1}&h_{3,2}&h_{3,3}\markOverlay{hor2f}\\
+              \markOverlay{hor3i}h_{4,1}\markOverlay{vert3f}&h_{4,2}\markOverlay{vert1f}&h_{4,3}\markOverlay{vert2f}\markOverlay{hor3f}\\
              \end{array}\right)$$
+ \onslide<1->{
+    \drawOverlayCircle[thick,KYJade]{$(ch1)+(.5em,.4em)$}{1em}{}
+}
+\onslide<2->{
+  \drawOverlayLine[thick, KYJade ]{$(vert1i)+(.5em,1em)$}{$(vert1f)+(-.5em,-.5em)$}{}
+  \drawOverlayLine[thick, KYJade ]{$(hor1i)+(0,.5em)$}{$(hor1f)+(0,.5em)$}{}
+  \drawOverlayCircle[thick,ARust]{$(hor2f)+(-.7em,.4em)$}{1em}{}
+}
+\onslide<3->{
+  \drawOverlayLine[thick, ARust ]{$(vert2i)+(.5em,1em)$}{$(vert2f)+(-.5em,-.5em)$}{}
+  \drawOverlayLine[thick, ARust ]{$(hor2i)+(0,.5em)$}{$(hor2f)+(0,.5em)$}{}
+  \drawOverlayCircle[thick,FFucsia]{$(hor3i)+(.5em,.4em)$}{1em}{}
+}
+\onslide<4->{
+  \drawOverlayLine[thick, FFucsia ]{$(vert3i)+(.5em,1em)$}{$(vert3f)+(-.5em,-.5em)$}{}
+  \drawOverlayLine[thick, FFucsia ]{$(hor3i)+(0,.5em)$}{$(hor3f)+(0,.5em)$}{}
+}
+
  $$\|\Hb\|^2=|h_{1,1}|^2+\dots+|h_{1,3}|^2\dots+|h_{4,3}|^2$$
 \end{column}
 
 \begin{column}{6cm}
 \begin{itemize}
+\onslide<1->{
 \item $M=1$
 \begin{itemize}
 \item 1 row, 1 column
 \item Last choice $4\times 3$ 
 \end{itemize}
+}
+\onslide<2->{
 \item $M=2$
 \begin{itemize}
 \item 2 rows, 2 columns
 \item Last choice  $3\times 2$
 \end{itemize}
+}
+\onslide<3->{
 \item $M=3$
 \begin{itemize}
 \item 3 rows, 3 columns 
 \item Last choice $2\times 1$
 \end{itemize}
+}
 \end{itemize}
  
 \end{column}

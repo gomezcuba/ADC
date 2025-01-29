@@ -27,43 +27,10 @@
 \usepackage{tikzscale}
 \usetikzlibrary{plotmarks,patterns,decorations.pathreplacing,backgrounds,calc,arrows,arrows.meta,spy,matrix,backgrounds,shapes,math}
 
-\tikzset{
-    block/.style = {draw, rectangle, 
-        minimum height=1cm, 
-        minimum width=1.2cm, align=center},
-    input/.style = {coordinate,node distance=1cm},
-    output/.style = {coordinate,node distance=2cm},
-    arrow/.style={draw, -latex,node distance=1.5cm},
-    pinstyle/.style = {pin edge={latex-, black,node distance=1.5cm}},
-    sum/.style = {draw, circle, node distance=1cm}
-}
-
-\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \UE (#1) {};}
-\newcommand{\DrawBox}[4][]{%
-    \tikz[overlay,remember picture]{%
-        \coordinate (TopLeft)     at ($(#2)+(-0.4em,1.6em)$);
-        \coordinate (BottomRight) at ($(#3)+(0.4em,-1.0em)$);
-        %
-        \path (TopLeft); \pgfgetlastxy{\XCoord}{\IgnoreCoord};
-        \path (BottomRight); \pgfgetlastxy{\IgnoreCoord}{\YCoord};
-        \coordinate (LabelPoint) at ($(\XCoord,\YCoord)!0.5!(BottomRight)$);
-        %
-        \draw [red,#1] (TopLeft) rectangle (BottomRight);
-        \UE [below, #1, fill=none, fill opacity=1] at (LabelPoint) {#4};
-    }
-}
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest}
 \pgfplotsset{plot coordinates/math parser=false}
 \usepgfplotslibrary{patchplots,groupplots}
-
-\tikzstyle{pinstyle} = [pin edge={to-,thin,black}]
-\def\antenna{%
-    -- +(0mm,4.0mm) -- +(2.625mm,7.5mm) -- +(-2.625mm,7.5mm) -- +(0mm,4.0mm) -- +(0mm,0mm)
-}
-\pgfmathdeclarefunction{gauss}{3}{%
-        \pgfmathparse{1/(#3*sqrt(2*pi))*exp(-((#1-#2)^2)/(2*#3^2))}%
-     }
 
 % OUTROS PAQUETES DE USO COMUN. HOXE EN DIA OS COMPILADORES SON TAN RAPIDOS QUE EU METO TODOS SEMPRE
 % \usepackage{float}
@@ -129,13 +96,13 @@
 \begin{columns}[T]
 \begin{column}{5cm}\centering
 Office A-204\\
-Monday-Thursday 15:00-16:30\\
+Wednesday \& Thursday 15:00-18:00\\
 \texttt{gomezcuba@gts.uvigo.es}\\
 \end{column}
 \end{columns}
 }
 
-\date{}
+\date{2025}
 
 \begin{document}
 
@@ -360,11 +327,13 @@ $$\max_{\x\in\mathcal{C}^{N_t}} \mathcal{L}_{\y}(\x) \equiv \min_{\x\in\mathcal{
 %             \vdots&\vdots&\ddots&\vdots\\
 %             0&0&\dots&u_{N_t,N_t}\\
 % \end{array}\right)$$
-            \item Recursive distance sum
-$$\|\Hb(\hat{\x}-\overline{\x})\|^2=\|\R(\hat{\x}-\overline{\x})\|^2=\sum_{i=1}^{N_t}r_{i,i}^2\Big[\underset{\alpha_i}{\underbrace{\hat{x}_i-\overline{x}_i}}+\underset{\beta_i}{\underbrace{\sum_{j=i+1}^{N_t}\frac{r_{i,j}}{r_{i,i}}(\hat{x}_j-\overline{x}_j)}}\Big]$$
-            \item Recursive $\beta_i=r_{i,i}\sum_{j=i+1}^{N_t}r_{i,j}\alpha_j$, starting $\beta_{N_t}=0$
-            \item If $\beta_{i+1}>r\Rightarrow \|\Hb(\hat{\x}-\overline{\x})\|^2>r$
+            \item Distance as recursive sum $\beta_i^{\hat{\x}_{i:N_t}}=r_{i,i}\sum_{j=i+1}^{N_t}r_{i,j}\alpha_j^{\hat{\x}_{j:N_t}}$, starting $\beta_{N_t}^{\emptyset}=0$
+$$\|\Hb(\hat{\x}-\overline{\x})\|^2=\|\R(\hat{\x}-\overline{\x})\|^2=\sum_{i=1}^{N_t}r_{i,i}^2\Big[\underset{\alpha_i^{\hat{\x}_{i:N_t}}}{\underbrace{\hat{x}_i-\overline{x}_i}}+\underset{\beta_i^{\hat{\x}_{i:N_t}}}{\underbrace{\sum_{j=i+1}^{N_t}\frac{r_{i,j}}{r_{i,i}}(\hat{x}_j-\overline{x}_j)}}\Big]$$
+            \item If $\beta_{i+1}^{\hat{\x}_{i:N_t}}>r\Rightarrow \|\Hb(\hat{\x}-\overline{\x})\|^2>r$
         \end{itemize}
+
+\pagebreak
+        
   \begin{columns}
  \begin{column}{6cm}
  
@@ -373,18 +342,15 @@ $$\|\Hb(\hat{\x}-\overline{\x})\|^2=\|\R(\hat{\x}-\overline{\x})\|^2=\sum_{i=1}^
 %     \begin{algorithm}
 %     \caption{Sphere Decoder tree}
      \begin{algorithmic}[0]
-      \FOR{level $i\in N_t \dots 1$}      
+      \STATE $r\leftarrow \inf \beta_i^{\hat{\x}_{i:N_t}}\forall i\forall \hat{\x}_{i:N_t}$
+      \WHILE{$\exists i>0\diagup\beta_i\leq r$}
         \FOR{each open branch}
             \IF {$\beta_i<r$}
                 \STATE Expand branch
-            \ELSE
-                \STATE Close branch
             \ENDIF
-        \ENDFOR
-      \ENDFOR
-      \IF {No branches expanded}
-        \STATE Increase $r$
-      \ENDIF
+        \ENDFOR        
+        \STATE $r\leftarrow \inf \beta_i\forall i$
+       \ENDWHILE
      \end{algorithmic}
     \end{beamercolorbox}
  \end{column}
@@ -566,7 +532,7 @@ edge from parent/.style = {draw,-latex},
     \begin{itemize}
      \item \textbf{Matched filter} maximizes SNR $\W^H=\Hb^H\to \w_i^H=\h_i^H\to \max \frac{|\w_i^H\h|^2}{\|\w_i\|^2\sigma^2}\frac{P}{N_t}$
      \vspace{-.2in}
-     $$\gamma_i=\frac{\left|\|\h_i\|^2\right|^2\frac{P}{N_t}}{\sum_{j\neq i}|\h_i^H\h_j|^2\frac{P}{N_t}+\|\h_i\|^2\sigma^2}=\frac{\|\h_i\|^2}{\frac{\|\h_i^H\Hb\|^2-\|\h_i\|^2}{\|\h_i\|^2}+\frac{N_t\sigma^2}{P}}\;\neq SNR $$
+     $$\textnormal{SINR}^{MF}=\frac{\left|\|\h_i\|^2\right|^2\frac{P}{N_t}}{\sum_{j\neq i}|\h_i^H\h_j|^2\frac{P}{N_t}+\|\h_i\|^2\sigma^2}=\frac{\|\h_i\|^2}{\frac{\|\h_i^H\Hb\|^2-\|\h_i\|^2}{\|\h_i\|^2}+\frac{N_t\sigma^2}{P}}\;\leq \textnormal{SNR}^{MF} $$
 %      $$SNR=\frac{\|\Hb^H\Hb\|^2P}{\|\Hb\|^2N_t\sigma^2_1}=\frac{P\left(\sum_{i=1}^{N_t} \frac{\lambda_i^2}{\left(\sum_{i=1}^{N_t} \lambda_i^2\right)}\right)}{\sigma^2_z}$$
      \item MRC optimum in SIMO ($N_t=1$) and orthogonal channels $\h_i^H\h_j= 0$
      \item In \textit{Massive MIMO} $\h_i^H\h_j\approx 0$
@@ -598,7 +564,7 @@ edge from parent/.style = {draw,-latex},
     \begin{itemize}
      \item \textbf{Zero Forcing Equalizer} (decorrelator) $\W^H\Hb=\I \to\rr=\x+\W^H\z$
      \item Pseudoinverse $\W^H=(\Hb^{H}\Hb)^{-1}\Hb^H=\arg\min \Ex{}{\|\W^H\z\|^2} \textnormal{ s.t. }\W^H\Hb=\I$ 
-     $$\textnormal{SNR}_{ZF}=\frac{\Ex{}{\|\x\|^2}}{\Ex{}{\|\W^H\z\|^2}}=\frac{P}{\tr\{\left(\Hb\Hb^H\right)^{-1}\}\sigma_z^2}=\frac{P}{\sigma_z^2\left(\sum_{i=1}^{N_t}\frac{1}{\lambda_1}\right)}< SNR^{MF}$$
+     $$\textnormal{SNR}_{ZF}=\frac{\Ex{}{\|\x\|^2}}{\Ex{}{\|\W^H\z\|^2}}=\frac{P}{\tr\{\left(\Hb\Hb^H\right)^{-1}\}\sigma_z^2}=\frac{P}{\sigma_z^2\left(\sum_{i=1}^{N_t}\frac{1}{\lambda_1}\right)}< \textnormal{SNR}^{MF}$$
     \end{itemize}
     \pagebreak
     
@@ -616,13 +582,13 @@ edge from parent/.style = {draw,-latex},
         \end{split}
      \end{equation*}
      \item Rotation of the trace $\ab^H\B\cc=\tr\{\ab^H\B\cc\}=\tr\{\cc\ab^H\B\}$
-     $$\Ex{}{\|\e\|^2}=\Ex{}{\tr\{\x\x^H(\I-\W^H\Hb)^H(\I-\W^H\Hb\}}+\Ex{}{\tr\{\z\z^H\W\W^H\}}$$
+     $$\Ex{}{\|\e\|^2}=\Ex{}{\tr\{\x\x^H(\I-\W^H\Hb)^H(\I-\W^H\Hb)\}}+\Ex{}{\tr\{\z\z^H\W\W^H\}}$$
      \item Average and trace are linear operators
-     $$\Ex{}{\|\e\|^2}=\tr\{\Sg_{\x}(\I-\W^H\Hb)^H(\I-\W^H\Hb\}+\tr\{\Sg_{\z}\W\W^H\}$$
+     $$\Ex{}{\|\e\|^2}=\tr\{\Sg_{\x}(\I-\W^H\Hb)^H(\I-\W^H\Hb)\}+\tr\{\Sg_{\z}\W\W^H\}$$
      \item I.i.d. noise and data 
      $$\Ex{}{\|\e\|^2}=\frac{P}{N_t}\left(\tr\{\I_{N_t}\}-\tr\{\Hb^H\W\}-\tr\{\W^H\Hb\}+\tr\{\W^H\Hb\Hb^H\W\}\right)+\sigma_z^2\tr\{\W\W^H\}\}$$
      \item Group the terms of a 2nd order ``polynomial'' (and $\A^H+\A=2\Re\{\A\}$)
-     $$\Ex{}{\|\e\|^2}==P+\frac{P}{N_t}\underset{\mathscr{F}(\W)}{\underbrace{\left[-2\tr\{\Re\{\Hb^H\W\}\}+\tr\left\{\W^H\left(\Hb\Hb^H+\frac{N_t\sigma_z}{P}\I_{N_{r}}\right)\W\right\}\right]}}$$
+     $$\Ex{}{\|\e\|^2}=P+\frac{P}{N_t}\underset{\mathscr{F}(\W)}{\underbrace{\left[-2\tr\{\Re\{\Hb^H\W\}\}+\tr\left\{\W^H\left(\Hb\Hb^H+\frac{N_t\sigma_z}{P}\I_{N_{r}}\right)\W\right\}\right]}}$$
      \item Gradient equal to zero
        \begin{equation*}
         \begin{split}
@@ -741,12 +707,10 @@ $$\Lb=\left(\begin{array}{cccc}
  0&0&\dots&\delta_{N_t}\\
 \end{array}\right)$$
 \end{definition}
+ \end{itemize}
       
-  \item Taylor series of matrix inverse $\M^{-1}=\prod_{n=1}^{\infty}(\I-\M)^n$
     \begin{figure}
     \centering
-    \caption{Recursive infinite filter $\rr^{(n+1)}=\rr_{MF}+(\I-\M)\rr^{(n)}$}
-\vspace{-.2in}
     \begin{tikzpicture}[auto, node distance=2cm,>=latex']
         \node [pinstyle] (input)  {$\x$};
         \node [block,right of=input,node distance=1cm] (ch) {$\Hb$} ;
@@ -766,12 +730,10 @@ $$\Lb=\left(\begin{array}{cccc}
         \node [pinstyle,right of = qtz,node distance=1.2cm] (out)  {$\hat{\x}$};
         \draw[->] (qtz) -- (out);
     \end{tikzpicture}
-    \end{figure}
-\vspace{-.1in}
-        
+    \caption{Taylor series of matrix inverse $\M^{-1}=\prod_{n=1}^{\infty}(\I-\M)^n$}
+    \end{figure}        
     \begin{figure}
     \centering
-    \caption{Infinite Impulse Response Filter}
     \begin{tikzpicture}[auto, node distance=2cm,>=latex']
         \node [pinstyle] (input)  {$\x$};
         \node [block,right of=input,node distance=1.2cm] (ch) {$\Hb$} ;
@@ -787,12 +749,12 @@ $$\Lb=\left(\begin{array}{cccc}
         \draw[->] (sum2) -- (nofilt) -- node [name=tap]{$\rr$} (qtz);
         \node [pinstyle,right of = qtz,node distance=1.2cm] (out)  {$\hat{\x}$};
         \draw[->] (qtz) -- (out);
-        \node [block, below of=nofilt, node distance=1cm] (feedback) {$\I-\M$};
+        \node [block, below of=nofilt, node distance=.8cm] (feedback) {$\I-\M$};
         \draw [->] (tap) |- node [above,pos=0.79] {} (feedback) ;
         \draw [->] (feedback) -| node[pos=0.99] {} node [near end] {} (sum2);
     \end{tikzpicture}
+    \caption{Infinite Impulse Response Filter $\rr^{(n+1)}=\rr_{MF}+(\I-\M)\rr^{(n)}$}
     \end{figure}
- \end{itemize}
 }
 
 
@@ -800,8 +762,6 @@ $$\Lb=\left(\begin{array}{cccc}
 \frame[allowframebreaks]{\frametitle{Non-linear MIMO Receivers: Decision Feedback}
 \begin{figure}
     \centering
-    \caption{Parallel Interference Cancelling}
-\vspace{-.2in}
     \begin{tikzpicture}[auto, node distance=2cm,>=latex']
         \node [pinstyle] (input)  {$\x$};
         \node [block,right of=input,node distance=1.2cm] (ch) {$\Hb$} ;
@@ -820,11 +780,11 @@ $$\Lb=\left(\begin{array}{cccc}
         \draw [->] (tap) |- node [above,pos=0.79] {} (feedback) ;
         \draw [->] (feedback) -| node[pos=0.99] {} node [near end] {} (sum2);
     \end{tikzpicture}
+    \caption{Parallel Interference Cancelling}
+\vspace{-.5in}
     \end{figure}
 \begin{figure}
     \centering
-    \caption{Successive Interference Cancelling (Cholesky)}
-\vspace{-.2in}
     \begin{tikzpicture}[auto, node distance=2cm,>=latex']
         \node [pinstyle] (input)  {$\x$};
         \node [block,right of=input,node distance=1.2cm] (ch) {$\Hb$} ;
@@ -845,6 +805,7 @@ $$\Lb=\left(\begin{array}{cccc}
         \draw [->] (tap) |- node [above,pos=0.79] {} (feedback) ;
         \draw [->] (feedback) -| node[pos=0.99] {} node [near end] {} (sum2);
     \end{tikzpicture}
+    \caption{Successive Interference Cancelling (Cholesky)}
     \end{figure}
     \pagebreak
      \begin{itemize}
@@ -937,7 +898,7 @@ $$\Lb=\left(\begin{array}{cccc}
         \draw [->] (sum) -- (pf);
         \node [block, right of = pf, node distance=1.5cm] (mf) {$\Pb^H$} ;
         \draw [->] (pf) -- (mf);
-        \node [block, right of = mf, node distance=1.7cm] (ff) {$\Dl^{-\frac{1}{2}}\Lb^{-H}$} ;
+        \node [block, right of = mf, node distance=1.7cm] (ff) {$\Dl^{-\frac{1}{2}}$} ;
         \draw [->] (mf) -- (ff);
         \node [sum, right of=ff, node distance=1.5cm] (sum2) {$+$};
         \draw [->] (ff) -- node {$\rr$} (sum2);
@@ -992,7 +953,7 @@ $$\Lb=\left(\begin{array}{cccc}
   \begin{itemize}
      \item Forward Filter $\rr=\F^H\y$\\ \ \\
      \item Feedback Filter $\B^H$\\ \ \\
-     \item $\M$ and Cholesky of ZF, MMSE1, or permutations
+     \item $\M$ and Cholesky of ZF, MMSE, or permutations
     \end{itemize}
  \end{column}
  \begin{column}{6cm}

@@ -184,6 +184,9 @@
 \def\antenna{%
     -- +(0mm,4.0mm) -- +(2.625mm,7.5mm) -- +(-2.625mm,7.5mm) -- +(0mm,4.0mm) -- +(0mm,0mm)
 }
+\pgfmathdeclarefunction{gauss}{3}{%
+        \pgfmathparse{1/(#3*sqrt(2*pi))*exp(-((#1-#2)^2)/(2*#3^2))}%
+     }
 % Overlay highlights on top of the page
 \newcommand{\markOverlay}[1]{\tikz[overlay,remember picture] \node (#1) {};}
 \newcommand{\drawOverlayBox}[4][]{%
