@@ -40,8 +40,8 @@
 \usepackage{psfrag}
 \usepackage{verbatim}
 \usepackage{amsmath}
-\usepackage{amsfonts} 
-\usepackage{amssymb} 
+\usepackage{amsfonts}
+\usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{pifont}
 \usepackage{array}
@@ -401,13 +401,13 @@ $$S_h(\tau,\nu)=\mathcal{F.T.}_{\Delta t}\left[A_{h}(\tau,\Delta t)\right]=\int_
  \end{definition}
  }
 \frame[allowframebreaks]{\frametitle{Fading Regimes}
- \begin{definition}[Transmitted Frame]
-  Sequence of $N_f=L/M$ modulation symbols transmitted consecutively, where the transmitter sends a data packet of $L$ bits using a modulation size $M$. The transmitted signal is the sum of all finite-frame signals.
-  $$x[n]=\sum_{b=-\infty}^{\infty}x[\dot{n},b]\textnormal{ where } \dot{n}=n \mod N_f \in \{0,N_f-1\}$$
+ \begin{definition}[Transport Block]
+  Sequence of $L_{s}=L_b/\eta$ consecutive modulation symbols \textbf{DECODED JOINTLY}. I.e. IP packet/MAC frame of $L_b$ bits using modulation size $\eta =\log_2(M)$. The transmitted signal is the sum of all finite-block signals.
+  $$x[n]=\sum_{b=-\infty}^{\infty}x[\dot{n},b]\textnormal{ where } \dot{n}=n \mod L_{s} \in \{0,L_{s}-1\}$$
  \end{definition}
  \vspace{-.1in}
  \begin{definition}[Fast Fading]
-  $T_{coh}\lesssim T_s$. In each frame $N_f$ i.i.d. realizations of the stochastic process
+  $T_{coh}\lesssim T_s$. In each block $L_{s}$ i.i.d. realizations of the stochastic process
     $$y[\dot{n},b]= h[\textcolor{ARust}{\dot{n}},b]x[\dot{n},b]+z[\dot{n},b],\;h[\dot{n},b]\sim \textnormal{i.i.d. }\forall \dot{n},b$$
   \end{definition}
   \pagebreak
@@ -459,11 +459,11 @@ $$S_h(\tau,\nu)=\mathcal{F.T.}_{\Delta t}\left[A_{h}(\tau,\Delta t)\right]=\int_
   \end{figure}
 
   \begin{definition}[Block Fading]
-  $T_{coh}\approx N_{f}T_s$. Channel \textbf{approximated} by frame-by-frame i.i.d. model
+  $T_{coh}\approx L_{s}T_s$. Channel \textbf{approximated} by block-by-block i.i.d. model
   $$y[\dot{n},b]\textcolor{VCobalt}{\simeq h[b]}x[\dot{n},b]+z[\dot{n},b], h[b]\textcolor{VCobalt}{\approx \textnormal{i.i.d. }\forall b}$$
   \end{definition}
  \vspace{-.1in}
- \begin{definition}[Slow Fading]$T_{coh}\gg N_fT_s$. The channel is random but remains the same in all frames
+ \begin{definition}[Slow Fading]$T_{coh}\gg L_{s}T_s$. The channel is random but remains the same in all blocks
   $$y[\dot{n},b]=\textcolor{ARust}{h}x[\dot{n},b]+z[\dot{n},b], \textcolor{ARust}{h\textnormal{ same }\forall b}$$
   \end{definition}
 }
@@ -472,20 +472,18 @@ $$S_h(\tau,\nu)=\mathcal{F.T.}_{\Delta t}\left[A_{h}(\tau,\Delta t)\right]=\int_
     \begin{itemize}
      \item Matrix channel notation $\y[n]= \Hb[n]\x[n]+\z[n]$
      \item Fast/Block/Slow fading $\to$ correlation of $\Hb[\dot{n}_1,b_1]$ vs $\Hb[\dot{n}_2,b_2]$ 
-     \item Spatial correlation $\to$ $\Sg_{\textrm{vec}\{\Hb\}}=\Ex{}{\textrm{vec}\{\Hb\}\textrm{vec}\{\Hb\}^H}\neq \I_{N_{t}N_{r}}$ 
+     \item Spatial correlation $\to$ $\Sg_{\vstack{\Hb}}=\Ex{}{\vstack{\Hb}\vstack{\Hb}^H}\neq \I_{N_{t}N_{r}}$ 
+     \item Normalization $\Ex{}{\|\Hb[n]\|^2}=\Ex{}{\vstack{\Hb}^H\vstack{\Hb}}=N_{t}N_{r}\to\sigma_h^2=1$
     \end{itemize}
-    \begin{definition}[Instantaneous SNR]
+    \begin{definition}[Instantaneous and Average SNR]
      $$\rho(\Hb[n])=\frac{P\|\Hb[n]\|^2}{N_{t}N_{r}\sigma_z^2}$$
-    \end{definition}
-    \begin{definition}[Average SNR]
-     $$\overline{\rho}=\frac{P\Ex{}{\|\Hb[n]\|^2}}{N_{t}N_{r}\sigma_z^2}\stackrel{\textnormal{white}}{=}\frac{P\cancel{N_{t}N_{r}}\sigma_h^2}{\cancel{N_{t}N_{r}}\sigma_z^2}=\frac{P\sigma_h^2}{\sigma_z^2}$$
-     Normalization $\Ex{}{\|\Hb[n]\|^2}=N_{t}N_{r}\to\sigma_h^2=1$
+     $$\overline{\rho}=\Ex{}{\rho(\Hb[n])}=\frac{P\Ex{}{\|\Hb[n]\|^2}}{N_{t}N_{r}\sigma_z^2}=\frac{P\sigma_h^2}{\sigma_z^2}$$
     \end{definition}
 }
 
 \frame[allowframebreaks]{\frametitle{SISO Fast Fading}
     \begin{itemize}
-    \item Each decoded frame experiences lots of fading realizations
+    \item Each decoded block experiences lots of fading realizations
         $$y[n]= h[n]x[n]+z[n]$$
     \item If $\mathscr{B}(\rho)=$ AWGN BER with SNR $\rho$
         $$\overline{\mathscr{B}(\rho)}=\Ex{h}{\mathscr{B}(\rho)}=\int f(\rho)\mathscr{B}(\rho)d\rho=\int f(|h|^2)\mathscr{B}\left(\frac{P|h|^2}{\sigma_z^2}\right)d|h|^2$$
@@ -687,15 +685,15 @@ $$P_o=P(\rho(h)<\xi)=P(|h|^2<\xi)=F_{|h|^2}(\xi)$$
 
 \frame{\frametitle{SISO Block/Slow Fading}
 \begin{itemize}
-    \item Each frame/full system experiences \textbf{a single fading realization}
+    \item Each block/full system experiences \textbf{a single fading realization}
         $$y[\dot{n},b]= h[b]x[\dot{n},b]+z[\dot{n},b]$$
     \item Instantaneous SNR $\rho$ and AWGN BER $\mathscr{B}(\rho)$ (not averaged)\\ \ \\
-    \item Outage probability $P_o$ $\approx$ Frame Error Rate (FER)\\ \ \\
+    \item Outage probability $P_o$ $\approx$ TB Error Rate (BLER)\\ \ \\
     \item \textbf{Diversity} important for different reasons
     \begin{itemize}
         \item In Fast Fading, improve BER vs $\overline{\rho}$
         \item In Slow Fading, improve $P_o$ vs $\overline{\rho}$
-        \item In Block Fading, $N_f\approx T_{coh}$ vs decoding delay
+        \item In Block Fading, $L_{s}\approx T_{coh}$ vs decoding delay
 \end{itemize}
 \end{itemize}
 }
@@ -703,14 +701,14 @@ $$P_o=P(\rho(h)<\xi)=P(|h|^2<\xi)=F_{|h|^2}(\xi)$$
 
 \begin{proof}[Inside of Shannon's Proof]
 \begin{itemize}
- \item Channel used multiple times  $\{\x[n]\}_{n=0}^{N_f}$\\ \ \\
+ \item Channel used multiple times  $\{\x[n]\}_{n=0}^{L_{s}}$\\ \ \\
 %     \begin{itemize}
 %     \item Random constellation $\mathcal{C}$ with $R$ items, each $\x[n]\in\mathcal{C}$ p.d.f. $f(x)$
 %     \end{itemize}
- \item {Chain rule} of M.I.  $\qquad \Inf{\{\x[n]\}_{n=0}^{N_f}}{\{\y[n]\}_{n=0}^{N_f}}\stackrel{}{=}\Inf{\x[0]}{\{\y[n]\}_{n=0}^{N_f}}+\CInf{\{\x[n]\}_{\textcolor{ARust}{n=1}}^{N_f}}{\{\y[n]\}_{n=0}^{N_f}}{\textcolor{ARust}{\x[0]}}\dots$\\ \ \\
+ \item {Chain rule} of M.I.  $\qquad \Inf{\{\x[n]\}_{n=0}^{L_{s}}}{\{\y[n]\}_{n=0}^{L_{s}}}\stackrel{}{=}\Inf{\x[0]}{\{\y[n]\}_{n=0}^{L_{s}}}+\CInf{\{\x[n]\}_{\textcolor{ARust}{n=1}}^{L_{s}}}{\{\y[n]\}_{n=0}^{L_{s}}}{\textcolor{ARust}{\x[0]}}\dots$\\ \ \\
  \item $C$ defined $\max R$ s.t. \textbf{probability of error is as low as desired}.
     \begin{itemize}
-    \item $R\leq C$ if and \textbf{only if} $\displaystyle\lim_{N_f\to\infty} P(\hat{x}\neq x) = 0 $\\ \ \\
+    \item $R\leq C$ if and \textbf{only if} $\displaystyle\lim_{L_{s}\to\infty} P(\hat{x}\neq x) = 0 $\\ \ \\
     \end{itemize}
  \item Instantaneous M.I. is a function of channel $\CInf{\x}{\y}{\Hb}=\mathcal{I}(\Hb)$\\ \ \\
  \item \textcolor{ARust}{Formally, the Shannon capacity of fading channels is zero!}
@@ -721,7 +719,7 @@ $$P_o=P(\rho(h)<\xi)=P(|h|^2<\xi)=F_{|h|^2}(\xi)$$
 \pagebreak
 
 \begin{definition}[Ergodic Capacity]
-In \textbf{Fast Fading}, as $N_f\to\infty$ the frame $\{\x[n]\}_{n=0}^{N_f}$ sees \textit{infinite realizations} of the random channel. The M.I. $\mathcal{I}(\Hb[n])$ is averaged over $f(\Hb)$
+In \textbf{Fast Fading}, as $L_{s}\to\infty$ the frame $\{\x[n]\}_{n=0}^{L_{s}}$ sees \textit{infinite realizations} of the random channel. The M.I. $\mathcal{I}(\Hb[n])$ is averaged over $f(\Hb)$
 \begin{itemize}
      \item With CSIR the transmitter uses same $f(\x)\; \forall \Hb$
         $$C=\sup_{\x}\Ex{\Hb}{ \CInf{\x[n]}{\y[n]}{\Hb[n]}}$$
@@ -731,7 +729,7 @@ In \textbf{Fast Fading}, as $N_f\to\infty$ the frame $\{\x[n]\}_{n=0}^{N_f}$ see
 \end{definition}
 \begin{itemize}
  \item By Jensen's Inequality $\Ex{\rho}{\log(1+\rho)}\leq\log(1+\Ex{\rho}{\rho})$\\ \ \\
- \item The Ergodic Capacity is \textbf{achievable} using long $N_f$ and joint coding
+ \item The Ergodic Capacity is \textbf{achievable} using long $L_{s}$ and joint coding
  \begin{itemize}
     \item One of the great advantages of OFDM with i.i.d. subcarriers
         $$\lim_{K\to\infty} \sum_{k=0}^{K-1}\log\det\left(\I+\frac{P_k}{\sigma_z}\Hb[k]\Hb^H[k]\right)=\Ex{\Hb}{\sup \CInf{\x}{\y}{\Hb}}$$
@@ -810,7 +808,7 @@ In \textbf{Slow Fading} only a single value of $\Hb$ observed per frame
     };
     \legend{$h(t_o)$,$h[b]$}
     \draw[KYJade,thick] (0.55,0.2) rectangle (7.45,1);
-    \node[KYJade] at (4,.6) {$\{x[n]\}_{n=0}^{N_f}$};
+    \node[KYJade] at (4,.6) {$\{x[n]\}_{n=0}^{L_{s}}$};
     \end{axis}
    \end{tikzpicture}
   \end{figure}
@@ -859,7 +857,7 @@ In \textbf{Slow Fading} only a single value of $\Hb$ observed per frame
     };
     \legend{$h(t_o)$,$h[b]$}
     \draw[KYJade,thick] (0.55,0.2) rectangle (1.45,1);
-    \node[KYJade] at (1,.6) {$\{x[n]\}_{n=0}^{N_f}$};
+    \node[KYJade] at (1,.6) {$\{x[n]\}_{n=0}^{L_{s}}$};
     \end{axis}
    \end{tikzpicture}
   \end{figure}

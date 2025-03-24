@@ -468,7 +468,7 @@ $
     \item Input $\x$ Statistical Distribution
     \begin{itemize}
         \item Zero Mean $\Ex{}{x_{i}}=0  \;\Rightarrow\; \Ex{}{\x}=\zero$\\ \ \\
-        \item Transmitted power $P=\sum_{i=1}^{N_t}\Ex{}{x_{i}}=\Ex{}{\|\x\|^2}$\\ \ \\
+        \item Transmitted power $P=\sum_{i=1}^{N_t}\Ex{}{|x_{i}|^2}=\Ex{}{\|\x\|^2}$\\ \ \\
         \item Covariance Matrix 
         $$\Sg_{\x}=\Ex{}{\x \x^H}=\Ex{}{\left( \begin{array}{cccc}
                                                 |x_1|^2&x_1x_2^*&\dots &x_1x_{N_{t}}^*\\
@@ -487,7 +487,7 @@ $
         \item Covariance Matrix $\Sg_{\y}=\Ex{}{\y \y^H}=\Hb\Sg_{\x}\Hb^H+\Sg_{\z}+\cancel{\Ex{}{2\Re\{\Hb\x\z^H\}}}^{0}$\\ \ \\
         \item Uncorrelated Noise and i.i.d. Symbols $\Sg_{\y}=\frac{P}{N_{t}}\Hb\Hb^H+\sigma_z^2\I$\\ \ \\
         \item SNR at the receiver 
-        $$\frac{\tr\{\frac{P}{N_{t}}\Hb\Sg_{\x}\Hb^H\}}{\tr\{\Sg_{\z}\}}=\frac{P}{N_{t}}\frac{\tr\{\Hb\Hb^H\}}{N_{r}\sigma_z^2}=\frac{P}{N_{t}N_{r}\sigma_z^2}\|\Hb\|^2=\frac{P}{N_{t}N_{r}\sigma_z^2}\sum_{i=1}^{N_{t}}\sum_{j=1}^{N_{r}}|h_{i,j}|^2$$\\ \ \\
+        $$\frac{\tr\{\Hb\Sg_{\x}\Hb^H\}}{\tr\{\Sg_{\z}\}}=\frac{P}{N_{t}}\frac{\tr\{\Hb\Hb^H\}}{N_{r}\sigma_z^2}=\frac{P}{N_{t}N_{r}\sigma_z^2}\|\Hb\|^2=\frac{P}{N_{t}N_{r}\sigma_z^2}\sum_{i=1}^{N_{t}}\sum_{j=1}^{N_{r}}|h_{i,j}|^2$$\\ \ \\
         \item Normalized channel matrix $\|\Hb\|^2=N_{t}N_{r}\to$ SNR$=\frac{P}{\sigma_z^2}$
     \end{itemize}
  \end{itemize}
@@ -532,7 +532,7 @@ $
     \begin{itemize}
      \item Variables
     \begin{itemize}
-     \item Distance to point $d_i=|\overrightarrow{P}_i-(0,0)|^2$
+     \item Distance to point $d_i=\|\overrightarrow{P}_i-(0,0)\|$
      \item Path delay $\tau_i=\frac{d_i}{c}$
     \end{itemize}
     \item Constants
@@ -582,7 +582,7 @@ $
  \begin{column}{7cm}
     \begin{itemize}
      \item Antennas are very close 
-     $$d'=|\overrightarrow{P}_{i+1}-\overrightarrow{P}_{i}|\ll d_i\forall i$$
+     $$d'=\|\overrightarrow{P}_{i+1}-\overrightarrow{P}_{i}\|\ll d_i\forall i$$
      \item Narrowband $\tau_i-\tau_1\ll T_s \forall i$
      \item $v_1(t)\simeq \frac{e^{j\theta_0}}{\sqrt{L}}\cdot x(t-\tau_1)$
      \item Simplified received signal

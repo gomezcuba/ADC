@@ -196,6 +196,7 @@ Wednesday \& Thursday 15:00-18:00\\
 \end{itemize}
 }
 
+
 \frame[allowframebreaks]{
 \frametitle{Review of OFDM}
 \begin{columns}
@@ -379,7 +380,7 @@ $$\phi_k(t)=e^{j\frac{2 \pi k t}{T}}\cdot{}w_T(t)\; \stackrel{\mathcal{FT}}{\lon
     \begin{equation*}
     \braket{\phi_k(t-mT)}{\psi_l (t-nT)} = \int_{-\infty}^\infty \phi_k(t-mT) \psi^*_l (t-nT) dt = \delta[k-l] \delta[m-n]
     \end{equation*}
- \item Simplifies to Nyquist criterion wiht only one pulse $k=l$
+ \item Simplifies to Nyquist criterion with only one pulse $k=l$
  \end{itemize}
 \end{definition}
 \begin{example}[Cyclic Prefix OFDM (CP-OFDM)]
@@ -457,63 +458,63 @@ where $T=T_{CP}+T_{FFT}$ and $\Delta f=\frac{1}{T_{FFT}}$
  \includegraphics[width=.9\textwidth]{window-designs.png}
 \end{figure}
 }
-
-\frame[allowframebreaks]{
-\frametitle{Ambiguity function}
-\begin{itemize}
-\item Window limited to one symbol period
-\begin{itemize}
-\item Time localization $\leftrightarrow$ frequency spreading
-\item Better designs following generalized Nyquist criterion
-\end{itemize}
-\end{itemize}
-\begin{definition}[Ambiguity Function]
-    \begin{equation*}
-        A_{\psi,\phi}(\tau,\nu)=\int_{-\infty}^\infty \psi_l(t) \phi_k^*(t-\tau) e^{-j 2\pi \nu t} dt
-    \end{equation*} 
-\end{definition}
-\begin{theorem}[Generalized Nyquist Criterion vs Ambiguity Function]
-\begin{equation*}
-\braket{ \phi_k(t-mT)}{\psi_l (t-nT)} = A_{\psi,\phi} ((n-m)T,(l-k) \Delta f) = \delta[n-m] \delta[l-k]
-\end{equation*}
-\end{theorem}
-
-\begin{columns}
- \begin{column}{6cm}
-    \begin{figure}
-    \centering
-    \caption{Ambiguity Funciton for RC prototype filter (in frequency!)}
-    \includegraphics[width=0.85\columnwidth]{rc-ambiguity.png}
-    \end{figure}
- \begin{itemize}
-\item Example roll-off $\alpha=0.5$
-\end{itemize}
-\begin{equation*}
-    w_T(t) = \frac{\sin \left( \frac{(1-\alpha) \pi t}{T} \right) + \frac{4 \alpha t}{T} \cos \left(  \frac{(1+\alpha)\pi t}{T} \right)}{\frac{\pi t}{T} \left( 1- \left(\frac{4 \alpha t}{T} \right)^2 \right)}
-\end{equation*}
- \end{column}
- \begin{column}{7cm}
- \begin{itemize}
-\item $\nu \in [-(1+\alpha)/T, (1+\alpha)/T]$\\ \ \\
-\item Infinite time response ($\tau$)\\ \ \\
-\item Safe to sample at zeros of $A(\tau,\nu)$
-    \begin{itemize}
-    \itempro For $\nu=0$, $\tau= \pm T, \pm 2T, \cdots$\\ \ \\
-    \end{itemize}
-\item Imperfect synchronization
-    \begin{itemize}
-        \itemcontra sampling outside zeros\\ \ \\
-    \end{itemize}
- \item Time-frequency dispersive channel
-    \begin{itemize}
-        \itemcontra Ambiguity function blurred
-    \end{itemize}
-\end{itemize}
- \end{column}
-\end{columns}
-}
-
-
+% 
+% \frame[allowframebreaks]{
+% \frametitle{Ambiguity function}
+% \begin{itemize}
+% \item Window limited to one symbol period
+% \begin{itemize}
+% \item Time localization $\leftrightarrow$ frequency spreading
+% \item Better designs following generalized Nyquist criterion
+% \end{itemize}
+% \end{itemize}
+% \begin{definition}[Ambiguity Function]
+%     \begin{equation*}
+%         A_{\psi,\phi}(\tau,\nu)=\int_{-\infty}^\infty \psi_l(t) \phi_k^*(t-\tau) e^{-j 2\pi \nu t} dt
+%     \end{equation*} 
+% \end{definition}
+% \begin{theorem}[Generalized Nyquist Criterion vs Ambiguity Function]
+% \begin{equation*}
+% \braket{ \phi_k(t-mT)}{\psi_l (t-nT)} = A_{\psi,\phi} ((n-m)T,(l-k) \Delta f) = \delta[n-m] \delta[l-k]
+% \end{equation*}
+% \end{theorem}
+% 
+% \begin{columns}
+%  \begin{column}{6cm}
+%     \begin{figure}
+%     \centering
+%     \caption{Ambiguity Funciton for RC prototype filter (in frequency!)}
+%     \includegraphics[width=0.85\columnwidth]{rc-ambiguity.png}
+%     \end{figure}
+%  \begin{itemize}
+% \item Example roll-off $\alpha=0.5$
+% \end{itemize}
+% \begin{equation*}
+%     w_T(t) = \frac{\sin \left( \frac{(1-\alpha) \pi t}{T} \right) + \frac{4 \alpha t}{T} \cos \left(  \frac{(1+\alpha)\pi t}{T} \right)}{\frac{\pi t}{T} \left( 1- \left(\frac{4 \alpha t}{T} \right)^2 \right)}
+% \end{equation*}
+%  \end{column}
+%  \begin{column}{7cm}
+%  \begin{itemize}
+% \item $\nu \in [-(1+\alpha)/T, (1+\alpha)/T]$\\ \ \\
+% \item Infinite time response ($\tau$)\\ \ \\
+% \item Safe to sample at zeros of $A(\tau,\nu)$
+%     \begin{itemize}
+%     \itempro For $\nu=0$, $\tau= \pm T, \pm 2T, \cdots$\\ \ \\
+%     \end{itemize}
+% \item Imperfect synchronization
+%     \begin{itemize}
+%         \itemcontra sampling outside zeros\\ \ \\
+%     \end{itemize}
+%  \item Time-frequency dispersive channel
+%     \begin{itemize}
+%         \itemcontra Ambiguity function blurred
+%     \end{itemize}
+% \end{itemize}
+%  \end{column}
+% \end{columns}
+% }
+% 
+% 
 \frame[allowframebreaks]{
 \frametitle{Filter Bank Multicarrier}
 \begin{columns}
@@ -538,106 +539,106 @@ where $T=T_{CP}+T_{FFT}$ and $\Delta f=\frac{1}{T_{FFT}}$
 \end{itemize}
  \end{column}
 \end{columns}
-
-\pagebreak
-
-\begin{definition}[dispersion]
-\begin{equation*}
-\sigma_\tau = \sqrt{\int_{-\infty}^\infty t^2 |p_T(t)|^2 dt}; \ \  \sigma_\nu = \sqrt{\int_{-\infty}^\infty f^2 |p_T(f)|^2 df}
-\end{equation*}
-\end{definition}
-\begin{theorem}[Heinsenberg's uncertainty principle]
- $$\sigma_\tau \sigma_\nu \geq 1/(4\pi)$$
- \end{theorem}
-
- \begin{itemize}
-\item Equality achieved with (and only with) Gaussian pulse
-    \begin{itemize}
-        \itemcontra Do not satisfy generalized Nyquist criterion\\ \ \\
-    \end{itemize}
-\item {\em Isotropic orthogonal transform algorithm} (IOTA)
-    \begin{itemize}
-        \itempro Prototype filters approaching Heisenberg's limit
-        \itempro Satisfy generalized Nyquist criterion
-    \end{itemize}
-\end{itemize}
-} 
-
-\frame[allowframebreaks]{
-\frametitle{OFDM-OQAM}
-\begin{itemize}
-\item {\em Offset QAM} OFDM using real constellations ($A_k[n]\in\mathbb{R}$)
-\begin{equation*}
-s(t)=\sum_{n} \sum_{k=0}^{N-1} \textcolor{KYJade}{j^{n+k}} A_k [n] p_T(t-nT\textcolor{KYJade}{/2}) e^{j 2\pi k/T}
-\end{equation*}
-\begin{columns}[T]
- \begin{column}{9cm}
-    \item Even $n$ $\to$ 
-    \begin{itemize}
-        \item Even carriers $k$ purely real ($j^{2}\cdot A_k[n]$)
-        \item Odd carriers purely imaginary ($j \cdot A_k[n]$)
-    \end{itemize}
- \end{column}
- \begin{column}{4cm}
-    \item Odd $n$ $\to$ reverse
- \end{column}
-\end{columns}
-\pagebreak
-\item Equivalent 'staggered' periods
-\begin{equation*}
-s(t)=\sum_{n} \sum_{k=0}^{N-1} A^e_k [n]  \phi_k^e(t-nT)+\sum_{n} \sum_{k=0}^{N-1} A^o_k [n]  
-\phi_k^o(t-nT-T/2)
-\end{equation*}
-\item Equivalent symbols $A^e_k$ and $A^o_k$\\ \ \\
-
-\item Receive filters $\phi^e_l(t-mT)$ and $\phi_l^o(t-mT-T/2)$ and taking the {\em real part}, where
-\begin{equation*}
-\phi_k^e(t) = j^k p_T(t) e^{j 2 \pi k t/T}, \ \ \phi_k^o(t)=j \cdot j^{k} p_T(t) e^{j 2 \pi k t/T}
-\end{equation*} 
-
-\pagebreak
-
-\item Generalized Nyquist condition for $\phi^e_k(t)$ vs $\phi^e_l(t)$ and $\phi^o_k(t)$ vs $\phi^o_l(t)$\\ \ \\
-\item But we require cross-terms too
-\begin{equation*}
-\Re\left\{\braket{ \phi^e_k(t-mT) }{ \phi^o_l (t-nT-T/2) } \right\}= 0
-\end{equation*}  
-\begin{theorem}[Conventional OFDM pulses satisfy this]
-\begin{equation*}
-\langle \phi_k^e(t), \phi_l^o(t-T/2) \rangle_{\mathbb R}  =  {\text {Re}} \left\{  j^{k-l+1}\int_{T/2}^T \cos (2\pi (k-l)/T) + j \sin (2\pi (k-l)/T) dt \right\} =0
-\end{equation*}
-\begin{itemize}
-    \item Cosine integral always zero
-    \item Sine integral non-zero only if $k-l$ odd $\to$ purely imaginary
-    \item For $k=l$ also purely imaginary
-\end{itemize}
-\end{theorem}
-\end{itemize}
-
-\pagebreak
-\begin{columns}
- \begin{column}{7cm}
-\begin{itemize}
-\item Two overlapped modulations $\to$
-\begin{itemize}
-\itemcontra Symbols real, no rate advantage\\ \ \\
-\end{itemize}
-\item $w_T(t)$ even symmetry $\to$
-\begin{itemize}
-\itempro  no even$\leftrightarrow$odd carrier interference
-\itempro  twice grid density\\ \ \\
-\end{itemize}
-\item More efficient joint FBMC-OQAM method also possible
-\end{itemize}
- \end{column}
- \begin{column}{6cm}
-  \begin{figure}
-   \centering
-   \includegraphics[width=.8\columnwidth]{OQAM-grid.png}
-  \end{figure}
- \end{column}
-\end{columns}
 }
+% \pagebreak
+% 
+% \begin{definition}[dispersion]
+% \begin{equation*}
+% \sigma_\tau = \sqrt{\int_{-\infty}^\infty t^2 |p_T(t)|^2 dt}; \ \  \sigma_\nu = \sqrt{\int_{-\infty}^\infty f^2 |p_T(f)|^2 df}
+% \end{equation*}
+% \end{definition}
+% \begin{theorem}[Heinsenberg's uncertainty principle]
+%  $$\sigma_\tau \sigma_\nu \geq 1/(4\pi)$$
+%  \end{theorem}
+% 
+%  \begin{itemize}
+% \item Equality achieved with (and only with) Gaussian pulse
+%     \begin{itemize}
+%         \itemcontra Do not satisfy generalized Nyquist criterion\\ \ \\
+%     \end{itemize}
+% \item {\em Isotropic orthogonal transform algorithm} (IOTA)
+%     \begin{itemize}
+%         \itempro Prototype filters approaching Heisenberg's limit
+%         \itempro Satisfy generalized Nyquist criterion
+%     \end{itemize}
+% \end{itemize}
+% } 
+% 
+% \frame[allowframebreaks]{
+% \frametitle{OFDM-OQAM}
+% \begin{itemize}
+% \item {\em Offset QAM} OFDM using real constellations ($A_k[n]\in\mathbb{R}$)
+% \begin{equation*}
+% s(t)=\sum_{n} \sum_{k=0}^{N-1} \textcolor{KYJade}{j^{n+k}} A_k [n] p_T(t-nT\textcolor{KYJade}{/2}) e^{j 2\pi k/T}
+% \end{equation*}
+% \begin{columns}[T]
+%  \begin{column}{9cm}
+%     \item Even $n$ $\to$ 
+%     \begin{itemize}
+%         \item Even carriers $k$ purely real ($j^{2}\cdot A_k[n]$)
+%         \item Odd carriers purely imaginary ($j \cdot A_k[n]$)
+%     \end{itemize}
+%  \end{column}
+%  \begin{column}{4cm}
+%     \item Odd $n$ $\to$ reverse
+%  \end{column}
+% \end{columns}
+% \pagebreak
+% \item Equivalent 'staggered' periods
+% \begin{equation*}
+% s(t)=\sum_{n} \sum_{k=0}^{N-1} A^e_k [n]  \phi_k^e(t-nT)+\sum_{n} \sum_{k=0}^{N-1} A^o_k [n]  
+% \phi_k^o(t-nT-T/2)
+% \end{equation*}
+% \item Equivalent symbols $A^e_k$ and $A^o_k$\\ \ \\
+% 
+% \item Receive filters $\phi^e_l(t-mT)$ and $\phi_l^o(t-mT-T/2)$ and taking the {\em real part}, where
+% \begin{equation*}
+% \phi_k^e(t) = j^k p_T(t) e^{j 2 \pi k t/T}, \ \ \phi_k^o(t)=j \cdot j^{k} p_T(t) e^{j 2 \pi k t/T}
+% \end{equation*} 
+% 
+% \pagebreak
+% 
+% \item Generalized Nyquist condition for $\phi^e_k(t)$ vs $\phi^e_l(t)$ and $\phi^o_k(t)$ vs $\phi^o_l(t)$\\ \ \\
+% \item But we require cross-terms too
+% \begin{equation*}
+% \Re\left\{\braket{ \phi^e_k(t-mT) }{ \phi^o_l (t-nT-T/2) } \right\}= 0
+% \end{equation*}  
+% \begin{theorem}[Conventional OFDM pulses satisfy this]
+% \begin{equation*}
+% \langle \phi_k^e(t), \phi_l^o(t-T/2) \rangle_{\mathbb R}  =  {\text {Re}} \left\{  j^{k-l+1}\int_{T/2}^T \cos (2\pi (k-l)/T) + j \sin (2\pi (k-l)/T) dt \right\} =0
+% \end{equation*}
+% \begin{itemize}
+%     \item Cosine integral always zero
+%     \item Sine integral non-zero only if $k-l$ odd $\to$ purely imaginary
+%     \item For $k=l$ also purely imaginary
+% \end{itemize}
+% \end{theorem}
+% \end{itemize}
+% 
+% \pagebreak
+% \begin{columns}
+%  \begin{column}{7cm}
+% \begin{itemize}
+% \item Two overlapped modulations $\to$
+% \begin{itemize}
+% \itemcontra Symbols real, no rate advantage\\ \ \\
+% \end{itemize}
+% \item $w_T(t)$ even symmetry $\to$
+% \begin{itemize}
+% \itempro  no even$\leftrightarrow$odd carrier interference
+% \itempro  twice grid density\\ \ \\
+% \end{itemize}
+% \item More efficient joint FBMC-OQAM method also possible
+% \end{itemize}
+%  \end{column}
+%  \begin{column}{6cm}
+%   \begin{figure}
+%    \centering
+%    \includegraphics[width=.8\columnwidth]{OQAM-grid.png}
+%   \end{figure}
+%  \end{column}
+% \end{columns}
+% }
 
 \frame{
 \frametitle{Universal Filtered Multicarrier (UFMC)}
@@ -661,6 +662,164 @@ s(t)=\sum_{n} \sum_{k=0}^{N-1} A^e_k [n]  \phi_k^e(t-nT)+\sum_{n} \sum_{k=0}^{N-
    \centering\includegraphics[width=0.7\textwidth]{UFMC.png}
   \end{figure}
 }
+
+
+\frame{\frametitle{5G Frame Structure}
+\begin{columns}[T]
+ \begin{column}{6cm} 
+    \begin{figure}
+    \centering
+    \subfigure[1 Frame = 10 Subframes]{
+        \begin{tikzpicture}[scale=.42, transform shape]
+        \foreach \a in {0,1,...,9}{
+            \draw[draw=KYJade] (\a,0) rectangle (1+\a,1);
+        }
+        \draw[pattern=north east lines, pattern color=KYJade,draw=KYJade] (0,0) rectangle (1,1);
+        \draw[thick,draw=VCobalt] (0,0) rectangle (10,1);
+        \draw[draw=white,left color=gray!40, right color=white] (10,0) rectangle (12,1);
+        \draw[draw=white,right color=gray!40, left color=white] (-2,0) rectangle (0,1);
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
+extension end length=.1]{(0,1.1)}{(10,1.1)}{$10$ ms};         
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
+extension end length=.1]{(1,-.5)}{(0,-.5)}{$1$ ms};         
+         \end{tikzpicture}
+}
+    \subfigure[1 Subframes = $2^\mu$ slots]{
+        \begin{tikzpicture}[scale=.42, transform shape]
+        \foreach \a in {0,1,...,8}{
+            \draw[draw=TAMustard] (\a,0) rectangle (1+\a,1);
+        }
+        \draw[pattern=north east lines, pattern color=TAMustard,draw=TAMustard] (0,0) rectangle (1,1);
+        \draw[thick,draw=KYJade] (0,0) rectangle (8,1);
+        \draw[draw=white,left color=VCobalt!40, right color=white] (8,0) rectangle (12,1);
+        \draw[draw=white,right color=VCobalt!40, left color=white] (-4,0) rectangle (0,1);
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
+extension end length=.1]{(0,1.1)}{(8,1.1)}{$1$ ms};         
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
+extension end length=.1]{(1,-.75)}{(0,-.75)}{$\frac{1}{2^{\mu}}$ ms};         
+         \end{tikzpicture}
+}
+    \subfigure[1 slot = 14 OFDM Symbols]{
+        \begin{tikzpicture}[scale=.42, transform shape]
+        \foreach \a in {0,1,...,13}{
+            \draw[draw=TZTeal] (.5*\a,0) rectangle (.5+.5*\a,1);
+        }
+        \draw[pattern=north east lines, pattern color=TZTeal,draw=TZTeal] (0,0) rectangle (.5,1);
+        \draw[thick,draw=TAMustard] (0,0) rectangle (7,1);
+        \draw[draw=white,left color=TAMustard!40, right color=white] (7,0) rectangle (11,1);
+        \draw[draw=white,right color=TAMustard!40, left color=white] (-4,0) rectangle (0,1);
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
+extension end length=.1]{(0,1.1)}{(7,1.1)}{$\frac{1}{2^{\mu}}$ ms};         
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
+extension end length=.1]{(1,-.75)}{(0,-.75)}{$\frac{1}{14\cdot 2^{\mu}}$ ms};         
+         \end{tikzpicture}
+}
+    \subfigure[OFDM $K =\frac{B}{2^{\mu} \Delta f_{ref}} \leq 4096$]{
+        \begin{tikzpicture}[scale=.42, transform shape]
+        \foreach \a in {0,1,...,19}{
+            \draw[dotted] (0,0+.1*\a) rectangle (6,.1+.1*\a);
+        }
+        \draw[pattern=north east lines] (0,0) rectangle (1,2);
+        \draw[thick,draw=TZTeal] (0,0) rectangle (6,2);
+        \draw[draw=white,left color=TZTeal!40, right color=white] (6,0) rectangle (8,2);
+        \draw[draw=white,right color=TZTeal!40, left color=white] (-2,0) rectangle (0,2);
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
+extension end length=.1]{(1,-.75)}{(0,-.75)}{$T_{CP}=\frac{4.69}{2^{\mu}}$ $\mu$s};       
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
+extension end length=.1]{(6,-.75)}{(1,-.75)}{$T_{FFT}=\frac{61.98}{2^{\mu}}$ $\mu$s};       
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline reverse-dimline reverse},extension start length=.1,
+extension end length=.1]{(6.1,1.1)}{(6.1,1.0)}{$\Delta f_{ref}2^{\mu}$ kHz};             
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline reverse-dimline reverse},extension start length=.1,
+extension end length=.1]{(6.9,2.0)}{(6.9,0)}{$K \Delta f_{ref} 2^{\mu}$};             
+         \end{tikzpicture}
+}
+%         \caption{5G Radio Resources}
+    \end{figure}  
+ \end{column}
+ \begin{column}{6cm}
+ \begin{itemize}
+  \item Cell discovery, synchronization, roaming etc. every \textit{several} frames\\ \ \\
+  \item All numerologies co-exist in each subframe\\ \ \\
+  \item Antenna Port Number: Limited Feedback Beamforming\\ \ \\
+  \item De-Modulation Reference Signal (DMRS) every slot\\ \ \\
+  \item Scheduler resolution mini-slot (2 OFDM sym. DMRS+data)\\ \ \\
+ \end{itemize}
+ \end{column}
+\end{columns}  
+}
+
+
+\frame{
+\frametitle{OFDM with Flexible Numerology}
+
+
+    \begin{figure}
+        \begin{tikzpicture}[scale=.45, transform shape] 
+            \foreach \x in {0,...,15}
+        {
+            \draw[pattern=north east lines,pattern color=VCobalt,opacity=.5] (0+.5*\x , 0) rectangle (.5*\x+.1,4);
+            \foreach \y in {0,...,7}
+            {  
+                \draw[dotted,VCobalt,opacity=.5] (.1+.5*\x , .5*\y) rectangle (.5*\x+.5,.5*\y+.5);
+            }
+        }        
+        \draw[pattern=dots,pattern color=TAMustard,draw=TAMustard] (.5 , .5) rectangle (3.5,2);
+        \draw[pattern=dots,pattern color=TAMustard,draw=TAMustard] (5.5 , .5) rectangle (7,2);
+        \draw[->] (-.25,-.25) -- node[anchor=north]{$t$} (8.25,-.25); 
+        \draw[->] (-.25,-.25) -- node[anchor=east]{$f$} (-.25,4.25); 
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+extension end length=.25]{(7.5,4.25)}{(8,4.25)}{$T/2$}; 
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+extension end length=.25]{(8.25,4)}{(8.25,3.5)}{$2\Delta f$};
+        \node at (9,2) {$+$};
+            \foreach \x in {0,...,7}
+        {
+            \draw[pattern=north west lines,pattern color=KYJade,opacity=.5] (10+\x , 0) rectangle (\x+10.2,4);
+            \foreach \y in {0,...,15}
+            {
+            \draw[dotted,KYJade,opacity=.5] (10.1+\x , .25*\y) rectangle (11+\x,.25+.25*\y);
+            }
+        }
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+extension end length=.25]{(17,4.25)}{(18,4.25)}{$T$}; 
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+extension end length=.25]{(18.25,4)}{(18.25,3.75)}{$\Delta f$};
+        \draw[pattern=dots,pattern color=ARust,draw=ARust] (11 , 2.25) rectangle (17,3.5);
+        \draw[->] (10-.25,-.25) -- node[anchor=north]{$t$} (10+8.25,-.25); 
+        \draw[->] (10-.25,-.25) -- node[anchor=east]{$f$} (10-.25,4.25); 
+        \node at (19,2) {$=$};
+            \foreach \x in {0,...,15}
+        {
+            \draw[pattern=north east lines,pattern color=VCobalt,opacity=.5] (20+.5*\x , 0) rectangle (.5*\x+20.1,4);
+            \foreach \y in {0,...,7}
+            {  
+                \draw[dotted,VCobalt,opacity=.5] (20.1+.5*\x , .5*\y) rectangle (.5*\x+20.5,.5*\y+.5);
+            }
+        }      
+            \foreach \x in {0,...,7}
+        {
+            \draw[pattern=north west lines,pattern color=KYJade,opacity=.5] (20+\x , 0) rectangle (\x+20.2,4);
+            \foreach \y in {0,...,15}
+            {
+            \draw[dotted,KYJade,opacity=.5] (20.1+\x , .25*\y) rectangle (21+\x,.25+.25*\y);
+            }
+        }
+        \draw[pattern=dots,pattern color=TAMustard,draw=TAMustard] (20.5 , .5) rectangle (23.5,2);
+        \draw[pattern=dots,pattern color=TAMustard,draw=TAMustard] (25.5 , .5) rectangle (27,2);
+        \draw[pattern=dots,pattern color=ARust,draw=ARust] (21 , 2.25) rectangle (27,3.5);
+        \draw[->] (20-.25,-.25) -- node[anchor=north]{$t$} (20+8.25,-.25); 
+        \draw[->] (20-.25,-.25) -- node[anchor=east]{$f$} (20-.25,4.25); 
+        \end{tikzpicture}
+    \end{figure}
+\begin{itemize}
+ \item Multiple OFDM grids of different $\Delta f=\frac{1}{T}$ defined \textit{simultaneously}\\ \ \\
+ \item Simultaneous data symbols assigned in either OFDM pattern\\ \ \\
+ \item RF signal is sum of all component grids\\ \ \\
+ \item \textbf{Flexible-size} orthogonal spectrum allocations\\ \ \\
+ \item 5G \textbf{numerology} parameter $\mu=0,1,2\dots$, $\Delta f= 2^\mu \times 15kHz$
+\end{itemize}
+}
+
 
 \frame[allowframebreaks]{\frametitle{Single Carrier OFDM}
 \vspace{-.2in}
@@ -917,77 +1076,6 @@ s(t)=\sum_{n} \sum_{k=0}^{N-1} A^e_k [n]  \phi_k^e(t-nT)+\sum_{n} \sum_{k=0}^{N-
 
 
 }
-\frame{
-\frametitle{OFDM with Flexible Numerology}
-
-
-    \begin{figure}
-        \begin{tikzpicture}[scale=.45, transform shape] 
-            \foreach \x in {0,...,15}
-        {
-            \draw[pattern=north east lines,pattern color=VCobalt,opacity=.5] (0+.5*\x , 0) rectangle (.5*\x+.1,4);
-            \foreach \y in {0,...,7}
-            {  
-                \draw[dotted,VCobalt,opacity=.5] (.1+.5*\x , .5*\y) rectangle (.5*\x+.5,.5*\y+.5);
-            }
-        }        
-        \draw[pattern=dots,pattern color=TAMustard,draw=TAMustard] (.5 , .5) rectangle (3.5,2);
-        \draw[pattern=dots,pattern color=TAMustard,draw=TAMustard] (5.5 , .5) rectangle (7,2);
-        \draw[->] (-.25,-.25) -- node[anchor=north]{$t$} (8.25,-.25); 
-        \draw[->] (-.25,-.25) -- node[anchor=east]{$f$} (-.25,4.25); 
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-extension end length=.25]{(7.5,4.25)}{(8,4.25)}{$T/2$}; 
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-extension end length=.25]{(8.25,4)}{(8.25,3.5)}{$2\Delta f$};
-        \node at (9,2) {$+$};
-            \foreach \x in {0,...,7}
-        {
-            \draw[pattern=north west lines,pattern color=KYJade,opacity=.5] (10+\x , 0) rectangle (\x+10.2,4);
-            \foreach \y in {0,...,15}
-            {
-            \draw[dotted,KYJade,opacity=.5] (10.1+\x , .25*\y) rectangle (11+\x,.25+.25*\y);
-            }
-        }
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-extension end length=.25]{(17,4.25)}{(18,4.25)}{$T$}; 
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-extension end length=.25]{(18.25,4)}{(18.25,3.75)}{$\Delta f$};
-        \draw[pattern=dots,pattern color=ARust,draw=ARust] (11 , 2.25) rectangle (17,3.5);
-        \draw[->] (10-.25,-.25) -- node[anchor=north]{$t$} (10+8.25,-.25); 
-        \draw[->] (10-.25,-.25) -- node[anchor=east]{$f$} (10-.25,4.25); 
-        \node at (19,2) {$=$};
-            \foreach \x in {0,...,15}
-        {
-            \draw[pattern=north east lines,pattern color=VCobalt,opacity=.5] (20+.5*\x , 0) rectangle (.5*\x+20.1,4);
-            \foreach \y in {0,...,7}
-            {  
-                \draw[dotted,VCobalt,opacity=.5] (20.1+.5*\x , .5*\y) rectangle (.5*\x+20.5,.5*\y+.5);
-            }
-        }      
-            \foreach \x in {0,...,7}
-        {
-            \draw[pattern=north west lines,pattern color=KYJade,opacity=.5] (20+\x , 0) rectangle (\x+20.2,4);
-            \foreach \y in {0,...,15}
-            {
-            \draw[dotted,KYJade,opacity=.5] (20.1+\x , .25*\y) rectangle (21+\x,.25+.25*\y);
-            }
-        }
-        \draw[pattern=dots,pattern color=TAMustard,draw=TAMustard] (20.5 , .5) rectangle (23.5,2);
-        \draw[pattern=dots,pattern color=TAMustard,draw=TAMustard] (25.5 , .5) rectangle (27,2);
-        \draw[pattern=dots,pattern color=ARust,draw=ARust] (21 , 2.25) rectangle (27,3.5);
-        \draw[->] (20-.25,-.25) -- node[anchor=north]{$t$} (20+8.25,-.25); 
-        \draw[->] (20-.25,-.25) -- node[anchor=east]{$f$} (20-.25,4.25); 
-        \end{tikzpicture}
-    \end{figure}
-\begin{itemize}
- \item Multiple OFDM grids of different $\Delta f=\frac{1}{T}$ defined \textit{simultaneously}\\ \ \\
- \item Simultaneous data symbols assigned in either OFDM pattern\\ \ \\
- \item RF signal is sum of all component grids\\ \ \\
- \item \textbf{Flexible-size} orthogonal spectrum allocations\\ \ \\
- \item 5G \textbf{numerology} parameter $\mu=0,1,2\dots$, $\Delta f= 2^\mu \times 15kHz$
-\end{itemize}
-}
-
 \frame[allowframebreaks]{
 \frametitle{Orthogonal Time Frequency Space (OTFS)}
 \begin{itemize}
@@ -1054,172 +1142,89 @@ $$Z_x(\tau,\nu)=\sum_{v=-\infty}^{\infty}x(v\tau+t)e^{-j2\pi\nu (t-\tau)}\forall
 %         \caption{Z}
     \end{figure}  
     
-    \pagebreak
-    
-\begin{columns}[T]
- \begin{column}{8cm}
- 
-\begin{definition}[DZT - OTFS Modulation]
-Sampling $t=nT_s$, $D=T/T_s$, $n=d+vD$
-$$Z_x[d,v]=\sum_{u=0}^{V-1}x[vD+d]e^{-j2\pi\frac{uv}{V}}\forall x[n]\textnormal{ with period }L=VD$$
-\vspace{-.3in}
-    \begin{figure}    
-    \subfigure[4-2-DZT symbols at TF grid]{
-        \begin{tikzpicture}[scale=.35, transform shape] 
-        \foreach \x in {0,1}
-        \foreach \y in {0,...,3}
-        {
-            \foreach \a in {0,...,3}
-            \foreach \b in {0,...,1}
-                {
-                    \draw[fill=black, fill opacity={(\a+4*\b)/10}] (4*\x+\a     ,{\y+\b/2}) rectangle (4*\x+\a+1,{(\y+\b/2+1/2)});
-                }
-                
-            \node at (4*\x+.5,\y+1/4) {$Z_x[0,0]$};
-        }
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-extension end length=.25]{(7.5,4.25)}{(8,4.25)}{$T_s$}; 
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-extension end length=.25]{(4,4.5)}{(8,4.5)}{$T=DT_s$}; 
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-extension end length=.25]{(0,4.75)}{(8,4.75)}{$L/\Delta f$}; 
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-extension end length=.25]{(8.25,4)}{(8.25,3.5)}{$\Delta f$};
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-extension end length=.25]{(8.5,4)}{(8.5,3)}{$V\Delta f$};
-        \draw[TZTeal,very thick,dashed] (0,0) rectangle (4,1);
-        \node[TZTeal] (number) at (-3,.25) {$Z_x[d,v]$};
-        \draw[TZTeal] (0,0) -- (number);
-        \draw[->] (-.25,-.25) -- node[anchor=north]{$t$} (8.25,-.25); 
-        \draw[->] (-.25,-.25) -- node[anchor=east]{$f$} (-.25,4.25); 
-        \end{tikzpicture}}
-        \hspace{.05in}
-        \subfigure[2-4-DZT FFTs]{
-        \begin{tikzpicture}[scale=.35, transform shape,auto, node distance=1.5cm,>=latex']
-        \foreach \x in {0,...,3}
-            \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
-                {
-                    \node (x\z) at ({2*\x+\y},0) {$x[\z]$} ;
-                }
-       \node[block,below of =x0,node distance=2cm, anchor=west,minimum width=3.4cm] (fft0) {$\frac{L}{D}$-FFT} ;
-       \node[block,below of =x7,node distance=2cm, anchor=east,minimum width=3.4cm] (fft1) {$\frac{L}{D}$-FFT} ;
-        \foreach \x in {0,...,3}
-            \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
-                {
-                    \draw[->] (x\z) -- ++(0,-.5) -- (fft\y);
-                }
-        
-        \foreach \x in {0,...,3}
-            \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
-                {
-                    \node (Zx\z) at ({4*\y+\x},-4) {$Z_x^{[\y,\x]}$} ;
-                }
-        \foreach \x in {0,...,3}
-            \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
-                {
-                    \draw[<-] (Zx\z) -- ++(0,1.5);
-                }
-        \end{tikzpicture}
-        }
-    \caption{OTFS vs OFDM FFT}
-\end{figure}
-\vspace{-.1in}
-% $$Z_y[d,v]=\sum_{u'=0}^{V-1}\sum_{d'=0}^{D-1}Z_h[d-d',v-v']Z_x[d',v']+Z_r[d,v]$$
-\end{definition}
- \end{column}
- \begin{column}{4cm}
-\begin{figure}[t]
- \centering \includegraphics[trim={1cm 2.5cm 1cm 2.5cm},clip,width=\columnwidth]{pulses3D}
- \caption{OTFS Orthonormal Pulses}
- \vspace{-.2in}
-\end{figure}  
- \end{column}
-\end{columns}  
+%     \pagebreak
+%     
+% \begin{columns}[T]
+%  \begin{column}{8cm}
+%  
+% \begin{definition}[DZT - OTFS Modulation]
+% Sampling $t=nT_s$, $D=T/T_s$, $n=d+vD$
+% $$Z_x[d,v]=\sum_{u=0}^{V-1}x[vD+d]e^{-j2\pi\frac{uv}{V}}\forall x[n]\textnormal{ with period }L=VD$$
+% \vspace{-.3in}
+%     \begin{figure}    
+%     \subfigure[4-2-DZT symbols at TF grid]{
+%         \begin{tikzpicture}[scale=.35, transform shape] 
+%         \foreach \x in {0,1}
+%         \foreach \y in {0,...,3}
+%         {
+%             \foreach \a in {0,...,3}
+%             \foreach \b in {0,...,1}
+%                 {
+%                     \draw[fill=black, fill opacity={(\a+4*\b)/10}] (4*\x+\a     ,{\y+\b/2}) rectangle (4*\x+\a+1,{(\y+\b/2+1/2)});
+%                 }
+%                 
+%             \node at (4*\x+.5,\y+1/4) {$Z_x[0,0]$};
+%         }
+%         \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+% extension end length=.25]{(7.5,4.25)}{(8,4.25)}{$T_s$}; 
+%         \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+% extension end length=.25]{(4,4.5)}{(8,4.5)}{$T=DT_s$}; 
+%         \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+% extension end length=.25]{(0,4.75)}{(8,4.75)}{$L/\Delta f$}; 
+%         \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+% extension end length=.25]{(8.25,4)}{(8.25,3.5)}{$\Delta f$};
+%         \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+% extension end length=.25]{(8.5,4)}{(8.5,3)}{$V\Delta f$};
+%         \draw[TZTeal,very thick,dashed] (0,0) rectangle (4,1);
+%         \node[TZTeal] (number) at (-3,.25) {$Z_x[d,v]$};
+%         \draw[TZTeal] (0,0) -- (number);
+%         \draw[->] (-.25,-.25) -- node[anchor=north]{$t$} (8.25,-.25); 
+%         \draw[->] (-.25,-.25) -- node[anchor=east]{$f$} (-.25,4.25); 
+%         \end{tikzpicture}}
+%         \hspace{.05in}
+%         \subfigure[2-4-DZT FFTs]{
+%         \begin{tikzpicture}[scale=.35, transform shape,auto, node distance=1.5cm,>=latex']
+%         \foreach \x in {0,...,3}
+%             \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
+%                 {
+%                     \node (x\z) at ({2*\x+\y},0) {$x[\z]$} ;
+%                 }
+%        \node[block,below of =x0,node distance=2cm, anchor=west,minimum width=3.4cm] (fft0) {$\frac{L}{D}$-FFT} ;
+%        \node[block,below of =x7,node distance=2cm, anchor=east,minimum width=3.4cm] (fft1) {$\frac{L}{D}$-FFT} ;
+%         \foreach \x in {0,...,3}
+%             \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
+%                 {
+%                     \draw[->] (x\z) -- ++(0,-.5) -- (fft\y);
+%                 }
+%         
+%         \foreach \x in {0,...,3}
+%             \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
+%                 {
+%                     \node (Zx\z) at ({4*\y+\x},-4) {$Z_x^{[\y,\x]}$} ;
+%                 }
+%         \foreach \x in {0,...,3}
+%             \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
+%                 {
+%                     \draw[<-] (Zx\z) -- ++(0,1.5);
+%                 }
+%         \end{tikzpicture}
+%         }
+%     \caption{OTFS vs OFDM FFT}
+% \end{figure}
+% \vspace{-.1in}
+% % $$Z_y[d,v]=\sum_{u'=0}^{V-1}\sum_{d'=0}^{D-1}Z_h[d-d',v-v']Z_x[d',v']+Z_r[d,v]$$
+% \end{definition}
+%  \end{column}
+%  \begin{column}{4cm}
+% \begin{figure}[t]
+%  \centering \includegraphics[trim={1cm 2.5cm 1cm 2.5cm},clip,width=\columnwidth]{pulses3D}
+%  \caption{OTFS Orthonormal Pulses}
+%  \vspace{-.2in}
+% \end{figure}  
+%  \end{column}
+% \end{columns}  
 }
 
-\frame{\frametitle{5G Frame Structure}
-\begin{columns}[T]
- \begin{column}{6cm} 
-    \begin{figure}
-    \centering
-    \subfigure[1 Frame = 10 Subframes]{
-        \begin{tikzpicture}[scale=.42, transform shape]
-        \foreach \a in {0,1,...,9}{
-            \draw[draw=KYJade] (\a,0) rectangle (1+\a,1);
-        }
-        \draw[pattern=north east lines, pattern color=KYJade,draw=KYJade] (0,0) rectangle (1,1);
-        \draw[thick,draw=VCobalt] (0,0) rectangle (10,1);
-        \draw[draw=white,left color=gray!40, right color=white] (10,0) rectangle (12,1);
-        \draw[draw=white,right color=gray!40, left color=white] (-2,0) rectangle (0,1);
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
-extension end length=.1]{(0,1.1)}{(10,1.1)}{$10$ ms};         
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
-extension end length=.1]{(1,-.5)}{(0,-.5)}{$1$ ms};         
-         \end{tikzpicture}
-}
-    \subfigure[1 Subframes = $2^\mu$ slots]{
-        \begin{tikzpicture}[scale=.42, transform shape]
-        \foreach \a in {0,1,...,8}{
-            \draw[draw=TAMustard] (\a,0) rectangle (1+\a,1);
-        }
-        \draw[pattern=north east lines, pattern color=TAMustard,draw=TAMustard] (0,0) rectangle (1,1);
-        \draw[thick,draw=KYJade] (0,0) rectangle (8,1);
-        \draw[draw=white,left color=VCobalt!40, right color=white] (8,0) rectangle (12,1);
-        \draw[draw=white,right color=VCobalt!40, left color=white] (-4,0) rectangle (0,1);
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
-extension end length=.1]{(0,1.1)}{(8,1.1)}{$1$ ms};         
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
-extension end length=.1]{(1,-.75)}{(0,-.75)}{$\frac{1}{2^{\mu}}$ ms};         
-         \end{tikzpicture}
-}
-    \subfigure[1 slot = 14 OFDM Symbols]{
-        \begin{tikzpicture}[scale=.42, transform shape]
-        \foreach \a in {0,1,...,13}{
-            \draw[draw=TZTeal] (.5*\a,0) rectangle (.5+.5*\a,1);
-        }
-        \draw[pattern=north east lines, pattern color=TZTeal,draw=TZTeal] (0,0) rectangle (.5,1);
-        \draw[thick,draw=TAMustard] (0,0) rectangle (7,1);
-        \draw[draw=white,left color=TAMustard!40, right color=white] (7,0) rectangle (11,1);
-        \draw[draw=white,right color=TAMustard!40, left color=white] (-4,0) rectangle (0,1);
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
-extension end length=.1]{(0,1.1)}{(7,1.1)}{$\frac{1}{2^{\mu}}$ ms};         
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
-extension end length=.1]{(1,-.75)}{(0,-.75)}{$\frac{1}{14\cdot 2^{\mu}}$ ms};         
-         \end{tikzpicture}
-}
-    \subfigure[OFDM $K =\frac{B}{2^{\mu} \Delta f_{ref}} \leq 4096$]{
-        \begin{tikzpicture}[scale=.42, transform shape]
-        \foreach \a in {0,1,...,19}{
-            \draw[dotted] (0,0+.1*\a) rectangle (6,.1+.1*\a);
-        }
-        \draw[pattern=north east lines] (0,0) rectangle (1,2);
-        \draw[thick,draw=TZTeal] (0,0) rectangle (6,2);
-        \draw[draw=white,left color=TZTeal!40, right color=white] (6,0) rectangle (8,2);
-        \draw[draw=white,right color=TZTeal!40, left color=white] (-2,0) rectangle (0,2);
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
-extension end length=.1]{(1,-.75)}{(0,-.75)}{$T_{CP}=\frac{4.69}{2^{\mu}}$ $\mu$s};       
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.1,
-extension end length=.1]{(6,-.75)}{(1,-.75)}{$T_{FFT}=\frac{61.98}{2^{\mu}}$ $\mu$s};       
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline reverse-dimline reverse},extension start length=.1,
-extension end length=.1]{(6.1,1.1)}{(6.1,1.0)}{$\Delta f_{ref}2^{\mu}$ kHz};             
-        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline reverse-dimline reverse},extension start length=.1,
-extension end length=.1]{(6.9,2.0)}{(6.9,0)}{$K \Delta f_{ref} 2^{\mu}$};             
-         \end{tikzpicture}
-}
-%         \caption{5G Radio Resources}
-    \end{figure}  
- \end{column}
- \begin{column}{6cm}
- \begin{itemize}
-  \item Cell discovery, synchronization, roaming etc. every \textit{several} frames\\ \ \\
-  \item All numerologies co-exist in each subframe\\ \ \\
-  \item Antenna Port Number: Limited Feedback Beamforming\\ \ \\
-  \item De-Modulation Reference Signal (DMRS) every slot\\ \ \\
-  \item Scheduler resolution mini-slot (2 OFDM sym. DMRS+data)\\ \ \\
- \end{itemize}
- \end{column}
-\end{columns}  
-}
 
 
 \end{document}
