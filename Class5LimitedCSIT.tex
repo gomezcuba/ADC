@@ -553,9 +553,9 @@ Wednesday \& Thursday 15:00-18:00\\
  \pagebreak
  \item For \textbf{Complex} Modulations there are not rate-1 OSTBCs for $N_{t}>2$, the Alamoutti scheme is the only rate-1 code\\ \ \\
  \item Trivial: rate $\frac{1}{2}$ OSTBCs for any $N_{t}>2$
- $$\tiny \Gb_{4\times 8}=\left(\begin{array}{cccccccc}s_1&-s_2&-s_3&-s_4&s_1^*&-s_2^*&-s_3^*&-s_4^* \\s_2&s_1&s_4&-s_3&s_2^*&s_1^*&s_4^*&-s_3^*\\s_3&-s_4&s_1&s_2&s_3^*&-s_4^*&s_1^*&s_2^*\\s_4&s_3&-s_2&s_1&s_4^*&s_3^*&-s_2^*&s_1^*\end{array}\right)$$
+ $$\tiny \Gb_{4\times 8}^T=\left(\begin{array}{cccccccc}s_1&-s_2&-s_3&-s_4&s_1^*&-s_2^*&-s_3^*&-s_4^* \\s_2&s_1&s_4&-s_3&s_2^*&s_1^*&s_4^*&-s_3^*\\s_3&-s_4&s_1&s_2&s_3^*&-s_4^*&s_1^*&s_2^*\\s_4&s_3&-s_2&s_1&s_4^*&s_3^*&-s_2^*&s_1^*\end{array}\right)$$
  \item Hard: Special Cases of rate$>\frac{1}{2}$ \textbf{and} $N_{t}>2$ OSTBCs
- $$\Gb_{3\times 4}=\left(\begin{array}{cccc}s_1&-s_2^*&\frac{s_3^*}{\sqrt{2}}&\frac{s_3^*}{\sqrt{2}} \\s_2&s_1^*&\frac{s_3^*}{\sqrt{2}}&\frac{-s_3^*}{\sqrt{2}}\\\frac{s_3}{\sqrt{2}}&\frac{s_3}{\sqrt{2}}& \frac{-s_1-s_1^*+s_2-s_2^*}{2}& \frac{s_1-s_1^*+s_2+s_2^*}{2} \end{array}\right)$$
+ $$\Gb_{3\times 4}^T=\left(\begin{array}{cccc}s_1&-s_2^*&\frac{s_3^*}{\sqrt{2}}&\frac{s_3^*}{\sqrt{2}} \\s_2&s_1^*&\frac{s_3^*}{\sqrt{2}}&\frac{-s_3^*}{\sqrt{2}}\\\frac{s_3}{\sqrt{2}}&\frac{s_3}{\sqrt{2}}& \frac{-s_1-s_1^*+s_2-s_2^*}{2}& \frac{s_1-s_1^*+s_2+s_2^*}{2} \end{array}\right)$$
  
 \end{itemize}
 }
@@ -621,7 +621,7 @@ Wednesday \& Thursday 15:00-18:00\\
 }
 
 
-\frame[allowframebreaks]{\frametitle{Transmitter Antenna Selection and MIMO}
+\frame{\frametitle{Transmitter Antenna Selection and MIMO}
 \begin{columns}
  \begin{column}{7cm}    
  \begin{figure}
@@ -791,57 +791,9 @@ $$f(\frac{\rho}{P/\sigma_z^2})\sim\max\textnormal{-}N_{t}\textnormal{-}\frac{1}{
 \end{columns}
 }
 
-\frame[allowframebreaks]{\frametitle{Limited Feedback MIMO}
 
- \begin{figure}
-    \centering
-    \caption{Limited Feedback Precoding}
-    \begin{tikzpicture}[auto, node distance=2cm,>=latex']%, scale=0.7, every node/.style={scale=0.7}]
-        \node [pinstyle, name=input] {$\x[n]$};
-        \node [block, right of=input, name=precod,label={$N_{t}\times M$}] {$\V$};        
-        \draw [->] (input) -- (precod);
-        \node [block, right of= precod, name=ch,label={$N_{r}\times N_{t}$}] {$\Hb$};
-        \draw [->,dashed] (precod) -- (ch);
-        \node [sum, right of= ch, node distance=1.5cm, pin={[pinstyle,pin distance=.2cm]above:$\z$}] (sumz) {$+$};
-        \draw [->,dashed] (ch) -- (sumz);
-        \node [block, right of= sumz, name=wf,label={$M\times N_{r}$}] {$\W$};
-        \draw [->] (sumz) -- node {$\y$} (wf);
-        \node [pinstyle, right of=wf, name=output] {$\rr$};
-        \draw[->] (wf) -- (output);
-        \node[block] (fb) at ($(ch)!.5!(wf)+(0,2cm)$) {Feedback P.M.I.};
-        \draw[->] (output) |- (fb);
-        \node[block, above of = precod] (cb) {${N_{CB} \choose M}$ Codebook};
-        \draw[->] (fb) -- (cb);
-        \draw[->] (cb) -- (precod);
-        \end{tikzpicture}
-\end{figure}
-\begin{definition}[Precoding Codebook]
- A finite collection of several \textbf{possible} precoding matrices
-  $$\mathcal{V}_{CB}=\left\{\V_1,\V_2|\dots|\V_{_{CB}}\right\},\textnormal{ where }\V_i\in\mathbb{C}^{N_{t}\times M}$$
-\end{definition}
 
- 
-\pagebreak
- \begin{itemize}
-  \item When matrix $\V_i\in \mathcal{V}_{CB}$ is selected, the equivalent channel is
-    $$\rr=\underset{M\times N_{r}}{\W}\underset{N_{r}\times N_{t}}{\Hb}\underset{N_{t}\times M}{\V_i}\x+\z$$  
-  \item Admits MF/ZF/MMSE linear and non-linear receiver 
-    $$\W=(\V_i^H\Hb^H\Hb\V_i+\frac{\sigma_z^2}{P}\I_{M})\V_i^H\Hb^H$$
- \end{itemize}
-\begin{definition}[Precoding Matrix Indicator]
-The receiver knows $\Hb$, computes a prediction of performance for all $\V_i\in \mathcal{V}_{CB}$, and reports the best $i^*$ to the transmitter.
-\end{definition}
- 
- 
-\pagebreak
- \begin{itemize}
-  \item Example: for MMSE linear $\W$, $\V_i$ for maximum SINR is
-  $$\V_i^*=\arg \max_{\V_i\in\mathcal{V}_{CB}} \mathrm{SINR}(\V_i)=\arg \max_{\V_i\in\mathcal{V}_{CB}}\frac{P}{\sigma_z^2\left(\sum_{i=1}^{M}\frac{1}{\lambda_i(\Hb\V_i)+\frac{M\sigma_z^2}{P}}\right)}$$  
-  \item Example: $M=1$, Tx. Antenna Selection and MRC in this notation
-  $$\mathcal{V}=\left\{\left(\begin{array}{c}1\\0\\\vdots\\0\end{array}\right),\left(\begin{array}{c}0\\1\\\vdots\\0\end{array}\right),\dots,\left(\begin{array}{c}0\\0\\\vdots\\1\end{array}\right)\right\}\qquad \W=\frac{\h_{i^*}^H}{\|\h_{i^*}\|}$$
-  \pagebreak
-  \item Example: $M=1$, LOS Beamforming Codebook with Limited Feedback
-       $$\mathcal{V}=\left\{\vv(0^o),\vv(45^o)\dots\right\}$$
+\frame[allowframebreaks]{\frametitle{Virtual Antenna Selection (Limited Feedback Beamforming)}
 
  \begin{columns}
   \begin{column}{6cm}    
@@ -904,10 +856,62 @@ The receiver knows $\Hb$, computes a prediction of performance for all $\V_i\in 
   \end{itemize}
   \end{column}
  \end{columns}
+}
+
+\frame[allowframebreaks]{\frametitle{Limited Feedback MIMO}
+
+ \begin{figure}
+    \centering
+    \caption{Limited Feedback Precoding}
+    \begin{tikzpicture}[auto, node distance=2cm,>=latex']%, scale=0.7, every node/.style={scale=0.7}]
+        \node [pinstyle, name=input] {$\x[n]$};
+        \node [block, right of=input, name=precod,label={$N_{t}\times M$}] {$\V$};        
+        \draw [->] (input) -- (precod);
+        \node [block, right of= precod, name=ch,label={$N_{r}\times N_{t}$}] {$\Hb$};
+        \draw [->,dashed] (precod) -- (ch);
+        \node [sum, right of= ch, node distance=1.5cm, pin={[pinstyle,pin distance=.2cm]above:$\z$}] (sumz) {$+$};
+        \draw [->,dashed] (ch) -- (sumz);
+        \node [block, right of= sumz, name=wf,label={$M\times N_{r}$}] {$\W$};
+        \draw [->] (sumz) -- node {$\y$} (wf);
+        \node [pinstyle, right of=wf, name=output] {$\rr$};
+        \draw[->] (wf) -- (output);
+        \node[block] (fb) at ($(ch)!.5!(wf)+(0,2cm)$) {Feedback P.M.I.};
+        \draw[->] (output) |- (fb);
+        \node[block, above of = precod] (cb) {${N_{CB} \choose M}$ Codebook};
+        \draw[->] (fb) -- (cb);
+        \draw[->] (cb) -- (precod);
+        \end{tikzpicture}
+\end{figure}
+\begin{definition}[Precoding Codebook]
+ A finite collection of several \textbf{possible} precoding matrices
+  $$\mathcal{V}_{CB}=\left\{\V_1,\V_2|\dots|\V_{_{CB}}\right\},\textnormal{ where }\V_i\in\mathbb{C}^{N_{t}\times M}$$
+\end{definition}
+
+ 
+\pagebreak
+ \begin{itemize}
+  \item When matrix $\V_i\in \mathcal{V}_{CB}$ is selected, the equivalent channel is
+    $$\rr=\underset{M\times N_{r}}{\W}\underset{N_{r}\times N_{t}}{\Hb}\underset{N_{t}\times M}{\V_i}\x+\z$$  
+  \item Admits MF/ZF/MMSE linear and non-linear receiver 
+    $$\W=(\V_i^H\Hb^H\Hb\V_i+\frac{\sigma_z^2}{P}\I_{M})\V_i^H\Hb^H$$
+ \end{itemize}
+\begin{definition}[Precoding Matrix Indicator]
+The receiver knows $\Hb$, computes a prediction of performance for all $\V_i\in \mathcal{V}_{CB}$, and reports the best $i^*$ to the transmitter.
+\end{definition}
+ 
+ 
+ \begin{itemize}
+  \item Example: $M=1$, Tx. Antenna Selection and MRC in this notation
+  $$\mathcal{V}=\left\{\left(\begin{array}{c}1\\0\\\vdots\\0\end{array}\right),\left(\begin{array}{c}0\\1\\\vdots\\0\end{array}\right),\dots,\left(\begin{array}{c}0\\0\\\vdots\\1\end{array}\right)\right\}\qquad \W=\frac{\h_{i^*}^H}{\|\h_{i^*}\|}$$
+  
+  \item Example: $M=1$, LOS Beamforming Codebook with Limited Feedback
+       $$\mathcal{V}=\left\{\vv(0^o),\vv(45^o)\dots\right\}$$
+  \item Example: MMSE linear $\W$ as a function of $\V_i$, for maximum SINR
+  $$\V_i^*=\arg \max_{\V_i\in\mathcal{V}_{CB}} \mathrm{SINR}(\V_i)=\arg \max_{\V_i\in\mathcal{V}_{CB}}\frac{P}{\sigma_z^2\left(\sum_{i=1}^{M}\frac{1}{\lambda_i(\Hb\V_i)+\frac{M\sigma_z^2}{P}}\right)}$$  
   \end{itemize}
 }
 
-\frame{\frametitle{Representation of the Channel in Angle-Domain}
+\frame[allowframebreaks]{\frametitle{Representation of the Channel in Angle-Domain}
  \begin{itemize}
    \item Design Transmit And Receive Beam Codebooks
    $$\V_{CB} =\left[\vv_1|\vv_2|\dots|\vv_{N_{CB-t}}\right],\qquad \W_{CB} =\left[\w_1|\w_2|\dots|\w_{N_{CB-r}}\right]$$
@@ -925,10 +929,42 @@ a_{N_{CB-r},1}&a_{N_{CB-r},2}&\dots&a_{N_{CB-r},N_{CB-t}}\\
     \item Received noise power $\to$ $\|\w_{i}\|^2=1$ $\to$ $\Ex{}{\|\z'\|^2}=\Ex{}{\|\W_{\mathcal{R}}\z\|^2}=M\sigma_z^2$
     \end{itemize}
   \end{itemize}
-  }
   
-\frame{\frametitle{Beam Steering}
+  \pagebreak
   
+\begin{itemize}
+ \item Rich scattering ($N_{path}\gg N_{t}N_{r}$): I.i.d. Rayleigh $\A$ 
+ \item Sparse Multipath  ($N_{path}\ll N_{t}N_{r}$): Low Rank $\A$ 
+\end{itemize}
+
+
+\begin{figure}
+ \centering
+ \caption{Magnitude of matrix coefficients $|a_{i,j}|^2$ with 64-FFT CB}
+ \subfigure[Rayleigh]{
+    \includegraphics[width=.45\columnwidth]{AvgRayleighAmatrix}
+ }
+ \subfigure[3 Paths]{
+    \includegraphics[width=.45\columnwidth]{AvgSparseAmatrix}
+ }
+\end{figure}
+
+}
+  
+\frame[allowframebreaks]{\frametitle{Beam Steering}
+  
+\begin{figure}
+ \centering
+ \caption{Digital vs Analog beamforming implementations}
+ \subfigure[Digital (complex vectors)]{
+    \includesvg[width=.45\columnwidth]{digitalbeamforming}
+ }
+ \subfigure[Analog (RF phase shifters)]{
+    \includesvg[width=.45\columnwidth]{analogbeamforming}
+ }
+\end{figure}
+\pagebreak
+
    $$r[n]=a_{i,j}s[n]+z'[n]=\w_{j}\Hb\vv_i s[n]+z'[n]\textnormal{ where } i,j=\arg\max |a_{i,j}|^2$$
     \begin{figure}
     \centering
@@ -992,10 +1028,8 @@ a_{N_{CB-r},1}&a_{N_{CB-r},2}&\dots&a_{N_{CB-r},N_{CB-t}}\\
 \end{figure}
 }
 
-\frame{\frametitle{Hybrid Beamforming}
+\frame[allowframebreaks]{\frametitle{Hybrid Beamforming}
   
-   $$\rr[n]=\A_{\mathcal{R},\mathcal{T}}\s[n]+\z'[n]=\W_{\mathcal{R}}\Hb\V_{\mathcal{T}} \s[n]+\z'[n],$$
-   $$ \mathcal{R},\mathcal{T}=\arg\max_{\texttt{rows}(\A)\times\texttt{cols}(\A)} \|\A_{\mathcal{R},\mathcal{T}}\|^2$$
     \begin{figure}
     \centering
     \caption{Transmit+Receive Multiple-Equivalent-Antenna Selection}
@@ -1057,6 +1091,16 @@ a_{N_{CB-r},1}&a_{N_{CB-r},2}&\dots&a_{N_{CB-r},N_{CB-t}}\\
         \draw[->] (output) |- (fb);
         \draw[->] (fb) -| (split);
         \end{tikzpicture}
+\end{figure}
+\pagebreak
+
+$$\rr[n]=\A_{RF}\s[n]+\z'[n]=\W_{RF}\Hb\V_{RF}} \s[n]+\z'[n],$$
+$$\V = \V_{BB}\V_{RF}\textnormal{ where }\V_{BB}\in \mathbb{C}^{M\times M}\textnormal{, }\V_{RF}\in \mathcal{V}_{CB}$$
+$$\W = \W_{BB}\W_{RF}\textnormal{ where }\W_{BB}\in \mathbb{C}^{M\times M}\textnormal{, }\W_{RF}\in \mathcal{W}_{CB}$$
+\begin{figure}
+ \centering
+ \caption{Hybrid beamforming implementation}
+    \includesvg[width=.85\columnwidth]{hybridbeamforming}
 \end{figure}
 }
 
@@ -1200,26 +1244,7 @@ Matrix $\V_{CB}$ with coefficients designed by algorithms
  w_{M,1}\V&\dots&h_{M,N_{r}}\V\\\hline
 \end{array}\right],\;\to \textnormal{vec}(\W\Hb\V)=(\V^H\odot\W)\textnormal{vec}(\Hb)$$
 \end{definition}
-\pagebreak
-\begin{itemize}
- \item Rich scattering ($N_{path}\gg N_{t}N_{r}$): I.i.d. Rayleigh $\A$ 
- \item Sparse Multipath  ($N_{path}\ll N_{t}N_{r}$): Low Rank $\A$ 
-\end{itemize}
-
-
-\begin{figure}
- \centering
- \caption{Average matrix $\Ex{}{\|\A\|^2}$ with 64-FFT CB}
- \subfigure[Rayleigh]{
-    \includegraphics[width=.45\columnwidth]{AvgRayleighAmatrix}
- }
- \subfigure[3 Paths]{
-    \includegraphics[width=.45\columnwidth]{AvgSparseAmatrix}
- }
-\end{figure}
-
 }
-
 
 \frame[allowframebreaks]{\frametitle{Long-Term Beamforming}
 \begin{definition}[Left and Right Covariance Matrices]
