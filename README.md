@@ -3,8 +3,8 @@ This Open Source repo presents a course in Advanced Digital Communications syste
 
 ## Versions
 
-2022 The repo is initialized with the course materials for academic year 2022/23
-2025 Updated with the course materials for academic year 2024/25
+* 2022 The repo is initialized with the course materials for academic year 2022/23
+* 2025 Updated with the course materials for academic year 2024/25
 
 ## Authors
 
