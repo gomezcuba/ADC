@@ -217,7 +217,7 @@ s(t)=\sum_{n} \sum_{k=0}^{K-1} A_k [n] \textcolor{VCobalt}{\phi_k (t-nT)}
 \begin{eqnarray}
 \label{eq:forma_phi_l}
 \nonumber
-\textcolor{VCobalt}{\phi_k(t)}=\textcolor{TZTeal}{e^{j\frac{2 \pi k t}{T}}}\cdot{}\textcolor{TAMustard}{w_T(t)}
+\textcolor{VCobalt}{\phi_k(t)}=\textcolor{TZTeal}{e^{-j\frac{2 \pi k t}{T}}}\cdot{}\textcolor{TAMustard}{w_T(t)}
 \end{eqnarray}
 \item Rectangular time window
 \begin{eqnarray}
@@ -361,7 +361,7 @@ When multiple transmitters use different oscillator or clock. Such as multiple B
 \frametitle{The problem of Side Lobes}
 \begin{itemize}
 \item Rectangular Window
-$$\phi_k(t)=e^{j\frac{2 \pi k t}{T}}\cdot{}w_T(t)\; \stackrel{\mathcal{FT}}{\longleftrightarrow}\; \Phi_k(f)=\delta(f-k\Delta f)*\textnormal{sinc}(\frac{f}{\Delta f})\textnormal{ with }\Delta f=1/T$$
+$$\phi_k(t)=e^{-j\frac{2 \pi k t}{T}}\cdot{}w_T(t)\; \stackrel{\mathcal{FT}}{\longleftrightarrow}\; \Phi_k(f)=\delta(f-k\Delta f)*\textnormal{sinc}(\frac{f}{\Delta f})\textnormal{ with }\Delta f=1/T$$
 \item Undesired levels of side lobes. 
 \end{itemize}
 \begin{figure}
@@ -385,7 +385,7 @@ $$\phi_k(t)=e^{j\frac{2 \pi k t}{T}}\cdot{}w_T(t)\; \stackrel{\mathcal{FT}}{\lon
 \end{definition}
 \begin{example}[Cyclic Prefix OFDM (CP-OFDM)]
 \begin{equation*}
-\phi_k(t)=e^{j 2 \pi \delta f k t}\cdot{}w_{T}(t)\qquad \psi_l (t)=e^{j 2 \pi \delta f l t}\cdot{}w_{T_{\text{FFT}}}(t)
+\phi_k(t)=e^{-j 2 \pi \delta f k t}\cdot{}w_{T}(t)\qquad \psi_l (t)=e^{-j 2 \pi \delta f l t}\cdot{}w_{T_{\text{FFT}}}(t)
 \end{equation*}
 where $T=T_{CP}+T_{FFT}$ and $\Delta f=\frac{1}{T_{FFT}}$
 \end{example}
@@ -1142,87 +1142,87 @@ $$Z_x(\tau,\nu)=\sum_{v=-\infty}^{\infty}x(v\tau+t)e^{-j2\pi\nu (t-\tau)}\forall
 %         \caption{Z}
     \end{figure}  
     
-%     \pagebreak
-%     
-% \begin{columns}[T]
-%  \begin{column}{8cm}
-%  
-% \begin{definition}[DZT - OTFS Modulation]
-% Sampling $t=nT_s$, $D=T/T_s$, $n=d+vD$
-% $$Z_x[d,v]=\sum_{u=0}^{V-1}x[vD+d]e^{-j2\pi\frac{uv}{V}}\forall x[n]\textnormal{ with period }L=VD$$
-% \vspace{-.3in}
-%     \begin{figure}    
-%     \subfigure[4-2-DZT symbols at TF grid]{
-%         \begin{tikzpicture}[scale=.35, transform shape] 
-%         \foreach \x in {0,1}
-%         \foreach \y in {0,...,3}
-%         {
-%             \foreach \a in {0,...,3}
-%             \foreach \b in {0,...,1}
-%                 {
-%                     \draw[fill=black, fill opacity={(\a+4*\b)/10}] (4*\x+\a     ,{\y+\b/2}) rectangle (4*\x+\a+1,{(\y+\b/2+1/2)});
-%                 }
-%                 
-%             \node at (4*\x+.5,\y+1/4) {$Z_x[0,0]$};
-%         }
-%         \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-% extension end length=.25]{(7.5,4.25)}{(8,4.25)}{$T_s$}; 
-%         \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-% extension end length=.25]{(4,4.5)}{(8,4.5)}{$T=DT_s$}; 
-%         \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-% extension end length=.25]{(0,4.75)}{(8,4.75)}{$L/\Delta f$}; 
-%         \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-% extension end length=.25]{(8.25,4)}{(8.25,3.5)}{$\Delta f$};
-%         \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
-% extension end length=.25]{(8.5,4)}{(8.5,3)}{$V\Delta f$};
-%         \draw[TZTeal,very thick,dashed] (0,0) rectangle (4,1);
-%         \node[TZTeal] (number) at (-3,.25) {$Z_x[d,v]$};
-%         \draw[TZTeal] (0,0) -- (number);
-%         \draw[->] (-.25,-.25) -- node[anchor=north]{$t$} (8.25,-.25); 
-%         \draw[->] (-.25,-.25) -- node[anchor=east]{$f$} (-.25,4.25); 
-%         \end{tikzpicture}}
-%         \hspace{.05in}
-%         \subfigure[2-4-DZT FFTs]{
-%         \begin{tikzpicture}[scale=.35, transform shape,auto, node distance=1.5cm,>=latex']
-%         \foreach \x in {0,...,3}
-%             \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
-%                 {
-%                     \node (x\z) at ({2*\x+\y},0) {$x[\z]$} ;
-%                 }
-%        \node[block,below of =x0,node distance=2cm, anchor=west,minimum width=3.4cm] (fft0) {$\frac{L}{D}$-FFT} ;
-%        \node[block,below of =x7,node distance=2cm, anchor=east,minimum width=3.4cm] (fft1) {$\frac{L}{D}$-FFT} ;
-%         \foreach \x in {0,...,3}
-%             \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
-%                 {
-%                     \draw[->] (x\z) -- ++(0,-.5) -- (fft\y);
-%                 }
-%         
-%         \foreach \x in {0,...,3}
-%             \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
-%                 {
-%                     \node (Zx\z) at ({4*\y+\x},-4) {$Z_x^{[\y,\x]}$} ;
-%                 }
-%         \foreach \x in {0,...,3}
-%             \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
-%                 {
-%                     \draw[<-] (Zx\z) -- ++(0,1.5);
-%                 }
-%         \end{tikzpicture}
-%         }
-%     \caption{OTFS vs OFDM FFT}
-% \end{figure}
-% \vspace{-.1in}
-% % $$Z_y[d,v]=\sum_{u'=0}^{V-1}\sum_{d'=0}^{D-1}Z_h[d-d',v-v']Z_x[d',v']+Z_r[d,v]$$
-% \end{definition}
-%  \end{column}
-%  \begin{column}{4cm}
-% \begin{figure}[t]
-%  \centering \includegraphics[trim={1cm 2.5cm 1cm 2.5cm},clip,width=\columnwidth]{pulses3D}
-%  \caption{OTFS Orthonormal Pulses}
-%  \vspace{-.2in}
-% \end{figure}  
-%  \end{column}
-% \end{columns}  
+    \pagebreak
+    
+\begin{columns}[T]
+ \begin{column}{8cm}
+ 
+\begin{definition}[DZT - OTFS Modulation]
+Sampling $t=nT_s$, $D=T/T_s$, $n=d+vD$
+$$Z_x[d,v]=\sum_{u=0}^{V-1}x[vD+d]e^{-j2\pi\frac{uv}{V}}\forall x[n]\textnormal{ with period }L=VD$$
+\vspace{-.3in}
+    \begin{figure}    
+    \subfigure[4-2-DZT symbols at TF grid]{
+        \begin{tikzpicture}[scale=.35, transform shape] 
+        \foreach \x in {0,1}
+        \foreach \y in {0,...,3}
+        {
+            \foreach \a in {0,...,3}
+            \foreach \b in {0,...,1}
+                {
+                    \draw[fill=black, fill opacity={(\a+4*\b)/10}] (4*\x+\a     ,{\y+\b/2}) rectangle (4*\x+\a+1,{(\y+\b/2+1/2)});
+                }
+                
+            \node at (4*\x+.5,\y+1/4) {$Z_x[0,0]$};
+        }
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+extension end length=.25]{(7.5,4.25)}{(8,4.25)}{$T_s$}; 
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+extension end length=.25]{(4,4.5)}{(8,4.5)}{$T=DT_s$}; 
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+extension end length=.25]{(0,4.75)}{(8,4.75)}{$L/\Delta f$}; 
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+extension end length=.25]{(8.25,4)}{(8.25,3.5)}{$\Delta f$};
+        \dimline[label style={anchor=south,font=\small,fill=white,text opacity=1,fill opacity=0},line style = {line width=.2 ,arrows=dimline-dimline},extension start length=.25,
+extension end length=.25]{(8.5,4)}{(8.5,3)}{$V\Delta f$};
+        \draw[TZTeal,very thick,dashed] (0,0) rectangle (4,1);
+        \node[TZTeal] (number) at (-3,.25) {$Z_x[d,v]$};
+        \draw[TZTeal] (0,0) -- (number);
+        \draw[->] (-.25,-.25) -- node[anchor=north]{$t$} (8.25,-.25); 
+        \draw[->] (-.25,-.25) -- node[anchor=east]{$f$} (-.25,4.25); 
+        \end{tikzpicture}}
+        \hspace{.05in}
+        \subfigure[2-4-DZT FFTs]{
+        \begin{tikzpicture}[scale=.35, transform shape,auto, node distance=1.5cm,>=latex']
+        \foreach \x in {0,...,3}
+            \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
+                {
+                    \node (x\z) at ({2*\x+\y},0) {$x[\z]$} ;
+                }
+       \node[block,below of =x0,node distance=2cm, anchor=west,minimum width=3.4cm] (fft0) {$\frac{L}{D}$-FFT} ;
+       \node[block,below of =x7,node distance=2cm, anchor=east,minimum width=3.4cm] (fft1) {$\frac{L}{D}$-FFT} ;
+        \foreach \x in {0,...,3}
+            \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
+                {
+                    \draw[->] (x\z) -- ++(0,-.5) -- (fft\y);
+                }
+        
+        \foreach \x in {0,...,3}
+            \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
+                {
+                    \node (Zx\z) at ({4*\y+\x},-4) {$Z_x^{[\y,\x]}$} ;
+                }
+        \foreach \x in {0,...,3}
+            \foreach \y [evaluate={\z= int(2*\x+\y)}] in {0,1}
+                {
+                    \draw[<-] (Zx\z) -- ++(0,1.5);
+                }
+        \end{tikzpicture}
+        }
+    \caption{OTFS vs OFDM FFT}
+\end{figure}
+\vspace{-.1in}
+% $$Z_y[d,v]=\sum_{u'=0}^{V-1}\sum_{d'=0}^{D-1}Z_h[d-d',v-v']Z_x[d',v']+Z_r[d,v]$$
+\end{definition}
+ \end{column}
+ \begin{column}{4cm}
+\begin{figure}[t]
+ \centering \includegraphics[trim={1cm 2.5cm 1cm 2.5cm},clip,width=\columnwidth]{pulses3D}
+ \caption{OTFS Orthonormal Pulses}
+ \vspace{-.2in}
+\end{figure}  
+ \end{column}
+\end{columns}  
 }
 
 
